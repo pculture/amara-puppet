@@ -3,5 +3,9 @@ class nginx::package {
     path      => "${::path}",
     logoutput => on_failure,
   }
-  if ! defined(Package['nginx-full']) { package { 'nginx-full': ensure => installed, } }
+  if ($::operatingsystemrelease == '10.04') {
+    if ! defined(Package['nginx']) { package { 'nginx': ensure => installed, } }
+  } else {
+    if ! defined(Package['nginx-full']) { package { 'nginx-full': ensure => installed, } }
+  }
 }
