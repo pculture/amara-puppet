@@ -1,0 +1,2 @@
+start on startup
+exec su -s /bin/sh -c '/usr/local/bin/redis-server /etc/redis.conf' <%= scope.lookupvar('redis::redis_user') %>

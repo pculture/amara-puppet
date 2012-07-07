@@ -1,0 +1,18 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant::Config.run do |config|
+  config.vm.host_name = "puppet.local"
+  config.vm.box = "precise64"
+  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+  config.vm.network :hostonly, "10.10.10.100"
+
+  config.vm.share_folder "puppet_manifests", "/etc/puppet/manifests", "manifests"
+  config.vm.share_folder "puppet_modules", "/etc/puppet/modules", "modules"
+
+  config.vm.forward_port 3000, 3000
+  config.vm.forward_port 8140, 8140
+
+  config.vm.provision :shell, :path => "build.sh"
+
+end

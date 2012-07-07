@@ -1,0 +1,8 @@
+name    'amara-base'
+version '0.0.1'
+source 'UNKNOWN'
+author 'ehazlett'
+license 'Apache License, Version 2.0'
+summary 'Configures base environment'
+description 'Configures base environment'
+project_page 'UNKNOWN'

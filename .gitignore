@@ -1,0 +1,5 @@
+pkg/*
+puppetmaster/modules/amara
+*.swp
+*DS_Store*
+.vagrant

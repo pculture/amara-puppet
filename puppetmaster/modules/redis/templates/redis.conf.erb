@@ -1,0 +1,30 @@
+# Redis configuration file example
+
+daemonize no
+pidfile /var/run/redis.pid
+port 6379
+timeout 0
+# verbose for more ; debug for all
+loglevel notice
+logfile /var/log/redis/redis-server.log
+databases 16
+save 900 1
+save 300 10
+save 60 10000
+rdbcompression yes
+dbfilename dump.rdb
+dir <%= scope.lookupvar('redis::data_dir') %>
+slave-serve-stale-data yes
+# requirepass foobared
+appendonly no
+slowlog-log-slower-than 10000
+slowlog-max-len 128
+vm-enabled no
+hash-max-zipmap-entries 512
+hash-max-zipmap-value 64
+list-max-ziplist-entries 512
+list-max-ziplist-value 64
+set-max-intset-entries 512
+zset-max-ziplist-entries 128
+zset-max-ziplist-value 64
+activerehashing yes

@@ -1,0 +1,76 @@
+upstream unisubs_backend {
+    server 127.0.0.1:8000;
+}
+
+server {
+    listen 80 default;
+    server_name unisubs.example.com;
+    client_max_body_size 4G;
+    open_file_cache off;
+    sendfile off;
+
+    keepalive_timeout 5;
+
+    location ~* /en/user-data/video/(.*) {
+        root /opt/extras/video;
+        try_files /$1 @unisubs;
+    }
+    location ~* /en/user-data/pictures/(.*) {
+        root /opt/extras/pictures;
+        try_files /$1 @unisubs;
+    }
+    location ~* /en/site_media/static-cache/(.*) {
+        root /opt/extras/static-cache;
+        try_files /$1 @unisubs;
+    }
+    location ~* /user-data/video/(.*) {
+        root /opt/extras/video;
+        try_files /$1 @unisubs;
+    }
+    location ~* /user-data/pictures/(.*) {
+        root /opt/extras/pictures;
+        try_files /$1 @unisubs;
+    }
+    location ~* /site_media/static-cache/(.*) {
+        root /opt/extras/static-cache;
+        try_files /$1 @unisubs;
+    }
+
+    location ~* /en/user-data/(.*) {
+        root /opt/unisubs/user-data;
+        try_files /$1 @unisubs;
+    }
+    location ~* /en/site_media/(.*) {
+        root /opt/unisubs/media;
+        try_files /$1 @unisubs;
+    }
+    location ~* /user-data/(.*) {
+        root /opt/unisubs/user-data;
+        try_files /$1 @unisubs;
+    }
+    location ~* /site_media/(.*) {
+        root /opt/unisubs/media;
+        try_files /$1 @unisubs;
+    }
+    location ~* / {
+        proxy_redirect   off;
+        proxy_set_header Host unisubs.example.com:8000;
+        proxy_set_header X-Real-IP        $remote_addr;
+        proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_set_header X-Magic-Header   "secret";
+        proxy_set_header X-Forwarded-Protocol http;
+
+        proxy_pass http://unisubs_backend;
+    }
+
+    location @unisubs {
+        proxy_redirect   off;
+        proxy_set_header Host unisubs.example.com:8000;
+        proxy_set_header X-Real-IP        $remote_addr;
+        proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_set_header X-Magic-Header   "secret";
+        proxy_set_header X-Forwarded-Protocol http;
+
+        proxy_pass http://unisubs_backend;
+    }
+}
