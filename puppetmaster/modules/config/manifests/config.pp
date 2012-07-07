@@ -1,4 +1,6 @@
 class config::config inherits config::params {
+  $project_dir = "${appserver::app_dir}/unisubs"
+
   if ($::virtual == 'virtualbox') {
     user { 'vagrant':
       ensure  => present,
@@ -12,5 +14,13 @@ class config::config inherits config::params {
       mode    => 0644,
       require => User['vagrant'],
     }
+  }
+
+  # unisubs closure library link
+  file { 'config::config::unisubs_closure_library_link':
+    ensure  => link,
+    path    => "${config::config::project_dir}/media/js/closure-library",
+    target  => "${closure::closure_local_dir}",
+    require => Class['closure'],
   }
 }
