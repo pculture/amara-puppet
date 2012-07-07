@@ -1,5 +1,5 @@
 class appserver::config inherits appserver::params {
-  $env = "${amara::env}"
+  $env = "${config::env}"
   group { 'appserver::config::app_group':
     name    => "${appserver::app_group}",
     ensure  => present,
