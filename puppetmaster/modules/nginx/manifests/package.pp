@@ -5,7 +5,9 @@ class nginx::package {
   }
   exec { 'nginx::package::nginx_ppa':
     command => 'add-apt-repository ppa:nginx/stable',
+    creates => "/etc/apt/sources.list.d/nginx-stable-${::lsbdistcodename}.list",
     notify  => Exec['nginx::package::update_apt'],
+    require => Package['python-software-properties'],
   }
   exec { 'nginx::package::update_apt':
     command     => 'apt-get update',
