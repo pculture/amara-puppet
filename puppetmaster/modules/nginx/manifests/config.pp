@@ -5,8 +5,8 @@ class nginx::config inherits nginx::params {
     logoutput => on_failure,
   }
   $nginx_pkg = $::operatingsystemrelease ? {
-    '10.04': Package['nginx'],
-    default: Package['nginx-full'],
+    '10.04' => Package['nginx'],
+    default => Package['nginx-full'],
   }
   file { 'nginx::config::vhost_unisubs_example_com':
     path    => '/etc/nginx/conf.d/unisubs.example.com.conf',
