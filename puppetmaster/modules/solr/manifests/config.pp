@@ -25,7 +25,7 @@ class solr::config inherits solr::params {
   file { 'solr::config::solr_core_conf':
     ensure  => present,
     content => template('solr/solr.xml.erb'),
-    path    => '/etc/solr/conf/solr/solr.xml',
+    path    => '/usr/share/solr/solr.xml',
     owner   => "${solr::config::tomcat_user}",
     mode    => 0644,
     require => File['solr::config::solr_core_dir'],
