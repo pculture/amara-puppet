@@ -1,0 +1,8 @@
+CELERYBEAT_CHDIR="<%= scope.lookupvar('appserver::app_dir') %>/unisubs"
+export DJANGO_SETTINGS_MODULE="<%= settings_module %>"
+CELERYBEAT="<%= scope.lookupvar('appserver::python_ve_dir') %>/unisubs/bin/python <%= scope.lookupvar('appserver::app_dir') %>/unisubs/manage.py celerybeat"
+CELERYBEAT_LOG_FILE="/var/log/celery/celerybeat.log"
+CELERYBEAT_PID_FILE="/var/run/celery/celerybeat.pid"
+CELERYBEAT_USER="<%= scope.lookupvar('celery::celery_user') %>"
+CELERYBEAT_GROUP="<%= scope.lookupvar('celery::celery_group') %>"
+CELERYBEAT_OPTS="--schedule=/tmp/celerybeat-schedule"
