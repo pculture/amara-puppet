@@ -36,4 +36,5 @@ class config {
   if 'local' in $roles {
     include config::roles::local
   }
+  class { 'config::config': }
 }
