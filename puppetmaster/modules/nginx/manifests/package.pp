@@ -3,9 +3,18 @@ class nginx::package {
     path      => "${::path}",
     logoutput => on_failure,
   }
-  if ($::operatingsystemrelease == '10.04') {
-    if ! defined(Package['nginx']) { package { 'nginx': ensure => installed, } }
-  } else {
-    if ! defined(Package['nginx-full']) { package { 'nginx-full': ensure => installed, } }
+  exec { 'nginx::package::nginx_ppa':
+    command => 'add-apt-repository ppa:nginx/stable',
+    notify  => Exec['nginx::package::update_apt'],
+  }
+  exec { 'nginx::package::update_apt':
+    command     => 'apt-get update',
+    refreshonly => true,
+  }
+  if ! defined(Package['nginx']) {
+    package { 'nginx':
+      ensure  => installed,
+      require => [ Exec['nginx::package::nginx_ppa'], Exec['nginx::package::update_apt'] ],
+    }
   }
 }
