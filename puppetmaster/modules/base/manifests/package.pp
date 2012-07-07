@@ -9,6 +9,7 @@ class base::package {
   if ! defined(Package['curl']) { package { 'curl': ensure => installed, } }
   if ! defined(Package['git-core']) { package { 'git-core': ensure => installed, } }
   if ! defined(Package['ntp']) { package { 'ntp': ensure => installed, } }
+  if ! defined(Package['python-software-properties']) { package { 'python-software-properties': ensure => installed, } }
   if ! defined(Package['supervisor']) { package { 'supervisor': ensure => installed, } }
   if ! defined(Package['vim']) { package { 'vim': ensure => installed, } }
 
