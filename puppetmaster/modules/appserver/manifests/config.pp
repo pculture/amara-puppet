@@ -20,4 +20,10 @@ class appserver::config inherits appserver::params {
     group   => "${appserver::app_group}",
     require => Group['appserver::config::app_group'],
   }
+  cron { 'appserver::config::cron_app_dir_permissions':
+    command   => "chown -R ${appserver::app_user}:${appserver::app_group} ${appserver::app_dir} ; chmod -R g+rw ${appserver::app_dir}",
+    user      => root,
+    hour      => '*',
+    minute    => '05',
+  }
 }
