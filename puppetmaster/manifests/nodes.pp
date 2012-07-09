@@ -7,7 +7,7 @@ node basenode {
       syslog_server => "${config::params::syslog_server}",
     }
   }
-  include config
+  class { 'config': require => Class['base'], }
 }
 node default inherits basenode {}
 

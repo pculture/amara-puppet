@@ -22,7 +22,10 @@
 #
 class config {
   $env = "${::system_env}"
-  $roles = $::system_roles
+  $roles = $::system_roles ? {
+    undef => [],
+    default => $::system_roles,
+  }
   # conditional to check for roles
   if 'app' in $roles {
     include config::roles::app
@@ -36,5 +39,4 @@ class config {
   if 'local' in $roles {
     include config::roles::local
   }
-  class { 'config::config': }
 }

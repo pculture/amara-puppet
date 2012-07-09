@@ -15,12 +15,16 @@ class config::config inherits config::params {
       require => User['vagrant'],
     }
   }
-
-  # unisubs closure library link
-  file { 'config::config::unisubs_closure_library_link':
-    ensure  => link,
-    path    => "${config::config::project_dir}/media/js/closure-library",
-    target  => "${closure::closure_local_dir}",
-    require => Class['closure'],
+  # custom role configs
+  # app role
+  if 'app' in $config::roles {
+    require closure
+    # unisubs closure library link
+    file { 'config::config::unisubs_closure_library_link':
+      ensure  => link,
+      path    => "${config::config::project_dir}/media/js/closure-library",
+      target  => "${closure::closure_local_dir}",
+      require => Class['closure'],
+    }
   }
 }
