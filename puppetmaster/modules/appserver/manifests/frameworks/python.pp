@@ -32,7 +32,7 @@ class appserver::frameworks::python {
     ensure  => directory,
     path    => "${appserver::python_ve_dir}",
     owner   => "${appserver::app_user}",
-    mode    => 2775,
+    mode    => 2664,
     recurse => true,
     group   => "${appserver::app_group}",
     require => Group['appserver::config::app_group'],
