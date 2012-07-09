@@ -36,7 +36,5 @@ class config {
   if 'util' in $roles {
     include config::roles::util
   }
-  if 'local' in $roles {
-    include config::roles::local
-  }
+  if ! defined(Class['config') { class { 'config::config': } }
 }
