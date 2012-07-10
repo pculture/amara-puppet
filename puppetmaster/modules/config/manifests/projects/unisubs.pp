@@ -1,6 +1,11 @@
 class config::projects::unisubs ($repo='https://github.com/pculture/unisubs.git', $revision='dev') {
   require closure
-
+  $settings_module = "${::system_env}" ? {
+    'dev'     => 'dev_settings',
+    'staging' => 'test_settings',
+    'prod'    => 'settings',
+    default   => 'dev_settings',
+  }
   $env = $::system_env ? {
     undef   => 'dev',
     default => $::system_env,

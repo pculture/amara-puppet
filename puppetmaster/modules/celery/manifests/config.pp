@@ -1,10 +1,4 @@
 class celery::config inherits celery::params {
-  $settings_module = "${::system_env}" ? {
-    'dev'     => 'dev_settings',
-    'staging' => 'test_settings',
-    'prod'    => 'settings',
-    default   => 'dev_settings',
-  }
   group { 'celery::config::group':
     name    => "${celery::celery_group}",
     ensure  => present,
