@@ -1,16 +1,20 @@
-class config::projects::unisubs ($repo='https://github.com/pculture/unisubs.git', $revision='dev') {
+class config::projects::unisubs ($repo='https://github.com/pculture/unisubs.git', $revision=undef) {
   require closure
   $settings_module = "${::system_env}" ? {
-    'dev'     => 'dev_settings',
-    'staging' => 'test_settings',
-    'prod'    => 'settings',
-    default   => 'dev_settings',
+    'dev'         => 'dev_settings',
+    'staging'     => 'test_settings',
+    'production'  => 'settings',
+    default       => 'dev_settings',
   }
   $env = $::system_env ? {
     undef   => 'dev',
     default => $::system_env,
   }
-  $project_root = "${appserver::app_dir}/universalsubtitles.${config::projects::unisubs::env}"
+  $rev = $revision ? {
+    undef   => "${::system_env}",
+    default => $revision,
+  }
+  $project_root = "${appserver::app_dir}/universalsubtitles.$env"
   $project_dir = "${config::projects::unisubs::project_root}/unisubs"
   file { 'config::projects::unisubs::project_root':
     ensure  => directory,
@@ -22,16 +26,17 @@ class config::projects::unisubs ($repo='https://github.com/pculture/unisubs.git'
   # clone repo if not exists ; only for app role
   if 'app' in $config::config::roles {
     vcsrepo { 'config::projects::unisubs':
-      path      => "${project_dir}",
+      path      => "$project_dir",
       provider  => 'git',
       source    => "$repo",
-      revision  => "$revision",
+      revision  => "$rev",
     }
+    # create virtualenv ?
   }
   # unisubs closure library link
   file { 'config::projects::unisubs::unisubs_closure_library_link':
     ensure  => link,
-    path    => "${config::projects::unisubs::project_dir}/media/js/closure-library",
+    path    => "$project_dir/media/js/closure-library",
     target  => "${closure::closure_local_dir}",
     require => Class['closure'],
   }
