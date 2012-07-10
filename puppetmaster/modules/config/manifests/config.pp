@@ -4,6 +4,7 @@ class config::config inherits config::params {
     default => $::system_roles,
   }
   if ($::virtual == 'virtualbox') {
+    include config::projects::unisubs
     user { 'vagrant':
       ensure  => present,
     }

@@ -19,12 +19,14 @@ class config::projects::unisubs ($repo='https://github.com/pculture/unisubs.git'
     owner   => "${appserver::app_user}",
     group   => "${appserver::app_group}",
   }
-  # clone repo if not exists
-  vcsrepo { 'config::projects::unisubs':
-    path      => "${project_dir}",
-    provider  => 'git',
-    source    => "$repo",
-    revision  => "$revision",
+  # clone repo if not exists ; only for app role
+  if 'app' in $config::config::roles {
+    vcsrepo { 'config::projects::unisubs':
+      path      => "${project_dir}",
+      provider  => 'git',
+      source    => "$repo",
+      revision  => "$revision",
+    }
   }
   # unisubs closure library link
   file { 'config::projects::unisubs::unisubs_closure_library_link':
