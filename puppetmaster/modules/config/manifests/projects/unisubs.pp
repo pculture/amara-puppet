@@ -1,5 +1,8 @@
 class config::projects::unisubs ($repo='https://github.com/pculture/unisubs.git', $revision=undef) {
   require closure
+  require config
+  require appserver
+
   Exec {
     path      => "${::path}",
     logoutput => on_failure,
@@ -34,12 +37,14 @@ class config::projects::unisubs ($repo='https://github.com/pculture/unisubs.git'
       provider  => 'git',
       source    => "$repo",
       revision  => "$rev",
+      notify    => Service['uwsgi.unisubs'],
     }
     # create virtualenv
     exec { 'config::projects::unisubs::virtualenv':
       command   => "virtualenv --no-site-packages ${appserver::python_ve_dir}/unisubs",
       user      => "${appserver::app_user}",
       creates   => "${appserver::python_ve_dir}/unisubs",
+      require   => Exec['appserver::frameworks::python::install_virtualenv'],
       notify    => Exec['config::projects::unisubs::bootstrap_ve'],
     }
     exec { 'config::projects::unisubs::bootstrap_ve':
@@ -47,6 +52,26 @@ class config::projects::unisubs ($repo='https://github.com/pculture/unisubs.git'
       cwd         => "$project_dir/deploy",
       user        => "${appserver::app_user}",
       refreshonly => true,
+      notify      => Service['uwsgi.unisubs'],
+    }
+    file { 'config::projects::unisubs::upstart_unisubs':
+      ensure  => present,
+      path    => '/etc/init/uwsgi.unisubs.conf',
+      content => template('config/apps/unisubs/upstart.unisubs.uwsgi.conf.erb'),
+      mode    => 0644,
+      owner   => root,
+    }
+    # manual symlink to /lib/init/upstart-job for http://projects.puppetlabs.com/issues/14297
+    file { 'config::projects::unisubs::upstart_link_unisubs':
+      ensure  => link,
+      path    => '/etc/init.d/uwsgi.unisubs',
+      target  => '/lib/init/upstart-job',
+      require => File['config::projects::unisubs::upstart_unisubs'],
+    }
+    service { 'uwsgi.unisubs':
+      ensure    => running,
+      provider  => 'upstart',
+      require   => [ File['config::projects::unisubs::upstart_link_unisubs'], Exec['config::projects::unisubs::bootstrap_ve'] ],
     }
   }
   # unisubs closure library link
