@@ -51,6 +51,7 @@ class config::projects::unisubs ($repo='https://github.com/pculture/unisubs.git'
       command     => "${appserver::python_ve_dir}/unisubs/bin/pip install -r requirements.txt",
       cwd         => "$project_dir/deploy",
       user        => "${appserver::app_user}",
+      timeout     => 1200,
       refreshonly => true,
       notify      => Service['uwsgi.unisubs'],
     }
