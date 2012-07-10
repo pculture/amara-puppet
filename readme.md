@@ -48,4 +48,4 @@ To start a `util` instance:
 
 ## Environments
 
-The node environment (dev, staging, prod) is defined in the file `/etc/system_env`.
+The node environment (dev, staging, production) is defined in the file `/etc/system_env`.
