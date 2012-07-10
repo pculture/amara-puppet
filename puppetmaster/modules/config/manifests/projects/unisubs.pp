@@ -1,5 +1,9 @@
 class config::projects::unisubs ($repo='https://github.com/pculture/unisubs.git', $revision=undef) {
   require closure
+  Exec {
+    path      => "${::path}",
+    logoutput => on_failure,
+  }
   $settings_module = "${::system_env}" ? {
     'dev'         => 'dev_settings',
     'staging'     => 'test_settings',
@@ -31,7 +35,19 @@ class config::projects::unisubs ($repo='https://github.com/pculture/unisubs.git'
       source    => "$repo",
       revision  => "$rev",
     }
-    # create virtualenv ?
+    # create virtualenv
+    exec { 'config::projects::unisubs::virtualenv':
+      command   => "virtualenv --no-site-packages ${appserver::python_ve_dir}/unisubs",
+      user      => "${appserver::app_user}",
+      creates   => "${appserver::python_ve_dir}/unisubs",
+      notify    => Exec['config::projects::unisubs::bootstrap_ve'],
+    }
+    exec { 'config::projects::unisubs::bootstrap_ve':
+      command     => "${appserver::python_ve_dir}/unisubs/bin/pip install -r requirements.txt",
+      cwd         => "$project_dir/deploy",
+      user        => "${appserver::app_user}",
+      refreshonly => true,
+    }
   }
   # unisubs closure library link
   file { 'config::projects::unisubs::unisubs_closure_library_link':
