@@ -8,7 +8,7 @@ class config::roles::app {
   file { 'config::roles::app::upstart_unisubs':
     ensure  => present,
     path    => '/etc/init/uwsgi.unisubs.conf',
-    content => template('config/apps/upstart.unisubs.uwsgi.conf.erb'),
+    content => template('config/apps/unisubs/upstart.unisubs.uwsgi.conf.erb'),
     mode    => 0644,
     owner   => root,
   }

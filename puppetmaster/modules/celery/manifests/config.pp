@@ -33,22 +33,6 @@ class celery::config inherits celery::params {
     mode    => 0775,
     require => [ User['celery::config::user'], Group['celery::config::group'] ],
   }
-  file { 'celery::config::celeryd_conf':
-    ensure  => present,
-    path    => '/etc/default/celeryd',
-    content => template('celery/celeryd_conf.erb'),
-    owner   => root,
-    group   => root,
-    mode    => 0644,
-  }
-  file { 'celery::config::celerybeat_conf':
-    ensure  => present,
-    path    => '/etc/default/celerybeat',
-    content => template('celery/celerybeat_conf.erb'),
-    owner   => root,
-    group   => root,
-    mode    => 0644,
-  }
   file { 'celery::config::celeryd':
     ensure  => present,
     path    => '/etc/init.d/celeryd',

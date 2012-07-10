@@ -22,10 +22,27 @@ class config::projects::unisubs ($repo='https://github.com/pculture/unisubs.git'
     revision  => "$revision",
   }
   # unisubs closure library link
-  file { 'config::config::unisubs_closure_library_link':
+  file { 'config::projects::unisubs::unisubs_closure_library_link':
     ensure  => link,
     path    => "${config::projects::unisubs::project_dir}/media/js/closure-library",
     target  => "${closure::closure_local_dir}",
     require => Class['closure'],
+  }
+  # celery config
+  file { 'config::projects::unisubs::celeryd_conf':
+    ensure  => present,
+    path    => '/etc/default/celeryd',
+    content => template('config/apps/unisubs/celeryd_conf.erb'),
+    owner   => root,
+    group   => root,
+    mode    => 0644,
+  }
+  file { 'config::projects::unisubs::celerybeat_conf':
+    ensure  => present,
+    path    => '/etc/default/celerybeat',
+    content => template('config/apps/unisubs/celerybeat_conf.erb'),
+    owner   => root,
+    group   => root,
+    mode    => 0644,
   }
 }
