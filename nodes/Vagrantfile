@@ -2,48 +2,34 @@
 # vi: set ft=ruby :
 
 Vagrant::Config.run do |config|
+  # default OS is ubuntu 12.04 LTS amd64
   config.vm.box = "precise64"
+  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
 
   config.vm.define :app do |app_config|
+    app_config.vm.box = "lucid64"
     app_config.vm.host_name = "app.local"
-    app_config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+    app_config.vm.box_url = "http://files.vagrantup.com/lucid64.box"
     app_config.vm.network :hostonly, "10.10.10.115"
     app_config.vm.forward_port 80, 8080
     app_config.vm.forward_port 8000, 8000
     app_config.vm.provision :shell, :path => "bootstrap.sh"
-    #app_config.vm.provision :puppet_server do |puppet|
-    #  puppet.puppet_server = "10.10.10.100"
-    #  puppet.options = ["--verbose"]
-    #end
-    # app_config.vm.share_folder "v-data", "/vagrant_data", "../data"
   end
 
   config.vm.define :data do |data_config|
     data_config.vm.host_name = "data.local"
-    data_config.vm.box_url = "http://files.vagrantup.com/precise64.box"
     data_config.vm.network :hostonly, "10.10.10.120"
     data_config.vm.forward_port 5672, 5672 # rabbitmq
     data_config.vm.forward_port 6379, 6379 # redis
     data_config.vm.forward_port 8989, 8989 # solr
     data_config.vm.provision :shell, :path => "bootstrap.sh"
-    #data_config.vm.provision :puppet_server do |puppet|
-    #  puppet.puppet_server = "10.10.10.100"
-    #  puppet.options = ["--verbose"]
-    #end
-    # data_config.vm.share_folder "v-data", "/vagrant_data", "../data"
   end
 
   config.vm.define :util do |util_config|
     util_config.vm.host_name = "util.local"
-    util_config.vm.box_url = "http://files.vagrantup.com/precise64.box"
     util_config.vm.network :hostonly, "10.10.10.110"
     util_config.vm.forward_port 3000, 3001 # graylog2
     util_config.vm.provision :shell, :path => "bootstrap.sh"
-    #util_config.vm.provision :puppet_server do |puppet|
-    #  puppet.puppet_server = "10.10.10.100"
-    #  puppet.options = ["--verbose"]
-    #end
-    # util_config.vm.share_folder "v-data", "/vagrant_data", "../data"
   end
 
 end
