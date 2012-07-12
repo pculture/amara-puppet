@@ -1,11 +1,23 @@
-class config::projects::unisubs ($repo='https://github.com/pculture/unisubs.git', $revision=undef) {
+class config::projects::unisubs (
+    $repo='https://github.com/pculture/unisubs.git',
+    $revision=undef,
+    $project_root=undef,
+    $app_user=undef,
+    $app_group=undef,
+    $ve_root=undef,
+    $enable_upstart=true,
+  ) {
   require closure
   require config
-  require appserver
+  #require appserver
 
   Exec {
     path      => "${::path}",
     logoutput => on_failure,
+  }
+  $env = $::env ? {
+    undef   => "dev",
+    default => "${::env}",
   }
   $settings_module = "${::system_env}" ? {
     'dev'         => 'dev_settings',
@@ -13,48 +25,43 @@ class config::projects::unisubs ($repo='https://github.com/pculture/unisubs.git'
     'production'  => 'settings',
     default       => 'dev_settings',
   }
-  $env = $::system_env ? {
-    undef   => 'dev',
-    default => $::system_env,
-  }
   $rev = $revision ? {
-    undef   => "${::system_env}",
+    undef   => "$env",
     default => $revision,
   }
-  $project_root = "${appserver::app_dir}/universalsubtitles.$env"
-  $project_dir = "${config::projects::unisubs::project_root}/unisubs"
-  file { 'config::projects::unisubs::project_root':
-    ensure  => directory,
-    path    => "${config::projects::unisubs::project_root}",
-    mode    => 2775,
-    owner   => "${appserver::app_user}",
-    group   => "${appserver::app_group}",
+  $project_dir = "$project_root/unisubs"
+  $ve_dir = "$ve_root/unisubs"
+  # unisubs repo
+  exec { 'config::projects::unisubs::clone_repo':
+    command => "git clone $repo $project_dir",
+    user    => "$app_user",
+    creates => "$project_dir",
+    notify  => Exec['config::projects::unisubs::checkout_rev'],
   }
-  # clone repo if not exists ; only for app role
-  if 'app' in $config::config::roles {
-    vcsrepo { 'config::projects::unisubs':
-      path      => "$project_dir",
-      provider  => 'git',
-      source    => "$repo",
-      revision  => "$rev",
-      notify    => Service['uwsgi.unisubs'],
-    }
-    # create virtualenv
-    exec { 'config::projects::unisubs::virtualenv':
-      command   => "virtualenv --no-site-packages ${appserver::python_ve_dir}/unisubs",
-      user      => "${appserver::app_user}",
-      creates   => "${appserver::python_ve_dir}/unisubs",
-      require   => Exec['appserver::frameworks::python::install_virtualenv'],
-      notify    => Exec['config::projects::unisubs::bootstrap_ve'],
-    }
-    exec { 'config::projects::unisubs::bootstrap_ve':
-      command     => "${appserver::python_ve_dir}/unisubs/bin/pip install -r requirements.txt",
-      cwd         => "$project_dir/deploy",
-      user        => "${appserver::app_user}",
-      timeout     => 1200,
-      refreshonly => true,
-      notify      => Service['uwsgi.unisubs'],
-    }
+  exec { 'config::projects::unisubs::checkout_rev':
+    cwd         => "$project_dir",
+    command     => "git checkout --force $rev",
+    require     => Exec['config::projects::unisubs::clone_repo'],
+    unless      => "test \"`git symbolic-ref HEAD | awk '{split(\$0,s,\"/\"); print s[3]}'`\" = \"$rev\"",
+  }
+  # create virtualenv
+  exec { 'config::projects::unisubs::virtualenv':
+    command   => "virtualenv --no-site-packages $ve_dir",
+    user      => "$app_user",
+    creates   => "$ve_root/unisubs",
+    require   => Exec['appserver::frameworks::python::install_virtualenv'],
+    notify    => Exec['config::projects::unisubs::bootstrap_ve'],
+  }
+  exec { 'config::projects::unisubs::bootstrap_ve':
+    command     => "$ve_root/unisubs/bin/pip install -r requirements.txt",
+    cwd         => "$project_dir/deploy",
+    user        => "$app_user",
+    require     => Exec['config::projects::unisubs::checkout_rev'],
+    timeout     => 1200,
+    refreshonly => true,
+  }
+  # upstart
+  if $enable_upstart {
     file { 'config::projects::unisubs::upstart_unisubs':
       ensure  => present,
       path    => '/etc/init/uwsgi.unisubs.conf',
