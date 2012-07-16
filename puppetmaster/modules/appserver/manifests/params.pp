@@ -1,5 +1,10 @@
 class appserver::params {
-  $app_dir = '/opt/apps'
+	$env = $::env ? {
+    undef   => "dev",
+    default => "${::env}",
+  }
+  $app_dir_root = "/opt/apps"
+  $app_dir = "$app_dir_root/$env"
   $app_user = $::virtual ? {
     virtualbox  => 'vagrant',
     default     => 'www-data',

@@ -6,11 +6,12 @@ class config::roles::app {
     require => Class['nginx'],
   }
   include closure
-
+  include celery
+  
   class { 'config::config':
     require => [
-      Class['appserver'],
       Class['nginx'],
+      Class['appserver'],
       Class['closure'],
     ],
   }
@@ -22,7 +23,7 @@ class config::roles::app {
       app_user      => "${appserver::app_user}",
       app_group     => "${appserver::app_group}",
       ve_root       => "${appserver::python_ve_dir}",
-      require       => Class['appserver::config'],
+      require       => [ Class['appserver::config'], Class['celery'] ],
     }
   }
 }

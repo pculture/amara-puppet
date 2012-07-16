@@ -1,5 +1,4 @@
-class nginx::config inherits nginx::params {
-  $www_user = 'www-data'
+class apache::config inherits apache::params {
   Exec {
     path      => "${::path}",
     logoutput => on_failure,

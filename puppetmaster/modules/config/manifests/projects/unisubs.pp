@@ -29,8 +29,21 @@ class config::projects::unisubs (
     undef   => "$env",
     default => $revision,
   }
+  $server_name = "${::is_vagrant}" ? {
+    "true"  => "unisubs.example.com",
+    "false" => "$env.universalsubtitles.org",
+  }
   $project_dir = "$project_root/unisubs"
   $ve_dir = "$ve_root/unisubs"
+  # nginx config (local dev)
+  file { 'config::projects::unisubs::vhost_unisubs':
+    path    => '/etc/nginx/conf.d/unisubs.example.com.conf',
+    content => template('config/apps/unisubs/vhost_unisubs.conf.erb'),
+    #owner   => "${nginx::config::www_user}",
+    mode    => 0644,
+    require => Package['nginx'],
+    notify  => Service['nginx'],
+  }
   # unisubs repo
   exec { 'config::projects::unisubs::clone_repo':
     command => "git clone $repo $project_dir",
