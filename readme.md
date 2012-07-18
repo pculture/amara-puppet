@@ -49,3 +49,6 @@ To start a `util` instance:
 ## Environments
 
 The node environment (dev, staging, production) is defined in the file `/etc/system_env`.
+
+# Amara Config
+In order to use the private Amara config, clone the amara-puppet-private repo into the `puppetmaster` directory.  The Vagrantfile will automatically mount the module in the proper place.

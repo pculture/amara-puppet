@@ -3,7 +3,7 @@ class config::config inherits config::params {
     undef => [],
     default => $::system_roles,
   }
-  if ($::virtual == 'virtualbox') and ($roles == []) {
+  if ($::is_vagrant == 'true') and ($roles == []) {
     include config::projects::unisubs
     user { 'vagrant':
       ensure  => present,

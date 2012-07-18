@@ -1,6 +1,6 @@
 node basenode {
   # config for vagrant
-  if ($::virtual == 'virtualbox') {
+  if ($::is_vagrant == 'true') {
     include base
   } else {
     class { 'base':
@@ -8,8 +8,11 @@ node basenode {
     }
   }
   class { 'config': require => Class['base'], }
+  class { 'amara':
+    stage => 'post',
+  }
 }
-node default inherits basenode {}
+node default inherits basenode {} # default for all non-defined nodes
 
 node puppet inherits basenode {
   include puppetdashboard

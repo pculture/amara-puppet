@@ -9,10 +9,11 @@ Vagrant::Config.run do |config|
   config.vm.customize ["modifyvm", :id, "--memory", 1024]
   config.vm.share_folder "puppet_manifests", "/etc/puppet/manifests", "manifests"
   config.vm.share_folder "puppet_modules", "/etc/puppet/modules", "modules"
-
+  # mount amara private config
+  if File.exists?('amara-puppet-private')
+    config.vm.share_folder "amara_private", "/etc/puppet/modules/amara", "amara-puppet-private"
+  end
   config.vm.forward_port 3000, 3000
   config.vm.forward_port 8140, 8140
-
   config.vm.provision :shell, :path => "build.sh"
-
 end

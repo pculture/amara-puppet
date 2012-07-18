@@ -4,7 +4,7 @@ class base::config inherits base::params {
     logoutput => on_failure,
   }
   # hack: local /etc/hosts for vagrant
-  if ($::virtual == 'virtualbox') {
+  if ($::is_vagrant == 'true') {
     file { "base::config::hosts":
       path    => "/etc/hosts",
       owner   => root,

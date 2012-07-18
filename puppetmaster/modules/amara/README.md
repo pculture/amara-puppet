@@ -1,0 +1,1 @@
+This is a placeholder module for the Amara config.
