@@ -9,7 +9,6 @@ class config::projects::unisubs (
   ) {
   require closure
   require config
-  #require appserver
 
   Exec {
     path      => "${::path}",
