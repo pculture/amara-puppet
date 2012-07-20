@@ -21,7 +21,7 @@
 # Copyright 2012 PCF, unless otherwise noted.
 #
 class config {
-  $env = "${::system_env}"
+  $envs = "${::environments}"
   $roles = $::system_roles ? {
     undef => [],
     default => $::system_roles,

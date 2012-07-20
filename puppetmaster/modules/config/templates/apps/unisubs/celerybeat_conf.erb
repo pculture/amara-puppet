@@ -1,6 +1,6 @@
-CELERYBEAT_CHDIR="<%= scope.lookupvar('config::projects::unisubs::project_dir') %>"
+CELERYBEAT_CHDIR="<%= @project_dir %>"
 export DJANGO_SETTINGS_MODULE="<%= settings_module %>"
-CELERYBEAT="<%= scope.lookupvar('appserver::python_ve_dir') %>/unisubs/bin/python <%= scope.lookupvar('config::projects::unisubs::project_dir') %>/manage.py celerybeat"
+CELERYBEAT="<%= scope.lookupvar('appserver::python_ve_dir') %>/unisubs/bin/python <%= @project_dir %>/manage.py celerybeat"
 CELERYBEAT_LOG_FILE="/var/log/celery/celerybeat.log"
 CELERYBEAT_PID_FILE="/var/run/celery/celerybeat.pid"
 CELERYBEAT_USER="<%= scope.lookupvar('celery::celery_user') %>"

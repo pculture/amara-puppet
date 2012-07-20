@@ -14,7 +14,7 @@
 class appserver (
     $python=true,
     $nodejs=true,
-    $app_dir=$appserver::params::app_dir,
+    $apps_dir=$appserver::params::apps_dir,
     $python_ve_dir=$appserver::params::python_ve_dir,
     $app_user=$appserver::params::app_user,
     $app_group=$appserver::params::app_group,

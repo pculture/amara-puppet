@@ -1,10 +1,5 @@
 class appserver::params {
-	$env = $::env ? {
-    undef   => "dev",
-    default => "${::env}",
-  }
-  $app_dir_root = "/opt/apps"
-  $app_dir = "$app_dir_root/$env"
+  $apps_dir = "/opt/apps"
   $app_user = $::is_vagrant ? {
     'true'  => 'vagrant',
     default => 'www-data',
