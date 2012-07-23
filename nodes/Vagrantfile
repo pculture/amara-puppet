@@ -22,7 +22,7 @@ Vagrant::Config.run do |config|
     data_config.vm.network :hostonly, "10.10.10.120"
     data_config.vm.forward_port 5672, 5672 # rabbitmq
     data_config.vm.forward_port 6379, 6379 # redis
-    data_config.vm.forward_port 8989, 8989 # solr
+    data_config.vm.forward_port 8983, 8983 # solr
     data_config.vm.provision :shell, :path => "bootstrap.sh"
   end
 

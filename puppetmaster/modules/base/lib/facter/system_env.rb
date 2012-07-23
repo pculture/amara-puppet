@@ -1,5 +1,5 @@
 require 'yaml'
-Facter.add("environments") do
+Facter.add("system_environments") do
   setcode do
     environments = Array.new
     begin

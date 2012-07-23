@@ -16,6 +16,7 @@ define config::projects::unisubs (
     logoutput => on_failure,
   }
   $settings_module = "$env" ? {
+    'local'       => 'dev_settings',
     'dev'         => 'dev_settings',
     'staging'     => 'test_settings',
     'production'  => 'settings',
@@ -26,7 +27,9 @@ define config::projects::unisubs (
     default => $revision,
   }
   $server_name = "$env" ? {
-    "production"  => "www.universalsubtitles.org",
+    'localdev'    => 'unisubs.example.com',
+    'local'       => 'unisubs.local', # this is for the multi-vm environment for infrastructure testing
+    'production'  => 'www.universalsubtitles.org',
     default       => "$env.universalsubtitles.org",
   }
   $project_root = "$apps_root/$env"
@@ -45,17 +48,7 @@ define config::projects::unisubs (
     hour      => '*',
     minute    => '05',
   }
-  # nginx config (local dev)
-  if ($::is_vagrant) and ($env == 'dev') {
-    file { "config::projects::unisubs::vhost_unisubs_local":
-      path    => '/etc/nginx/conf.d/unisubs.example.com.conf',
-      content => template('config/apps/unisubs/vhost_unisubs.conf.erb'),
-      #owner   => "${nginx::config::www_user}",
-      mode    => 0644,
-      require => Package['nginx'],
-      notify  => Service['nginx'],
-    }
-  }
+
   # unisubs repo
   exec { "config::projects::unisubs::clone_repo_$env":
     command => "git clone $repo $project_dir",
@@ -133,12 +126,24 @@ define config::projects::unisubs (
     mode    => 0644,
   }
   # nginx
-  file { "config::projects::unisubs::vhost_unisubs_$env":
-    path    => "/etc/nginx/conf.d/$server_name.conf",
-    content => template('config/apps/unisubs/vhost_unisubs.conf.erb'),
-    #owner   => "${nginx::config::www_user}",
-    mode    => 0644,
-    require => Package['nginx'],
-    notify  => Service['nginx'],
+  # nginx config (local dev)
+  if ($::is_vagrant) and ($env == 'localdev') {
+    file { 'config::projects::unisubs::vhost_unisubs_localdev':
+      path    => '/etc/nginx/conf.d/unisubs.example.com.conf',
+      content => template('config/apps/unisubs/vhost_unisubs.conf.erb'),
+      #owner   => "${nginx::config::www_user}",
+      mode    => 0644,
+      require => Package['nginx'],
+      notify  => Service['nginx'],
+    }
+  } else {
+    file { "config::projects::unisubs::vhost_unisubs_$env":
+      path    => "/etc/nginx/conf.d/$server_name.conf",
+      content => template('config/apps/unisubs/vhost_unisubs.conf.erb'),
+      #owner   => "${nginx::config::www_user}",
+      mode    => 0644,
+      require => Package['nginx'],
+      notify  => Service['nginx'],
+    }
   }
 }

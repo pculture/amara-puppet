@@ -7,9 +7,9 @@ class config::roles::app {
   }
   include closure
   include celery
-  $envs = $::environments ? {
+  $envs = $::system_environments ? {
     undef   => ["dev"],
-    default => "${::environments}",
+    default => "${::system_environments}",
   }
   class { 'config::config':
     require => [
@@ -39,6 +39,13 @@ class config::roles::app {
   if 'app' in $config::config::roles {
     # setup unisubs project ; note: the notation project_unisubs { $envs: } isn't working for
     # some reason ; so as a hack, check for the specific envs
+    if 'local' in $envs {
+      project_unisubs {'local': revision => 'dev',}
+    }
+    # this is for the development environment
+    if 'localdev' in $envs {
+      project_unisubs {'localdev': revision => 'dev',}
+    }
     if 'dev' in $envs {
       project_unisubs {'dev':}
     }

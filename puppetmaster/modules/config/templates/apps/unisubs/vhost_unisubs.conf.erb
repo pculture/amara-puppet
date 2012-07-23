@@ -1,4 +1,4 @@
-upstream unisubs_backend {
+upstream unisubs_backend_<%= @env %> {
     server 127.0.0.1:8000;
 }
 
@@ -54,7 +54,7 @@ server {
     }
     location ~* / {
         proxy_redirect   off;
-        <% if scope.lookupvar('::is_vagrant') == "true" %>
+        <% if scope.lookupvar('::is_vagrant') == "true" and $env == 'dev' %>
         proxy_set_header Host unisubs.example.com:8000;
         <% end %>
         proxy_set_header X-Real-IP        $remote_addr;
@@ -62,12 +62,12 @@ server {
         proxy_set_header X-Magic-Header   "secret";
         proxy_set_header X-Forwarded-Protocol http;
 
-        proxy_pass http://unisubs_backend;
+        proxy_pass http://unisubs_backend_<%= @env %>;
     }
 
     location @unisubs {
         proxy_redirect   off;
-        <% if scope.lookupvar('::is_vagrant') == "true" %>
+        <% if scope.lookupvar('::is_vagrant') == "true" and $env == 'dev' %>
         proxy_set_header Host unisubs.example.com:8000;
         <% end %>
         proxy_set_header X-Real-IP        $remote_addr;
@@ -75,6 +75,6 @@ server {
         proxy_set_header X-Magic-Header   "secret";
         proxy_set_header X-Forwarded-Protocol http;
 
-        proxy_pass http://unisubs_backend;
+        proxy_pass http://unisubs_backend_<%= @env %>;
     }
 }
