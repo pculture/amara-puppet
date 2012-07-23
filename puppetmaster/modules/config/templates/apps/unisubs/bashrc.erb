@@ -88,8 +88,8 @@ fi
 # Unisubs-specific stuff ------------------------------------------------------
 export PYTHONDONTWRITEBYTECODE=1
 
-alias cu='cd <%= scope.lookupvar('config::projects::unisubs::project_dir') %>'
-alias cv='cd <%= scope.lookupvar('config::projects::unisubs::project_dir') %>'
+alias cu='cd <%= @project_dir %>'
+alias cv='cd <%= @project_dir %>'
 alias so='source ./venv/bin/activate'
 alias go='cu && so && ./dev-runserver.sh plus'
 alias d='./dev-runserver.sh plus'
@@ -115,8 +115,8 @@ function pmtd {
 }
 
 # on login, drop us on the working directory with the venv activated
-cd <%= scope.lookupvar('config::projects::unisubs::project_dir') %>/
-if [ -d "<%= scope.lookupvar('appserver::python_ve_dir') %>/unisubs" ]; then source ./venv/bin/activate; fi
+cd <%= @project_dir %>/
+if [ -d "<%= @project_dir %>" ]; then source ./venv/bin/activate; fi
 
 # ps-grep
 function psg {

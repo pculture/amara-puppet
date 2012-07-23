@@ -1,12 +1,14 @@
 class config::roles::data {
-  include rabbitmq
-  include redis
-  include solr
-  class { 'config::config':
-    require => [
-      Class['rabbitmq'],
-      Class['redis'],
-      Class['solr'],
-    ],
+  if ! defined(Class['rabbitmq']) { include rabbitmq }
+  if ! defined(Class['redis']) { include redis }
+  if ! defined(Class['solr']) { include solr }
+  if ! defined(Class['config::config']) { 
+    class { 'config::config':
+      require => [
+        Class['rabbitmq'],
+        Class['redis'],
+        Class['solr'],
+      ],
+    }
   }
 }
