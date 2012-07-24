@@ -40,7 +40,7 @@ define config::projects::unisubs (
   $project_dir = "$project_root/unisubs"
   $ve_dir = "$ve_root/unisubs_$env"
   # don't setup project dir for vagrant ; it's symlinked via vagrant
-  if (! $::is_vagrant) and ($env != 'vagrant') {
+  if ($env != 'vagrant') {
     file { "config::projects::unisubs::project_root_$env":
       ensure  => directory,
       path    => "$project_root",
@@ -132,6 +132,13 @@ define config::projects::unisubs (
     }
   }
 
+  # local email dir
+  file { "config::projects::unisubs::email_messages_dir_$env":
+    ensure  => directory,
+    path    => "/tmp/unisubs-messages_$env",
+    owner   => "$app_user",
+    mode    => 0750,
+  }
   # celery config
   file { "config::projects::unisubs::celeryd_conf_$env":
     ensure  => present,

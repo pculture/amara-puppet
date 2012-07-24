@@ -1,8 +1,8 @@
 class config::roles::data {
-  if ! defined(Class['rabbitmq']) { include rabbitmq }
-  if ! defined(Class['redis']) { include redis }
-  if ! defined(Class['solr']) { include solr }
-  if ! defined(Class['config::config']) { 
+  if ! defined(Class['rabbitmq']) { class { 'rabbitmq': } }
+  if ! defined(Class['redis']) { class { 'redis': } }
+  if ! defined(Class['solr']) { class { 'solr': } }
+  if ! defined(Class['config::config']) {
     class { 'config::config':
       require => [
         Class['rabbitmq'],
@@ -10,5 +10,9 @@ class config::roles::data {
         Class['solr'],
       ],
     }
+  }
+  # if running in the local test vagrant multi-vm, include mysql for local testing
+  if ($::is_vagrant) {
+    if ! defined(Class['mysql']) { class { 'mysql': } }
   }
 }

@@ -13,4 +13,16 @@ class mysql::config inherits mysql::params {
     unless    => "echo \"show databases;\" | ${mysql::config::mysql_cmd} | grep unisubs",
     require   => Exec['mysql::config::set_root_password'],
   }
+  exec { 'mysql::config::permissions_unisubs_db':
+    command   => "echo \"grant all on unisubs.* to root@\'%\';\" | ${mysql::config::mysql_cmd}",
+    unless    => "echo \"show grants for root@'%';\" | ${mysql::config::mysql_cmd} | grep \"GRANT ALL PRIVILEGES ON \`unisubs\`.* TO 'root'@'%'\"",
+    require   => Exec['mysql::config::set_root_password'],
+  }
+  file { 'mysql::config::mysql_config':
+    ensure  => present,
+    path    => '/etc/mysql/my.cnf',
+    content => template('mysql/my.cnf.erb'),
+    require => Package['mysql-server'],
+    notify  => Service['mysql'],
+  }
 }
