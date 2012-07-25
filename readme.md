@@ -24,6 +24,8 @@ To test the Amara application locally, create an entry in your local `/etc/hosts
 
 This will use the local multi-VM application server.
 
+*Note: You must use `unisubs.local` as the media URLs are setup for that hostname.
+
 ## Nodes
 
 Node (server or VM) functionality is divided into "roles" such as `app`, `data`, `util`, etc.  A node may have one or more roles that are defined in YAML format in the file `/etc/system_roles.yml`.
@@ -74,6 +76,10 @@ environments:
 ```
 
 # Appendix
+
+## General Notes
+
+In order to do full multi-VM replicated environment testing, you will need the `amara-puppet-private` module.  See below for details.  However, you can still build an entire environment (everything but serving the app on http://unisubs.local) without the `amara-puppet-private` module.
 
 ## Adding a new environment (for the `app` role)
 
