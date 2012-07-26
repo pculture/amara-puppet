@@ -16,19 +16,13 @@ class solr::config inherits solr::params {
     owner   => "${solr::config::tomcat_user}",
     require => Package["tomcat6"],
   }
-  file { 'solr::config::solr_core_dir':
-    ensure  => directory,
-    path    => '/etc/solr/conf/solr',
-    owner   => "${solr::config::tomcat_user}",
-    mode    => 0775,
-  }
   file { 'solr::config::solr_core_conf':
     ensure  => present,
     content => template('solr/solr.xml.erb'),
     path    => '/usr/share/solr/solr.xml',
     owner   => "${solr::config::tomcat_user}",
     mode    => 0644,
-    require => File['solr::config::solr_core_dir'],
+    require => Package['solr-tomcat'],
     notify  => Service['tomcat6'],
   }
 }

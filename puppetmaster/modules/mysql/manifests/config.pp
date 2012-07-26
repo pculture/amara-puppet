@@ -15,7 +15,7 @@ class mysql::config inherits mysql::params {
   }
   exec { 'mysql::config::permissions_unisubs_db':
     command   => "echo \"grant all on unisubs.* to root@\'%\' identified by \'${mysql::root_password}\';\" | ${mysql::config::mysql_cmd}",
-    unless    => "echo \"show grants for root@'%';\" | ${mysql::config::mysql_cmd} | grep \"GRANT ALL PRIVILEGES ON \`unisubs\`.* TO 'root'@'%'\"",
+    unless    => "echo \"show grants for root@'%';\" | ${mysql::config::mysql_cmd} | grep \"GRANT ALL PRIVILEGES ON \\`unisubs\\`.* TO 'root'@'%'\"",
     require   => Exec['mysql::config::set_root_password'],
   }
   file { 'mysql::config::mysql_config':
