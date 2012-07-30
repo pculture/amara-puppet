@@ -13,4 +13,9 @@ class base::package {
   if ! defined(Package['supervisor']) { package { 'supervisor': ensure => installed, } }
   if ! defined(Package['vim']) { package { 'vim': ensure => installed, } }
 
+  if ($::is_vagrant) {
+    if ! defined(Package['firefox']) { package { 'firefox': ensure => installed, } }
+    if ! defined(Package['screen']) { package { 'screen': ensure => installed, } }
+  }
+
 }

@@ -6,4 +6,4 @@ This installs and configures RabbitMQ.
 
 Basic
 
-`include rabbitmq`
+`class { 'rabbitmq': }`

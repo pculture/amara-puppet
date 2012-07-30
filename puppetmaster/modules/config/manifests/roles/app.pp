@@ -1,5 +1,6 @@
 class config::roles::app {
-  if ! defined(Class['nginx']) { include nginx }
+  # base modules to include
+  if ! defined(Class['nginx']) { class { 'nginx': } }
   if ! defined(Class['appserver']) {
     class { 'appserver':
       python  => true,
@@ -7,8 +8,10 @@ class config::roles::app {
       require => Class['nginx'],
     }
   }
-  if ! defined(Class['closure']) { include closure }
-  if ! defined(Class['celery']) { include celery }
+  if ! defined(Class['closure']) { class { 'closure': } }
+  if ! defined(Class['celery']) { class { 'celery': } }
+  if ! defined(Class['memcached']) { class { 'memcached': } }
+
   $envs = $::system_environments ? {
     undef   => ["dev"],
     default => $::system_environments,
@@ -41,22 +44,22 @@ class config::roles::app {
   }
   # setup unisubs project
   if 'local' in $envs {
-    project_unisubs {'local': revision => 'dev',}
+    project_unisubs { 'local': revision => 'staging', }
   }
   if 'dev' in $envs {
-    project_unisubs {'dev':}
+    project_unisubs { 'dev': }
   }
   if 'staging' in $envs {
-    project_unisubs {'staging':}
+    project_unisubs { 'staging': }
   }
   if 'nf' in $envs {
-    project_unisubs {'nf': revision => 'x-nf',}
+    project_unisubs { 'nf': revision => 'x-nf', }
   }
   if 'production' in $envs {
-    project_unisubs {'production':}
+    project_unisubs { 'production': }
   }
   # this is for the development environment
   if 'vagrant' in $envs {
-    project_unisubs {'vagrant': revision => 'dev', }
+    project_unisubs { 'vagrant': revision => 'dev', }
   }
 }

@@ -1,20 +1,33 @@
 define config::projects::unisubs (
     $repo='https://github.com/pculture/unisubs.git',
     $revision=undef,
-    $apps_root=undef,
-    $app_user=undef,
-    $app_group=undef,
-    $ve_root=undef,
+    $apps_root='/opt/apps',
+    $app_user='root',
+    $app_group='root',
+    $ve_root='/opt/ve',
     $enable_upstart=true,
     $env=undef,
+    $celery_user='celery',
+    $celery_group='celery',
   ) {
+  require celery
   require closure
   require config
+
+  # supporting OS packages
+  if ! defined(Package['python-dev']) { package { 'python-dev': ensure => installed, } }
+  if ! defined(Package['python-imaging']) { package { 'python-imaging': ensure => installed, } }
+  if ! defined(Package['python-memcache']) { package { 'python-memcache': ensure => installed, } }
+  if ! defined(Package['libmysqlclient-dev']) { package { 'libmysqlclient-dev': ensure => installed, } }
+  if ! defined(Package['libxml2-dev']) { package { 'libxml2-dev': ensure => installed, } }
+  if ! defined(Package['libxslt1-dev']) { package { 'libxslt1-dev': ensure => installed, } }
+  if ! defined(Package['swig']) { package { 'swig': ensure => installed, } }
 
   Exec {
     path      => "${::path}",
     logoutput => on_failure,
   }
+
   $roles = $::system_roles ? {
     undef => [],
     default => $::system_roles,
@@ -39,6 +52,8 @@ define config::projects::unisubs (
   $project_root = "$apps_root/$env"
   $project_dir = "$project_root/unisubs"
   $ve_dir = "$ve_root/unisubs_$env"
+
+  if ! defined(Class['virtualenv']) { class { 'virtualenv': } }
   # don't setup project dir for vagrant ; it's symlinked via vagrant
   if ($env != 'vagrant') {
     file { "config::projects::unisubs::project_root_$env":
@@ -59,6 +74,7 @@ define config::projects::unisubs (
       command => "git clone $repo $project_dir",
       user    => "$app_user",
       creates => "$project_dir",
+      timeout => 900,
       notify  => Exec["config::projects::unisubs::checkout_rev_$env"],
       require => File["config::projects::unisubs::project_root_$env"],
     }
@@ -67,6 +83,12 @@ define config::projects::unisubs (
       command     => "git checkout --force $rev",
       require     => Exec["config::projects::unisubs::clone_repo_$env"],
       unless      => "test \"`git symbolic-ref HEAD | awk '{split(\$0,s,\"/\"); print s[3]}'`\" = \"$rev\"",
+      notify      => Exec["config::projects::unisubs::set_permissions_$env"],
+    }
+    exec { "config::projects::unisubs::set_permissions_$env":
+      command     => "chown -R $app_user:$app_group $project_dir ; chmod -R g+rw $project_dir",
+      require     => Exec["config::projects::unisubs::clone_repo_$env"],
+      refreshonly => true,
     }
     # unisubs closure library link
     file { "config::projects::unisubs::unisubs_closure_library_link_$env":
@@ -80,7 +102,7 @@ define config::projects::unisubs (
       command   => "virtualenv --no-site-packages $ve_dir",
       user      => "$app_user",
       creates   => "$ve_dir",
-      require   => Exec["appserver::frameworks::python::install_virtualenv"],
+      require   => Class['virtualenv'],
       notify    => Exec["config::projects::unisubs::bootstrap_ve_$env"],
     }
     exec { "config::projects::unisubs::bootstrap_ve_$env":
@@ -89,6 +111,12 @@ define config::projects::unisubs (
       user        => "$app_user",
       require     => Exec["config::projects::unisubs::checkout_rev_$env"],
       timeout     => 1200,
+      refreshonly => true,
+      notify      => Exec["config::projects::unisubs::ve_permissions_$env"],
+    }
+    exec { "config::projects::unisubs::ve_permissions_$env":
+      command     => "chgrp -R $app_group $ve_dir ; chmod -R g+rw $ve_dir",
+      require     => Exec["config::projects::unisubs::bootstrap_ve_$env"],
       refreshonly => true,
     }
     # upstart
@@ -176,13 +204,19 @@ define config::projects::unisubs (
     }
   }
   # nginx
-  file { "config::projects::unisubs::vhost_unisubs_$env":
-    path    => "/etc/nginx/conf.d/$server_name.conf",
-    content => template('config/apps/unisubs/vhost_unisubs.conf.erb'),
-    #owner   => "${nginx::config::www_user}",
-    mode    => 0644,
-    require => Package['nginx'],
-    notify  => Service['nginx'],
+  if defined(Class['nginx']) {
+    file { "config::projects::unisubs::vhost_unisubs_$env":
+      path    => "/etc/nginx/conf.d/$server_name.conf",
+      content => template('config/apps/unisubs/vhost_unisubs.conf.erb'),
+      #owner   => "${nginx::config::www_user}",
+      mode    => 0644,
+      require => Package['nginx'],
+      notify  => Service['nginx'],
+    }
+  } else {
+    notify { 'config::projects::unisubs::no_nginx':
+      name  => 'Nginx class not defined ; skipping virtual host config',
+    }
   }
   # vagrant setup
   if ($::is_vagrant) and ($env == 'vagrant') {

@@ -21,7 +21,14 @@
 # Copyright 2012 PCF, unless otherwise noted.
 #
 class config {
-  $envs = $::system_environments
+  # this needs to match the appserver::apps_dir variable for the fabric tasks
+  $apps_dir = '/opt/apps'
+  $ve_root = '/opt/ve'
+  $app_group = 'deploy'
+  $envs = $::system_environments ? {
+    undef   => [],
+    default => $::system_environments,
+  }
   $roles = $::system_roles ? {
     undef => [],
     default => $::system_roles,

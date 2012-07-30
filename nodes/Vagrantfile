@@ -6,15 +6,11 @@ Vagrant::Config.run do |config|
   config.vm.box = "precise64"
   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
 
-  config.vm.define :app do |app_config|
-    app_config.vm.box = "lucid64"
-    app_config.vm.host_name = "app.local"
-    app_config.vm.customize ["modifyvm", :id, "--memory", 1024]
-    app_config.vm.box_url = "http://files.vagrantup.com/lucid64.box"
-    app_config.vm.network :hostonly, "10.10.10.115"
-    app_config.vm.forward_port 80, 8080
-    app_config.vm.forward_port 8000, 8000
-    app_config.vm.provision :shell, :path => "bootstrap.sh"
+  config.vm.define :util do |util_config|
+    util_config.vm.host_name = "util.local"
+    util_config.vm.network :hostonly, "10.10.10.110"
+    util_config.vm.forward_port 3000, 3001 # graylog2
+    util_config.vm.provision :shell, :path => "bootstrap.sh"
   end
 
   config.vm.define :data do |data_config|
@@ -26,11 +22,15 @@ Vagrant::Config.run do |config|
     data_config.vm.provision :shell, :path => "bootstrap.sh"
   end
 
-  config.vm.define :util do |util_config|
-    util_config.vm.host_name = "util.local"
-    util_config.vm.network :hostonly, "10.10.10.110"
-    util_config.vm.forward_port 3000, 3001 # graylog2
-    util_config.vm.provision :shell, :path => "bootstrap.sh"
+  config.vm.define :app do |app_config|
+    app_config.vm.box = "lucid64"
+    app_config.vm.host_name = "app.local"
+    app_config.vm.customize ["modifyvm", :id, "--memory", 1024]
+    app_config.vm.box_url = "http://files.vagrantup.com/lucid64.box"
+    app_config.vm.network :hostonly, "10.10.10.115"
+    app_config.vm.forward_port 80, 8080
+    app_config.vm.forward_port 8000, 8000
+    app_config.vm.provision :shell, :path => "bootstrap.sh"
   end
 
 end

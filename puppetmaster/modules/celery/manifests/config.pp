@@ -1,7 +1,8 @@
 class celery::config inherits celery::params {
-  group { 'celery::config::group':
-    name    => "${celery::celery_group}",
-    ensure  => present,
+  if ! defined(Group["${celery::celery_group}"]) {
+    group { "${celery::celery_group}":
+      ensure  => present,
+    }
   }
   user { 'celery::config::user':
     name      => "${celery::celery_user}",
@@ -9,7 +10,7 @@ class celery::config inherits celery::params {
     comment   => 'Runs celeryd, celerycam, and celeryev daemons',
     shell     => '/bin/bash',
     gid       => 'celery',
-    require   => Group['celery::config::group'],
+    require   => Group["${celery::celery_group}"],
   }
   file { 'celery::config::log_dir':
     ensure  => directory,
@@ -17,7 +18,7 @@ class celery::config inherits celery::params {
     owner   => "${celery::celery_user}",
     group   => "${celery::celery_group}",
     mode    => 0775,
-    require => [ User['celery::config::user'], Group['celery::config::group'] ],
+    require => [ User['celery::config::user'], Group["${celery::celery_group}"] ],
   }
   file { 'celery::config::run_dir':
     ensure  => directory,
@@ -25,7 +26,7 @@ class celery::config inherits celery::params {
     owner   => "${celery::celery_user}",
     group   => "${celery::celery_group}",
     mode    => 0775,
-    require => [ User['celery::config::user'], Group['celery::config::group'] ],
+    require => [ User['celery::config::user'], Group["${celery::celery_group}"] ],
   }
   file { 'celery::config::celeryd':
     ensure  => present,
