@@ -13,7 +13,7 @@ Vagrant::Config.run do |config|
   if File.exists?('amara-puppet-private')
     config.vm.share_folder "amara_private", "/etc/puppet/modules/amara", "amara-puppet-private"
   end
-  config.vm.forward_port 3000, 3000
-  config.vm.forward_port 8140, 8140
+  config.vm.forward_port 3000, 3000 # puppet (puppet-dashboard standalone)
+  config.vm.forward_port 8140, 8140 # puppet
   config.vm.provision :shell, :path => "build.sh"
 end

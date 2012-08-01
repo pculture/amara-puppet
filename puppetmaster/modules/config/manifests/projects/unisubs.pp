@@ -9,12 +9,16 @@ define config::projects::unisubs (
     $env=undef,
     $celery_user='celery',
     $celery_group='celery',
+    $setup_db=false,
   ) {
-  require celery
-  require closure
-  require config
+
+  # modules
+  if ! defined(Class['celery']) { class { 'celery': } }
+  if ! defined(Class['closure']) { class { 'closure': } }
+  if ! defined(Class['virtualenv']) { class { 'virtualenv': } }
 
   # supporting OS packages
+  if ! defined(Package['git-core']) { package { 'git-core': ensure => installed, } }
   if ! defined(Package['python-dev']) { package { 'python-dev': ensure => installed, } }
   if ! defined(Package['python-imaging']) { package { 'python-imaging': ensure => installed, } }
   if ! defined(Package['python-memcache']) { package { 'python-memcache': ensure => installed, } }
@@ -51,9 +55,11 @@ define config::projects::unisubs (
   }
   $project_root = "$apps_root/$env"
   $project_dir = "$project_root/unisubs"
-  $ve_dir = "$ve_root/unisubs_$env"
+  $ve_dir = "$ve_root/$env/unisubs"
 
-  if ! defined(Class['virtualenv']) { class { 'virtualenv': } }
+  # app root
+  if ! defined(File["$apps_root"]) { file { "$apps_root": ensure => directory, path => "$apps_root", } }
+
   # don't setup project dir for vagrant ; it's symlinked via vagrant
   if ($env != 'vagrant') {
     file { "config::projects::unisubs::project_root_$env":
@@ -76,7 +82,7 @@ define config::projects::unisubs (
       creates => "$project_dir",
       timeout => 900,
       notify  => Exec["config::projects::unisubs::checkout_rev_$env"],
-      require => File["config::projects::unisubs::project_root_$env"],
+      require => [ Package['git-core'], File["config::projects::unisubs::project_root_$env"] ],
     }
     exec { "config::projects::unisubs::checkout_rev_$env":
       cwd         => "$project_dir",
@@ -100,7 +106,6 @@ define config::projects::unisubs (
     # create virtualenv
     exec { "config::projects::unisubs::virtualenv_$env":
       command   => "virtualenv --no-site-packages $ve_dir",
-      user      => "$app_user",
       creates   => "$ve_dir",
       require   => Class['virtualenv'],
       notify    => Exec["config::projects::unisubs::bootstrap_ve_$env"],
@@ -108,7 +113,6 @@ define config::projects::unisubs (
     exec { "config::projects::unisubs::bootstrap_ve_$env":
       command     => "$ve_dir/bin/pip install -r requirements.txt",
       cwd         => "$project_dir/deploy",
-      user        => "$app_user",
       require     => Exec["config::projects::unisubs::checkout_rev_$env"],
       timeout     => 1200,
       refreshonly => true,
@@ -121,9 +125,16 @@ define config::projects::unisubs (
     }
     # upstart
     if $enable_upstart {
+      file { "config::projects::unisubs::uwsgi_unisubs_conf_$env":
+        ensure  => present,
+        path    => "/etc/uwsgi.unisubs.$env.ini",
+        content => template('config/apps/unisubs/uwsgi.unisubs.ini.erb'),
+        mode    => 0644,
+        owner   => root,
+      }
       file { "config::projects::unisubs::upstart_unisubs_$env":
         ensure  => present,
-        path    => "/etc/init/uwsgi.unisubs-$env.conf",
+        path    => "/etc/init/uwsgi.unisubs.$env.conf",
         content => template('config/apps/unisubs/upstart.unisubs.uwsgi.conf.erb'),
         mode    => 0644,
         owner   => root,
@@ -131,11 +142,11 @@ define config::projects::unisubs (
       # manual symlink to /lib/init/upstart-job for http://projects.puppetlabs.com/issues/14297
       file { "config::projects::unisubs::upstart_link_unisubs_$env":
         ensure  => link,
-        path    => "/etc/init.d/uwsgi.unisubs-$env",
+        path    => "/etc/init.d/uwsgi.unisubs.$env",
         target  => '/lib/init/upstart-job',
         require => File["config::projects::unisubs::upstart_unisubs_$env"],
       }
-      service { "uwsgi.unisubs-$env":
+      service { "uwsgi.unisubs.$env":
         ensure    => running,
         provider  => 'upstart',
         require   => [ File["config::projects::unisubs::upstart_link_unisubs_$env"], Exec["config::projects::unisubs::bootstrap_ve_$env"] ],

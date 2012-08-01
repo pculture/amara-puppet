@@ -7,7 +7,7 @@ echo "environments:\n  - local\n" > /etc/system_environments.yml
 echo "roles:\n  - `hostname -s`\n" > /etc/system_roles.yml
 
 # update apt
-apt-get update 2>&1 > /dev/null
+apt-get -y update 2>&1 > /dev/null
 
 # create the initial puppet.conf ; needed to sync puppet role facts
 mkdir -p /etc/puppet

@@ -8,7 +8,6 @@ class config::roles::app {
       require => Class['nginx'],
     }
   }
-  if ! defined(Class['closure']) { class { 'closure': } }
   if ! defined(Class['celery']) { class { 'celery': } }
   if ! defined(Class['memcached']) { class { 'memcached': } }
 
