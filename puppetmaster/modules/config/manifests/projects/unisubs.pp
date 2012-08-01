@@ -167,7 +167,7 @@ define config::projects::unisubs (
       command   => "virtualenv --no-site-packages $ve_dir",
       user      => "$app_user",
       creates   => "$ve_dir",
-      require   => Exec["appserver::frameworks::python::install_virtualenv"],
+      require   => Class['virtualenv'],
     }
   }
 
