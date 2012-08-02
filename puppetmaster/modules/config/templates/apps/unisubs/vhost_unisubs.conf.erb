@@ -1,6 +1,8 @@
-#upstream unisubs-backend-<%= @env %> {
-#    server 127.0.0.1:8000;
-#}
+<% if @env == 'vagrant' %>
+upstream unisubs-backend-<%= @env %> {
+    server 127.0.0.1:8000;
+}
+<% end %>
 
 server {
     listen 80;
@@ -54,33 +56,31 @@ server {
     }
     location ~* / {
         proxy_redirect   off;
-        #<% if scope.lookupvar('::is_vagrant') == 'true' and @env == 'vagrant' %>
-        #proxy_set_header Host unisubs.example.com:8000;
-        #<% else %>
-        #proxy_set_header Host <%= @server_name %>;
-        #<% end %>
-        #proxy_set_header X-Real-IP        $remote_addr;
-        #proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
-        #proxy_set_header X-Magic-Header   "secret";
-        #proxy_set_header X-Forwarded-Protocol http;
-        #proxy_pass http://unisubs-backend-<%= @env %>;
+        <% if @env == 'vagrant' %>
+        proxy_set_header Host unisubs.example.com:8000;
+        proxy_set_header X-Real-IP        $remote_addr;
+        proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_set_header X-Magic-Header   "secret";
+        proxy_set_header X-Forwarded-Protocol http;
+        proxy_pass http://unisubs-backend-<%= @env %>;
+        <% else %>
         include uwsgi_params;
         uwsgi_pass unix:///tmp/uwsgi_unisubs.sock;
+        <% end %>
     }
 
     location @unisubs {
         proxy_redirect   off;
-        #<% if scope.lookupvar('::is_vagrant') == 'true' and @env == 'vagrant' %>
-        #proxy_set_header Host unisubs.example.com:8000;
-        #<% else %>
-        #proxy_set_header Host <%= @server_name %>;
-        #<% end %>
-        #proxy_set_header X-Real-IP        $remote_addr;
-        #proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
-        #proxy_set_header X-Magic-Header   "secret";
-        #proxy_set_header X-Forwarded-Protocol http;
-        #proxy_pass http://unisubs-backend-<%= @env %>;
+        <% if @env == 'vagrant' %>
+        proxy_set_header Host unisubs.example.com:8000;
+        proxy_set_header X-Real-IP        $remote_addr;
+        proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_set_header X-Magic-Header   "secret";
+        proxy_set_header X-Forwarded-Protocol http;
+        proxy_pass http://unisubs-backend-<%= @env %>;
+        <% else %>
         include uwsgi_params;
         uwsgi_pass unix:///tmp/uwsgi_unisubs.sock;
+        <% end %>
     }
 }
