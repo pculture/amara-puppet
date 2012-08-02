@@ -118,11 +118,6 @@ define config::projects::unisubs (
       refreshonly => true,
       notify      => Exec["config::projects::unisubs::ve_permissions_$env"],
     }
-    exec { "config::projects::unisubs::ve_permissions_$env":
-      command     => "chgrp -R $app_group $ve_dir ; chmod -R g+rw $ve_dir",
-      require     => Exec["config::projects::unisubs::bootstrap_ve_$env"],
-      refreshonly => true,
-    }
     # upstart
     if $enable_upstart {
       file { "config::projects::unisubs::uwsgi_unisubs_conf_$env":
@@ -168,9 +163,14 @@ define config::projects::unisubs (
       user      => root,
       creates   => "$ve_dir",
       require   => Class['virtualenv'],
+      notify    => Exec["config::projects::unisubs::ve_permissions_$env"],
     }
   }
-
+  exec { "config::projects::unisubs::ve_permissions_$env":
+    command     => "chgrp -R $app_group $ve_dir ; chmod -R g+rw $ve_dir",
+    require     => Exec["config::projects::unisubs::bootstrap_ve_$env"],
+    refreshonly => true,
+  }
   # local email dir
   file { "config::projects::unisubs::email_messages_dir_$env":
     ensure  => directory,
