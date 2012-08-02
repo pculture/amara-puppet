@@ -7,10 +7,10 @@ node basenode {
       syslog_server => "${config::params::syslog_server}",
     }
   }
+  # modules
+  class { 'postfix': }
   class { 'config': require => Class['base'], }
-  class { 'amara':
-    stage => 'post',
-  }
+  class { 'amara': }
 }
 node default inherits basenode {} # default for all non-defined nodes
 
