@@ -1,4 +1,5 @@
 class mysql::config inherits mysql::params {
+  $os_ver = $::operatingsystemrelease
   $mysql_cmd = "mysql -u root -p${mysql::root_password}"
   Exec {
     path      => "${::path}",

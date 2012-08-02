@@ -33,15 +33,17 @@ nice		= 0
 # * Basic Settings
 #
 user		= mysql
+<% if @os_ver == '12.04' %>
 pid-file	= /var/run/mysqld/mysqld.pid
+<% end %>
 socket		= /var/run/mysqld/mysqld.sock
 port		= 3306
 basedir		= /usr
 datadir		= /var/lib/mysql
 tmpdir		= /tmp
-<% if $::operatingsystemrelease == '12.04' -%>
+<% if @os_ver == '12.04' %>
 lc-messages-dir	= /usr/share/mysql
-<% end -%>
+<% end %>
 skip-external-locking
 #
 # Instead of skip-networking the default is now to listen only on
