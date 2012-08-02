@@ -116,7 +116,7 @@ function pmtd {
 
 # on login, drop us on the working directory with the venv activated
 cd <%= @project_dir %>/
-if [ -d "<%= @project_dir %>" ]; then source ./venv/bin/activate; fi
+if [ -e "./venv" ]; then source ./venv/bin/activate; fi
 
 # ps-grep
 function psg {
