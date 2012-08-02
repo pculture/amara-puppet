@@ -168,7 +168,6 @@ define config::projects::unisubs (
   }
   exec { "config::projects::unisubs::ve_permissions_$env":
     command     => "chgrp -R $app_group $ve_dir ; chmod -R g+rw $ve_dir",
-    require     => Exec["config::projects::unisubs::bootstrap_ve_$env"],
     refreshonly => true,
   }
   # local email dir
