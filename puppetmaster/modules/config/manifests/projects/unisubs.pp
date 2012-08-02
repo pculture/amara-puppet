@@ -164,8 +164,8 @@ define config::projects::unisubs (
     }
     # create virtualenv
     exec { "config::projects::unisubs::virtualenv_$env":
-      command   => "virtualenv --no-site-packages $ve_dir",
-      user      => "$app_user",
+      command   => "virtualenv --no-site-packages $ve_dir ; chown -R $app_user $ve_dir",
+      user      => root,
       creates   => "$ve_dir",
       require   => Class['virtualenv'],
     }
