@@ -14,6 +14,7 @@ Vagrant::Config.run do |config|
   end
 
   config.vm.define :data do |data_config|
+    data_config.vm.box = "lucid64"
     data_config.vm.host_name = "data.local"
     data_config.vm.network :hostonly, "10.10.10.120"
     data_config.vm.forward_port 5672, 5672 # rabbitmq

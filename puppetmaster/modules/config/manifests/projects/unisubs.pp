@@ -89,7 +89,7 @@ define config::projects::unisubs (
       command     => "git checkout --force $rev",
       require     => Exec["config::projects::unisubs::clone_repo_$env"],
       unless      => "test \"`git symbolic-ref HEAD | awk '{split(\$0,s,\"/\"); print s[3]}'`\" = \"$rev\"",
-      notify      => Exec["config::projects::unisubs::set_permissions_$env"],
+      notify      => [ Exec["config::projects::unisubs::virtualenv_$env"], Exec["config::projects::unisubs::set_permissions_$env"] ],
     }
     exec { "config::projects::unisubs::set_permissions_$env":
       command     => "chown -R $app_user:$app_group $project_dir ; chmod -R g+rw $project_dir",
@@ -105,10 +105,11 @@ define config::projects::unisubs (
     }
     # create virtualenv
     exec { "config::projects::unisubs::virtualenv_$env":
-      command   => "virtualenv --no-site-packages $ve_dir",
-      creates   => "$ve_dir",
-      require   => Class['virtualenv'],
-      notify    => Exec["config::projects::unisubs::bootstrap_ve_$env"],
+      command     => "virtualenv --no-site-packages $ve_dir",
+      creates     => "$ve_dir",
+      require     => Class['virtualenv'],
+      notify      => Exec["config::projects::unisubs::bootstrap_ve_$env"],
+      refreshonly => true,
     }
     exec { "config::projects::unisubs::bootstrap_ve_$env":
       command     => "$ve_dir/bin/pip install -r requirements.txt",
