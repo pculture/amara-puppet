@@ -1,0 +1,7 @@
+# unisubs celerycam
+
+description "unisubs: celerycam (<%= @env %>)"
+start on runlevel [2345]
+stop on runlevel [06]
+
+exec <%= @ve_dir %>/bin/python <%= @project_dir %>/manage.py celerycam -f /var/log/celerycam.<%= @env %>.log --settings <%= @settings_module %>

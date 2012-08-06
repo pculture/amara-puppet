@@ -1,0 +1,7 @@
+# unisubs celeryd
+
+description "unisubs: celeryd (<%= @env %>)"
+start on runlevel [2345]
+stop on runlevel [06]
+
+exec <%= @ve_dir %>/bin/python <%= @project_dir %>/manage.py celeryd -B -c 4 -E -f /var/log/celeryd.<%= @env %>.log --settings <%= @settings_module %>

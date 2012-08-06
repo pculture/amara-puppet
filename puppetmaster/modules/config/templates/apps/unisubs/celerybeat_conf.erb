@@ -1,8 +1,0 @@
-CELERYBEAT_CHDIR="<%= @project_dir %>"
-export DJANGO_SETTINGS_MODULE="unisubs_settings"
-CELERYBEAT="<%= @ve_dir %>/bin/python <%= @project_dir %>/manage.py celerybeat"
-CELERYBEAT_LOG_FILE="/var/log/celery/celerybeat.log"
-CELERYBEAT_PID_FILE="/var/run/celery/celerybeat.pid"
-CELERYBEAT_USER="<%= @celery_user %>"
-CELERYBEAT_GROUP="<%= @celery_group %>"
-CELERYBEAT_OPTS="--schedule=/tmp/celerybeat-schedule"

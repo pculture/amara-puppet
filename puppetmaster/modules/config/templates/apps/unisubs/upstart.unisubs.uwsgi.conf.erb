@@ -4,6 +4,4 @@ description "uWSGI: unisubs (<%= @env %>)"
 start on runlevel [2345]
 stop on runlevel [06]
 
-#exec uwsgi --master --processes 4 --die-on-term --uid www-data --enable-threads --gid www-data --socket /tmp/uwsgi_unisubs.sock -H <%= @ve_dir %> -b 32768 --no-orphans --vacuum --pythonpath <%= @project_root %> --wsgi-file <%= @project_dir %>/deploy/unisubs.wsgi --max-requests 5000 --log-syslog "uwsgi.unisubs-<%= @env %>" --env DJANGO_SETTINGS_MODULE=unisubs_settings --touch-reload <%= @project_dir %>/deploy/unisubs.uwsgi
-
 exec uwsgi --ini /etc/uwsgi.unisubs.<%= @env %>.ini

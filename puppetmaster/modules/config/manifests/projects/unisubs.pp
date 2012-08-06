@@ -36,6 +36,11 @@ define config::projects::unisubs (
     undef => [],
     default => $::system_roles,
   }
+  $settings_module = $env ? {
+    'dev'     => 'dev_settings',
+    'vagrant' => 'dev_settings',
+    default   => 'unisubs_settings',
+  }
   $rev = $revision ? {
     undef   => "$env",
     default => $revision,
@@ -172,21 +177,35 @@ define config::projects::unisubs (
     mode    => 0750,
   }
   # celery config
-  file { "config::projects::unisubs::celeryd_conf_$env":
+  file { "config::projects::unisubs::upstart_celeryd_conf_$env":
     ensure  => present,
-    path    => "/etc/default/celeryd.$env",
-    content => template('config/apps/unisubs/celeryd_conf.erb'),
+    path    => "/etc/init/celeryd.$env.conf",
+    content => template('config/apps/unisubs/upstart.celeryd.conf.erb'),
     owner   => root,
     group   => root,
     mode    => 0644,
   }
-  file { "config::projects::unisubs::celerybeat_conf_$env":
+  # manual symlink to /lib/init/upstart-job for http://projects.puppetlabs.com/issues/14297
+  file { "config::projects::unisubs::upstart_link_celeryd_$env":
+    ensure  => link,
+    path    => "/etc/init.d/celeryd.$env",
+    target  => '/lib/init/upstart-job',
+    require => File["config::projects::unisubs::upstart_celeryd_conf_$env"],
+  }
+  file { "config::projects::unisubs::upstart_celerycam_conf_$env":
     ensure  => present,
-    path    => "/etc/default/celerybeat.$env",
-    content => template('config/apps/unisubs/celerybeat_conf.erb'),
+    path    => "/etc/init/celerycam.$env.conf",
+    content => template('config/apps/unisubs/upstart.celerycam.conf.erb'),
     owner   => root,
     group   => root,
     mode    => 0644,
+  }
+  # manual symlink to /lib/init/upstart-job for http://projects.puppetlabs.com/issues/14297
+  file { "config::projects::unisubs::upstart_link_celerycam_$env":
+    ensure  => link,
+    path    => "/etc/init.d/celerycam.$env",
+    target  => '/lib/init/upstart-job',
+    require => File["config::projects::unisubs::upstart_celerycam_conf_$env"],
   }
   # symlinks for celery - needed for celery module (celeryd, celerybeat)
   # NOTE: on multi-env setups, this will only be created for the first env as subsequent
@@ -194,17 +213,17 @@ define config::projects::unisubs (
   if ! defined(File['config::projects::unisubs::celeryd_symlink']) {
     file { "config::projects::unisubs::celeryd_symlink":
       ensure    => link,
-      path      => '/etc/default/celeryd',
-      target    => "/etc/default/celeryd.$env",
-      require   => File["config::projects::unisubs::celeryd_conf_$env"],
+      path      => '/etc/init/celeryd.conf',
+      target    => "/etc/init/celeryd.$env.conf",
+      require   => File["config::projects::unisubs::upstart_celeryd_conf_$env"],
     }
   }
-  if ! defined(File['config::projects::unisubs::celerybeat_symlink']) {
-    file { "config::projects::unisubs::celerybeat_symlink":
+  if ! defined(File['config::projects::unisubs::celerycam_symlink']) {
+    file { "config::projects::unisubs::celerycam_symlink":
       ensure    => link,
-      path      => '/etc/default/celerybeat',
-      target    => "/etc/default/celerybeat.$env",
-      require   => File["config::projects::unisubs::celerybeat_conf_$env"],
+      path      => '/etc/init/celerycam.conf',
+      target    => "/etc/init/celerycam.$env.conf",
+      require   => File["config::projects::unisubs::upstart_celerycam_conf_$env"],
     }
   }
   # nginx

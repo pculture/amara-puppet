@@ -7,7 +7,7 @@ class celery::config inherits celery::params {
   user { 'celery::config::user':
     name      => "${celery::celery_user}",
     ensure    => present,
-    comment   => 'Runs celeryd, celerycam, and celeryev daemons',
+    comment   => 'Runs celery daemons',
     shell     => '/bin/bash',
     gid       => 'celery',
     require   => Group["${celery::celery_group}"],
@@ -28,29 +28,4 @@ class celery::config inherits celery::params {
     mode    => 0775,
     require => [ User['celery::config::user'], Group["${celery::celery_group}"] ],
   }
-  file { 'celery::config::celeryd':
-    ensure  => present,
-    path    => '/etc/init.d/celeryd',
-    source  => 'puppet:///modules/celery/celeryd',
-    owner   => root,
-    group   => root,
-    mode    => 0755,
-  }
-  file { 'celery::config::celerybeat':
-    ensure  => present,
-    path    => '/etc/init.d/celerybeat',
-    source  => 'puppet:///modules/celery/celerybeat',
-    owner   => root,
-    group   => root,
-    mode    => 0755,
-  }
-  file { 'celery::config::celeryevcam':
-    ensure  => present,
-    path    => '/etc/init.d/celeryevcam',
-    source  => 'puppet:///modules/celery/celerybeat',
-    owner   => root,
-    group   => root,
-    mode    => 0755,
-  }
-
 }
