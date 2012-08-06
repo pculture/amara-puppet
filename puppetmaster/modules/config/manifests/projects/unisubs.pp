@@ -36,13 +36,6 @@ define config::projects::unisubs (
     undef => [],
     default => $::system_roles,
   }
-  $settings_module = "$env" ? {
-    'local'       => 'dev_settings',
-    'dev'         => 'dev_settings',
-    'staging'     => 'test_settings',
-    'production'  => 'settings',
-    default       => 'dev_settings',
-  }
   $rev = $revision ? {
     undef   => "$env",
     default => $revision,
