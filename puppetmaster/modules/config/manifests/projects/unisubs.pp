@@ -47,9 +47,9 @@ define config::projects::unisubs (
   }
   $server_name = "$env" ? {
     'vagrant'    => 'unisubs.example.com',
-    'local'       => 'unisubs.local', # this is for the multi-vm environment for infrastructure testing
-    'production'  => 'www.universalsubtitles.org',
-    default       => "$env.universalsubtitles.org",
+    'local'       => 'unisubs.local amara.local', # this is for the multi-vm environment for infrastructure testing
+    'production'  => 'www.universalsubtitles.org universalsubtitles.org www.amara.org amara.org',
+    default       => "$env.universalsubtitles.org $env.amara.org",
   }
   $project_root = "$apps_root/$env"
   $project_dir = "$project_root/unisubs"
