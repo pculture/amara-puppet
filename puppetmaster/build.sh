@@ -43,6 +43,25 @@ echo "[main]
   node_name_fact = fqdn
   runinterval = 300" > /etc/puppet/puppet.conf
 
+# create hiera config
+echo "---
+:backends:
+  - yaml
+  - puppet
+
+:logger: console
+
+:hierarchy:
+  - "%{system_environment}"
+  - common
+
+:yaml:
+   :datadir: /etc/puppet/hieradata
+
+:puppet:
+   :datasource: data
+" > /etc/hiera.yaml
+
 # autosign config for vagrant
 echo "*.local" > /etc/puppet/autosign.conf
 
