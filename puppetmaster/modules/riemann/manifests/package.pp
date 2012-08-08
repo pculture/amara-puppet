@@ -6,8 +6,12 @@ class riemann::package inherits riemann::params {
   if ! defined(Package['openjdk-6-jdk']) { package { 'openjdk-6-jdk': ensure => installed, } }
 
   exec { 'riemann::package::install':
-    command   => "wget $riemann::params::riemann_deb_url -O /tmp/riemann.deb ; dpkg -i /tmp/riemann.deb ; rm /tmp/riemann.deb",
+    command   => "wget $riemann::params::riemann_url -O /tmp/riemann.tar.bz2 ; cd /opt ; tar jxf /tmp/riemann.tar.bz2 ; mv riemann-* riemann ; rm -rf /tmp/riemann",
     user      => root,
-    creates   => '/usr/bin/riemann',
+    creates   => '/opt/riemann/bin/riemann',
+  }
+  package { 'riemann-dash':
+    ensure    => present,
+    provider  => 'gem',
   }
 }
