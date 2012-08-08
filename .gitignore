@@ -1,6 +1,7 @@
 pkg/*
 puppetmaster/amara-puppet-private
 *.swp
+*.swo
 *DS_Store*
 .vagrant
 *.un*
