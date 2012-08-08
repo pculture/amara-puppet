@@ -9,9 +9,13 @@ Vagrant::Config.run do |config|
   config.vm.define :util do |util_config|
     util_config.vm.host_name = "util.local"
     util_config.vm.network :hostonly, "10.10.10.110"
+    util_config.vm.forward_port 2003, 2003 # graphite
+    util_config.vm.forward_port 2004, 2004 # graphite
     util_config.vm.forward_port 3000, 3001 # graylog2
     util_config.vm.forward_port 4567, 4567 # riemann-dash
     util_config.vm.forward_port 5555, 5555 # riemann
+    util_config.vm.forward_port 7002, 7002 # graphite
+    util_config.vm.forward_port 80, 8081 # graphite-web
     util_config.vm.provision :shell, :path => "bootstrap.sh"
   end
 

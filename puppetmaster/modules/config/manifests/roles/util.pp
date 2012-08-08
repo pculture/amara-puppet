@@ -3,7 +3,8 @@ class config::roles::util {
   class { 'graylog2':
     update_local_syslog => false,
   }
-  class { 'riemann': }
+  class { 'graphite': }
+  class { 'riemann': require  => Class['graphite'], }
   class { 'config::config':
     require => [
       Class['graylog2'],

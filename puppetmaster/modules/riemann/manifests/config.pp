@@ -22,7 +22,7 @@ class riemann::config inherits riemann::params {
   file { '/etc/init.d/riemann-dash':
       ensure  => link,
       target  => '/lib/init/upstart-job',
-      alias   => "riemann-dash-upstart-job"
+      alias   => "riemann-dash-upstart-job",
   }
   file { "/etc/init/riemann-dash.conf":
       mode    => 0644,
