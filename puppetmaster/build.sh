@@ -24,6 +24,8 @@ dpkg -i puppetlabs.deb
 apt-get -y update
 DEBCONF=noninteractive apt-get -y install puppetmaster-passenger git-core
 
+gem install --no-ri --no-rdoc hiera hiera-puppet
+
 # create puppet directories
 mkdir -p /etc/puppet/manifests
 mkdir -p /etc/puppet/modules
