@@ -3,6 +3,7 @@ class riemann::package inherits riemann::params {
     path      => "${::path}",
     logoutput => on_failure,
   }
+  if ! defined(Package['g++']) { package { 'g++': ensure => installed, } }
   if ! defined(Package['make']) { package { 'make': ensure => installed, } }
   if ! defined(Package['autoconf']) { package { 'autoconf': ensure => installed, } }
   if ! defined(Package['openjdk-6-jdk']) { package { 'openjdk-6-jdk': ensure => installed, } }

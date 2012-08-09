@@ -24,8 +24,11 @@ class graphite::config inherits graphite::params {
     ensure        => directory,
     owner         => 'www-data',
     group         => 'www-data',
-    recurse       => true,
-    recurselimit  => 1,
+    notify        => Service['apache2'],
+  }
+  file { '/opt/graphite/storage/graphite.db':
+    owner         => 'www-data',
+    group         => 'www-data',
     notify        => Service['apache2'],
   }
   file { '/opt/graphite/storage/log/webapp':
