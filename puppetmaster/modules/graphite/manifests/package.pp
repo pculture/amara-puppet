@@ -24,15 +24,18 @@ class graphite::package inherits graphite::params {
   exec { 'graphite::package::install_whisper':
     command   => "pip install --use-mirrors $graphite::params::whisper_url",
     creates   => '/usr/local/bin/whisper-update.py',
+    require   => Package['python-pip'],
   }
   # carbon
   exec { 'graphite::package::install_carbon':
     command   => "pip install --use-mirrors $graphite::params::carbon_url",
     creates   => '/opt/graphite/bin/carbon-cache.py',
+    require   => Package['python-pip'],
   }
   # graphite-web
   exec { 'graphite::package::install_graphite_web':
     command   => "pip install --use-mirrors $graphite::params::graphite_web_url",
     creates   => '/opt/graphite/webapp/graphite/manage.py',
+    require   => Package['python-pip'],
   }
 }
