@@ -4,7 +4,7 @@ node basenode {
     include base
   } else {
     class { 'base':
-      syslog_server         => "${config::params::syslog_server}",
+      syslog_server         => 'syslog.amara.org',
       puppet_dashboard_url  => 'http://puppet.amara.org:3000'
     }
   }
