@@ -3,14 +3,14 @@ class base::config inherits base::params {
     path      => "${::path}",
     logoutput => on_failure,
   }
+  $dev_group = 'deploy'
+  if ! defined(Group["$dev_group"]) {
+    group { "$dev_group":
+      ensure  => present,
+    }
+  }
   # hack: local /etc/hosts for vagrant
   if ($::is_vagrant == 'true') {
-    $dev_group = 'deploy'
-    if ! defined(Group["$dev_group"]) {
-      group { "$dev_group":
-        ensure  => present,
-      }
-    }
     if ! defined(User['vagrant']) {
       user { 'vagrant':
         groups  => ["$dev_group"],
