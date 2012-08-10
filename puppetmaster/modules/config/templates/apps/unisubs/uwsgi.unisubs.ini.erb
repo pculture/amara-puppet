@@ -1,0 +1,19 @@
+[uwsgi]
+master = true
+processes = 4
+socket = /tmp/uwsgi_unisubs.sock
+die-on-term = true
+# currently with nginx + uwsgi this must run under www-data/www-data
+uid = www-data
+gid = www-data
+enable-threads = true
+virtualenv = <%= @ve_dir %>
+buffer-size = 32768
+no-orphans = true
+vacuum = true
+pythonpath = <%= @project_root %>
+wsgi-file = <%= @project_dir %>/deploy/unisubs.wsgi
+max-requests = 5000
+log-syslog = uwsgi.unisubs.<%= @env %>
+env = DJANGO_SETTINGS_MODULE=unisubs_settings
+touch-reload = <%= @project_dir %>/deploy/unisubs.wsgi

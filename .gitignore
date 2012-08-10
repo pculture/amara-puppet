@@ -4,4 +4,4 @@ puppetmaster/amara-puppet-private
 *.swo
 *DS_Store*
 .vagrant
-*.un*
+*.un~*
