@@ -8,7 +8,8 @@
   ssldir = /var/lib/puppet/ssl
   reporturl = <%= scope.lookupvar('base::puppet_dashboard_url') %>/reports/upload
   facts_terminus = yaml
-  modulepath = /opt/amara-puppet-private:/opt/amara-puppet:/etc/puppet/modules
+  modulepath = /opt/amara-puppet-private:/opt/amara-puppet/puppetmaster/modules:/etc/puppet/modules
+  manifestdir = /opt/amara-puppet/puppetmaster/manifests:/etc/puppet/manifests
 
 [agent]
   node_name_fact = fqdn
