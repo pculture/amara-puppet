@@ -46,6 +46,7 @@ server {
         root <%= @project_dir %>/media;
         try_files /$1 @unisubs;
     }
+    <% if @env == 'dev' %>
     location ~* /user-data/(.*) {
         root <%= @project_dir %>/user-data;
         try_files /$1 @unisubs;
@@ -54,6 +55,16 @@ server {
         root <%= @project_dir %>/media;
         try_files /$1 @unisubs;
     }
+    <% else %>
+    location ~* /user-data/(.*) {
+        root <%= @project_dir %>/user-data;
+        try_files /$1 @unisubs;
+    }
+    location ~* /site_media/(.*) {
+        root <%= @project_dir %>/media;
+        try_files /$1 @unisubs;
+    }
+    <% end %>
     location ~* / {
         proxy_redirect   off;
         <% if @env == 'vagrant' %>

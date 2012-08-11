@@ -9,6 +9,7 @@ class base::package {
   if ! defined(Package['curl']) { package { 'curl': ensure => installed, } }
   if ! defined(Package['gawk']) { package { 'gawk': ensure => installed, } }
   if ! defined(Package['git-core']) { package { 'git-core': ensure => installed, } }
+  if ! defined(Package['libssl-dev']) { package { 'libssl-dev': ensure => installed, } }
   if ! defined(Package['ntp']) { package { 'ntp': ensure => installed, } }
   if ! defined(Package['python-software-properties']) { package { 'python-software-properties': ensure => installed, } }
   if ! defined(Package['s3cmd']) { package { 's3cmd': ensure => installed, } }

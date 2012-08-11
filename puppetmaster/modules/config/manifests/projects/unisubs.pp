@@ -229,7 +229,7 @@ define config::projects::unisubs (
   # nginx
   if defined(Class['nginx']) {
     file { "config::projects::unisubs::vhost_unisubs_$env":
-      path    => "/etc/nginx/conf.d/$server_name.conf",
+      path    => "/etc/nginx/conf.d/amara_$env.conf",
       content => template('config/apps/unisubs/vhost_unisubs.conf.erb'),
       #owner   => "${nginx::config::www_user}",
       mode    => 0644,
