@@ -14,27 +14,27 @@ server {
     keepalive_timeout 5;
 
     location ~* /en/user-data/video/(.*) {
-        root /opt/extras/video;
+        root <%= @project_dir %>/user-data/video;
         try_files /$1 @unisubs;
     }
     location ~* /en/user-data/pictures/(.*) {
-        root /opt/extras/pictures;
+        root <%= @project_dir %>/user-data/pictures;
         try_files /$1 @unisubs;
     }
     location ~* /en/site_media/static-cache/(.*) {
-        root /opt/extras/static-cache;
+        root <%= @project_dir %>/media/static-cache;
         try_files /$1 @unisubs;
     }
     location ~* /user-data/video/(.*) {
-        root /opt/extras/video;
+        root <%= @project_dir %>/user-data/video;
         try_files /$1 @unisubs;
     }
     location ~* /user-data/pictures/(.*) {
-        root /opt/extras/pictures;
+        root <%= @project_dir %>/user-data/pictures;
         try_files /$1 @unisubs;
     }
     location ~* /site_media/static-cache/(.*) {
-        root /opt/extras/static-cache;
+        root <%= @project_dir %>/media/static-cache;
         try_files /$1 @unisubs;
     }
 
@@ -46,7 +46,6 @@ server {
         root <%= @project_dir %>/media;
         try_files /$1 @unisubs;
     }
-    <% if @env == 'dev' %>
     location ~* /user-data/(.*) {
         root <%= @project_dir %>/user-data;
         try_files /$1 @unisubs;
@@ -55,22 +54,12 @@ server {
         root <%= @project_dir %>/media;
         try_files /$1 @unisubs;
     }
-    <% else %>
-    location ~* /user-data/(.*) {
-        root <%= @project_dir %>/user-data;
-        try_files /$1 @unisubs;
-    }
-    location ~* /site_media/(.*) {
-        root <%= @project_dir %>/media;
-        try_files /$1 @unisubs;
-    }
-    <% end %>
     location ~* / {
         proxy_redirect   off;
+        proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_set_header X-Real-IP        $remote_addr;
         <% if @env == 'vagrant' %>
         proxy_set_header Host unisubs.example.com:8000;
-        proxy_set_header X-Real-IP        $remote_addr;
-        proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
         proxy_set_header X-Magic-Header   "secret";
         proxy_set_header X-Forwarded-Protocol http;
         proxy_pass http://unisubs-backend-<%= @env %>;
@@ -82,10 +71,10 @@ server {
 
     location @unisubs {
         proxy_redirect   off;
+        proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_set_header X-Real-IP        $remote_addr;
         <% if @env == 'vagrant' %>
         proxy_set_header Host unisubs.example.com:8000;
-        proxy_set_header X-Real-IP        $remote_addr;
-        proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
         proxy_set_header X-Magic-Header   "secret";
         proxy_set_header X-Forwarded-Protocol http;
         proxy_pass http://unisubs-backend-<%= @env %>;
