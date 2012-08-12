@@ -17,6 +17,7 @@ max-requests = 5000
 log-syslog = uwsgi.unisubs.<%= @env %>
 <% if @graphite_host != 'undef' %>
 carbon = <%= @graphite_host %>
+carbon-freq = 10
 <% end %>
 env = DJANGO_SETTINGS_MODULE=unisubs_settings
 touch-reload = <%= @project_dir %>/deploy/unisubs.wsgi
