@@ -1,4 +1,4 @@
-class config::roles::app {
+class config::roles::app ($graphite_host=undef) {
   # base modules to include
   if ! defined(Class['nginx']) { class { 'nginx': } }
   if ! defined(Class['appserver']) {
@@ -39,7 +39,7 @@ class config::roles::app {
       revision        => $revision,
       env             => $env,
       enable_upstart  => $enable_upstart,
-      graphite_host   => $config::graphite_host,
+      graphite_host   => $config::roles::app::graphite_host,
     }
   }
   # setup unisubs project

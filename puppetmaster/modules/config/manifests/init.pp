@@ -35,7 +35,7 @@ class config ($graphite_host=$config::params::graphite_host) inherits config::pa
   }
   # conditional to check for roles
   if 'app' in $roles {
-    if ! defined(Class['config::roles::app']) { class { 'config::roles::app': } }
+    if ! defined(Class['config::roles::app']) { class { 'config::roles::app': graphite_host => $graphite_host, } }
   }
   if 'data' in $roles {
     if ! defined(Class['config::roles::data']) { class { 'config::roles::data': } }
