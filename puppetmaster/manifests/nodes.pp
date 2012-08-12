@@ -13,7 +13,7 @@ node basenode {
   if ($::is_vagrant == 'true') {
     class { 'config': require => Class['base'], }
   } else {
-    class { 'config': graphite_host = '10.226.105.213:2003', require => Class['base'], }
+    class { 'config': graphite_host => '10.226.105.213:2003', require => Class['base'], }
   }
   class { 'amara': }
 }
