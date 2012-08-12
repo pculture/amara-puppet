@@ -20,7 +20,7 @@
 #
 # Copyright 2012 PCF, unless otherwise noted.
 #
-class config ($graphite_host=$config::params::graphite_host) {
+class config ($graphite_host=$config::params::graphite_host) inherits config::params {
   # this needs to match the appserver::apps_dir variable for the fabric tasks
   $apps_dir = '/opt/apps'
   $ve_root = '/opt/ve'
