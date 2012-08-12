@@ -24,11 +24,33 @@ class graphite::config inherits graphite::params {
     ensure        => directory,
     owner         => 'www-data',
     group         => 'www-data',
+    mode          => 0775,
     notify        => Service['apache2'],
   }
   file { '/opt/graphite/storage/graphite.db':
     owner         => 'www-data',
     group         => 'www-data',
+    notify        => Service['apache2'],
+  }
+  file { '/opt/graphite/storage/log':
+    ensure        => directory,
+    owner         => 'www-data',
+    group         => 'www-data',
+    mode          => 0775,
+    notify        => Service['apache2'],
+  }
+  file { '/opt/graphite/storage/rrd':
+    ensure        => directory,
+    owner         => 'www-data',
+    group         => 'www-data',
+    mode          => 0775,
+    notify        => Service['apache2'],
+  }
+  file { '/opt/graphite/storage/whisper':
+    ensure        => directory,
+    owner         => 'www-data',
+    group         => 'www-data',
+    mode          => 0775,
     notify        => Service['apache2'],
   }
   file { '/opt/graphite/storage/log/webapp':
