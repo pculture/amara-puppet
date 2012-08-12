@@ -126,6 +126,7 @@ define config::projects::unisubs (
         content => template('config/apps/unisubs/uwsgi.unisubs.ini.erb'),
         mode    => 0644,
         owner   => root,
+        notify  => Service["uwsgi.unisubs.$env"],
       }
       file { "config::projects::unisubs::upstart_unisubs_$env":
         ensure  => present,
