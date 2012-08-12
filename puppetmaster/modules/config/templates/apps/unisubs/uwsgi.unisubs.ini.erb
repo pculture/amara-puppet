@@ -15,5 +15,8 @@ pythonpath = <%= @project_root %>
 wsgi-file = <%= @project_dir %>/deploy/unisubs.wsgi
 max-requests = 5000
 log-syslog = uwsgi.unisubs.<%= @env %>
+<% if @graphite_host != 'undef' %>
+carbon = <%= @graphite_host %>
+<% end %>
 env = DJANGO_SETTINGS_MODULE=unisubs_settings
 touch-reload = <%= @project_dir %>/deploy/unisubs.wsgi

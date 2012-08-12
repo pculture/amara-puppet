@@ -39,6 +39,7 @@ class config::roles::app {
       revision        => $revision,
       env             => $env,
       enable_upstart  => $enable_upstart,
+      graphite_host   => $config::graphite_host,
     }
   }
   # setup unisubs project

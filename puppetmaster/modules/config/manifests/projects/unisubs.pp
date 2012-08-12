@@ -10,6 +10,7 @@ define config::projects::unisubs (
     $celery_user='celery',
     $celery_group='celery',
     $setup_db=false,
+    $graphite_host=undef,
   ) {
 
   # modules

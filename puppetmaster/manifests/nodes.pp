@@ -10,7 +10,11 @@ node basenode {
   }
   # modules
   class { 'postfix': }
-  class { 'config': require => Class['base'], }
+  if ($::is_vagrant == 'true') {
+    class { 'config': require => Class['base'], }
+  } else {
+    class { 'config': graphite_host = '10.226.105.213:2003', require => Class['base'], }
+  }
   class { 'amara': }
 }
 node default inherits basenode {} # default for all non-defined nodes
