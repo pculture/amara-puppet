@@ -38,4 +38,11 @@ class graphite::package inherits graphite::params {
     creates   => '/opt/graphite/webapp/graphite/manage.py',
     require   => Package['python-pip'],
   }
+  # bucky (collectd to graphite bridge)
+  exec { 'graphite::package::install_bucky':
+    command   => "pip install --use-mirrors bucky",
+    creates   => '/usr/local/bin/bucky',
+    require   => Package['python-pip'],
+  }
+
 }

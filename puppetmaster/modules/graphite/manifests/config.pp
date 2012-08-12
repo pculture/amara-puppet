@@ -87,4 +87,25 @@ class graphite::config inherits graphite::params {
     content => template('graphite/carbon-cache.conf.erb'),
     notify  => Service['carbon-cache'],
   }
+  # bucky config
+  file { '/etc/bucky.cfg':
+    ensure  => present,
+    owner   => root,
+    content => template('graphite/bucky.cfg.erb'),
+  }
+  # manual symlink to /lib/init/upstart-job for http://projects.puppetlabs.com/issues/14297
+  file { '/etc/init.d/bucky':
+    ensure  => link,
+    target  => '/lib/init/upstart-job',
+    alias   => 'bucky-upstart-job',
+  }
+  file { '/etc/init/bucky.conf':
+    ensure  => present,
+    mode    => 0644,
+    owner   => root,
+    group   => root,
+    content => template('graphite/bucky.conf.erb'),
+    notify  => Service['bucky'],
+  }
+
 }

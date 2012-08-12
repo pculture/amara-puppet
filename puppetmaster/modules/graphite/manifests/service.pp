@@ -8,4 +8,12 @@ class graphite::service {
         hasstatus   => true,
     }
   }
+  if ! defined(Service['bucky']) {
+    service { 'bucky':
+        ensure      => running,
+        provider    => upstart,
+        hasrestart  => true,
+        hasstatus   => true,
+    }
+  }
 }

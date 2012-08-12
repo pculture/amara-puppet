@@ -6,6 +6,7 @@ class base::package {
     logoutput => on_failure,
   }
   if ! defined(Package['build-essential']) { package { 'build-essential': ensure => installed, } }
+  if ! defined(Package['collectd']) { package { 'collectd': ensure => installed, } }
   if ! defined(Package['curl']) { package { 'curl': ensure => installed, } }
   if ! defined(Package['gawk']) { package { 'gawk': ensure => installed, } }
   if ! defined(Package['git-core']) { package { 'git-core': ensure => installed, } }
