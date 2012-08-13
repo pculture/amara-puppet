@@ -5,10 +5,4 @@ class config::roles::util {
   }
   class { 'graphite': }
   class { 'riemann': require  => Class['graphite'], }
-  class { 'config::config':
-    require => [
-      Class['graylog2'],
-      Class['riemann'],
-    ],
-  }
 }
