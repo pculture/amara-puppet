@@ -12,4 +12,12 @@ class nginx::config inherits nginx::params {
     require => Package['nginx'],
     notify  => Service['nginx'],
   }
+  file { '/etc/nginx/sites-available/default':
+    ensure  => present,
+    content => template('nginx/default.conf.erb'),
+    owner   => root,
+    mode    => 0644,
+    require => Package['nginx'],
+    notify  => Service['nginx'],
+  }
 }
