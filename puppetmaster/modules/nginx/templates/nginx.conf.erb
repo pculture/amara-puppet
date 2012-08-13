@@ -48,11 +48,13 @@ http {
         # gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
 
         # status
-        location /nginx_status {
-            stub_status on;
-            access_log off;
-            allow 127.0.0.1;
-            deny all;
+        server {
+            location /nginx_status {
+                stub_status on;
+                access_log off;
+                allow 127.0.0.1;
+                deny all;
+            }
         }
 
         # virtual hosts
