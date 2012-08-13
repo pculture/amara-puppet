@@ -11,7 +11,7 @@ node basenode {
   # modules
   class { 'postfix': }
   if ($::is_vagrant == 'true') {
-    class { 'config': require => Class['base'], }
+    class { 'config': graphite_host => '10.10.10.110:2003', require => Class['base'], }
   } else {
     class { 'config': graphite_host => '10.226.105.213:2003', require => Class['base'], }
   }
