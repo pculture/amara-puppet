@@ -15,15 +15,6 @@ class config::roles::app ($graphite_host=undef) {
     undef   => ["dev"],
     default => $::system_environments,
   }
-  if ! defined(Class['config']) {
-    class { 'config::config':
-      require => [
-        Class['nginx'],
-        Class['appserver'],
-        Class['closure'],
-      ],
-    }
-  }
   define project_unisubs ($revision=undef, $enable_upstart=true, $env=$name) {
     $apps_root  = "${appserver::apps_dir}"
     $app_user      = "${appserver::app_user}"

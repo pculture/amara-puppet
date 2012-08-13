@@ -4,20 +4,11 @@ class config::roles::data {
   if ! defined(Class['redis']) { class { 'redis': } }
   if ! defined(Class['solr']) { class { 'solr': } }
   if ! defined(Class['virtualenv']) { class { 'virtualenv': } }
-  if ! defined(Class['config::config']) {
-    class { 'config::config':
-      require => [
-        Class['rabbitmq'],
-        Class['redis'],
-        Class['solr'],
-      ],
-    }
-  }
   # extra role packages
   if ! defined(Package['libmysqlclient-dev']) { package { 'libmysqlclient-dev': ensure => installed, } }
 
   # if running in the local test vagrant multi-vm, include mysql for local testing
-  if ('vagrant' in $config::roles) {
+  if ($::is_vagrant) {
     if ! defined(Class['mysql']) { class { 'mysql': } }
   }
 
