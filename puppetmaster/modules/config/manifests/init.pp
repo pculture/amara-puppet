@@ -49,6 +49,4 @@ class config ($graphite_host=$config::params::graphite_host) inherits config::pa
     if ! defined(Class['config::roles::data']) { class { 'config::roles::data': } }
     if ! defined(Class['mysql']) { class { 'mysql': } }
   }
-  # config
-  if ! defined(Class['config']) { class { 'config::config': } }
 }
