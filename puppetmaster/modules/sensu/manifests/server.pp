@@ -10,6 +10,17 @@ class sensu::server ($configure_rabbitmq=true, $configure_redis=true) {
   if ($configure_redis) {
     if ! defined(Package['redis-server']) { package { 'redis-server': ensure => installed, } }
     if ! defined(Service['redis-server']) { service { 'redis-server': ensure  => running, } }
+    file { '/etc/redis/redis.conf':
+      alias   => 'sensu::server::redis_conf',
+      ensure  => present,
+      content => template('sensu/redis.conf.erb'),
+      owner   => root,
+      group   => 'redis',
+      mode    => 0640,
+      require => Package['redis-server'],
+      notify  => Service['redis-server'],
+    }
+    if ! defined(Service['redis-server']) { service { 'redis-server': ensure => running, } }
   }
   # configure rabbit
   if ($configure_rabbitmq) {
@@ -36,8 +47,10 @@ class sensu::server ($configure_rabbitmq=true, $configure_redis=true) {
   }
   # service
   service { ['sensu-server', 'sensu-api', 'sensu-dashboard']:
-    ensure  => running,
-    require => Package['sensu'],
+    enable    => true,
+    ensure    => running,
+    provider  => upstart,
+    require   => Package['sensu'],
     subscribe => File['/etc/sensu/config.json'],
   }
 }

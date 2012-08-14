@@ -28,5 +28,6 @@ class sensu::package {
       require => [ File['sensu::package::apt_source_list'], Exec['sensu::package::apt_update'] ],
     }
   }
+  if ! defined(Package['sensu-plugin']) { package { 'sensu-plugin': ensure => installed, provider => 'gem', } }
 
 }

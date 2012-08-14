@@ -6,6 +6,10 @@ class sensu::params {
   $sensu_rabbitmq_pass = 's3n5u'
   $sensu_redis_host = 'localhost'
   $sensu_redis_port = '6379'
+  $sensu_api_host = 'localhost'
+  $sensu_api_port = '4567'
+  $sensu_dashboard_host = 'localhost'
+  $sensu_dashboard_port = '8080'
   $sensu_dashboard_user = 'admin'
   $sensu_dashboard_pass = 'sensu'
 }

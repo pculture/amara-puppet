@@ -11,8 +11,20 @@ node basenode {
   # modules
   class { 'postfix': }
   if ($::is_vagrant == 'true') {
+    class { 'sensu':
+      sensu_rabbitmq_host   => 'util.local',
+      sensu_redis_host      => 'util.local',
+      sensu_api_host        => 'util.local',
+      sensu_dashboard_host  => 'util.local',
+    }
     class { 'config': graphite_host => '10.10.10.110:2003', require => Class['base'], }
   } else {
+    class { 'sensu':
+      sensu_rabbitmq_host   => 'util.amara.org',
+      sensu_redis_host      => 'util.amara.org',
+      sensu_api_host        => 'util.amara.org',
+      sensu_dashboard_host  => 'util.amara.org',
+    }
     class { 'config': graphite_host => '10.226.105.213:2003', require => Class['base'], }
   }
   class { 'amara': }

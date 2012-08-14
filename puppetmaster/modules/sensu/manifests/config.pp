@@ -10,6 +10,10 @@ class sensu::config inherits sensu::params {
   $sensu_rabbitmq_pass = $sensu::sensu_rabbitmq_pass
   $sensu_redis_host = $sensu::sensu_redis_host
   $sensu_redis_port = $sensu::sensu_redis_port
+  $sensu_api_host = $sensu::sensu_api_host
+  $sensu_api_port = $sensu::sensu_api_port
+  $sensu_dashboard_host = $sensu::sensu_dashboard_host
+  $sensu_dashboard_port = $sensu::sensu_dashboard_port
   $sensu_dashboard_user = $sensu::sensu_dashboard_user
   $sensu_dashboard_pass = $sensu::sensu_dashboard_pass
   file { '/etc/sensu/config.json':
@@ -19,5 +23,17 @@ class sensu::config inherits sensu::params {
     group   => 'sensu',
     mode    => 0640,
     require => Package['sensu'],
+  }
+  file { '/etc/sensu/plugins':
+    ensure  => directory,
+    owner   => root,
+    mode    => 0755,
+    require => Package['sensu'],
+  }
+  # plugins
+  file { '/etc/sensu/plugins/check-procs.rb':
+    ensure  => present,
+    source  => 'puppet:///modules/sensu/check-procs.rb',
+    mode    => 0755,
   }
 }

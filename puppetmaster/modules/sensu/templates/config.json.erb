@@ -11,27 +11,14 @@
     "port": <%= @sensu_redis_port %>
   },
   "api": {
-    "host": "localhost",
-    "port": 4567
+    "host": "<%= @sensu_api_host %>",
+    "port": <%= @sensu_api_port %>
   },
   "dashboard": {
-    "host": "localhost",
-    "port": 8080,
+    "host": "<%= @sensu_dashboard_host %>",
+    "port": <%= @sensu_dashboard_port %>,
     "user": "<%= @sensu_dashboard_user %>",
     "password": "<%= @sensu_dashboard_pass %>"
-  },
-  "client": {
-    "name": "localhost",
-    "address": "127.0.0.1",
-    "subscriptions": [ "core" ]
-  },
-  "checks": {
-    "test": {
-      "handler": "default",
-      "command": "echo 'Im OK'; exit 0",
-      "standalone": true,
-      "interval": 60
-    }
   },
   "handlers": {
     "default": {
