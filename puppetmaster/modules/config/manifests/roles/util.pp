@@ -4,5 +4,6 @@ class config::roles::util {
     update_local_syslog => false,
   }
   class { 'graphite': }
+  class { 'sensu::server': }
   class { 'riemann': require  => Class['graphite'], }
 }

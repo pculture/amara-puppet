@@ -16,6 +16,7 @@ Vagrant::Config.run do |config|
     util_config.vm.forward_port 5555, 5555 # riemann
     util_config.vm.forward_port 7002, 7002 # graphite
     util_config.vm.forward_port 80, 8081 # graphite-web
+    util_config.vm.forward_port 8080, 8082 # sensu-dashboard
     util_config.vm.provision :shell, :path => "bootstrap.sh"
   end
 
