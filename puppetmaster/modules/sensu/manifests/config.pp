@@ -33,7 +33,18 @@ class sensu::config inherits sensu::params {
   # plugins
   file { '/etc/sensu/plugins/check-procs.rb':
     ensure  => present,
-    source  => 'puppet:///modules/sensu/check-procs.rb',
+    source  => 'puppet:///modules/sensu/plugins/check-procs.rb',
+    mode    => 0755,
+  }
+  # handlers
+  file { '/etc/sensu/handlers/irc.rb':
+    ensure  => present,
+    source  => 'puppet:///modules/sensu/handlers/irc.rb',
+    mode    => 0755,
+  }
+  file { '/etc/sensu/handlers/mailer.rb':
+    ensure  => present,
+    source  => 'puppet:///modules/sensu/handlers/mailer.rb',
     mode    => 0755,
   }
 }

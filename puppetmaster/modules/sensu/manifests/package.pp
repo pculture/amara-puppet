@@ -29,5 +29,6 @@ class sensu::package {
     }
   }
   if ! defined(Package['sensu-plugin']) { package { 'sensu-plugin': ensure => installed, provider => 'gem', } }
+  if ! defined(Package['carrier-pigeon']) { package { 'carrier-pigeon': ensure => installed, provider => 'gem', } }
 
 }

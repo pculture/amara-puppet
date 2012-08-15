@@ -15,4 +15,7 @@ echo "[main]\n  pluginsync = true\n" > /etc/puppet/puppet.conf
 # run the initial sync in the foreground
 puppet agent -t
 
+# start the puppet agent daemon
+puppet agent
+
 exit 0
