@@ -26,6 +26,11 @@ class base::config inherits base::params {
         groups  => ["$dev_group"],
       }
     }
+    if ! defined(User['sandbox']) {
+      user { 'sandbox':
+        groups  => ["$dev_group"],
+      }
+    }
     file { "base::config::hosts":
       path    => "/etc/hosts",
       owner   => root,

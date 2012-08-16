@@ -19,6 +19,7 @@ class base::package {
   if ! defined(Package['supervisor']) { package { 'supervisor': ensure => installed, } }
   if ! defined(Package['vim']) { package { 'vim': ensure => installed, } }
   if ($::operatingsystem == 'Ubuntu') and ($::operatingsystemrelease == '10.04') {
+    if ! defined(Package['ruby']) { package { 'ruby': ensure => installed, } }
     if ! defined(Package['rubygems']) { package { 'rubygems': ensure => installed, } }
     if ! defined(Package['ruby1.8-dev']) { package { 'ruby1.8-dev': ensure => installed, } }
   }
