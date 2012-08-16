@@ -12,7 +12,7 @@ class base::config inherits base::params {
   # timezone
   file { '/etc/timezone':
     ensure  => present,
-    content => 'Etc/UTC',
+    content => "Etc/UTC\n",
     notify  => Exec['base::config::update_tzdata'],
   }
   exec { 'base::config::update_tzdata':

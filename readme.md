@@ -92,3 +92,27 @@ To add a new environment for the `app` role:
 
 ## Amara Config
 In order to use the private Amara config, clone the amara-puppet-private repo into the `puppetmaster` directory.  The Vagrantfile will automatically mount the module in the proper place.
+
+## VMware Fusion
+VirtualBox has not been the most stable for me so I use VMware Fusion when VirtualBox is not playing nice.  In order to maintain consistency, I use the same networking for the VMs.  I will put the configuration process here and hopefully have a script to set it all up sometime.
+
+* (on Mac) Edit /Library/Preferences/VMware\ Fusion/networking and configure NAT address subnet for 10.10.10.0 (should be VNET_8_HOSTONLY_SUBNET)
+* Create each VM (following the Vagrantfile base OS - either Ubuntu lucid or precise)
+* Install VMware tools
+* Install Puppet (using the PuppetLabs APT repo http://projects.puppetlabs.com/projects/puppet/wiki/Downloading_Puppet#Ubuntu+Packages)
+* Configure each VM networking (following the Vagrantfile for each node)
+* On the Puppet master, `cd` into the shared directory and run the `build.sh` script to build the master
+* Add a shared folder for the Puppet master to the `amara-puppet/puppetmaster` directory labeled as `puppet`
+* To use the Amara Puppet modules add the following to `/etc/rc.local` before the `exit 0` line:
+
+```
+while [ "`mount | grep hgfs`" = "" ]
+do
+    sleep 5
+done
+mount -o bind /mnt/hgfs/puppet/manifests /etc/puppet/manifests
+mount -o bind /mnt/hgfs/puppet/modules /etc/puppet/modules
+mount -o bind /mnt/hgfs/puppet/amara-puppet-private/amara /etc/puppet/modules/amara
+```
+* Then run `sudo mount -a` to bind mount
+* Run Puppet on each -- should setup the same environment

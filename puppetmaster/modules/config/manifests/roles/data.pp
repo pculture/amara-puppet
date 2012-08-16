@@ -1,4 +1,4 @@
-class config::roles::data {
+class config::roles::data($revisions={}) {
   # base modules to include
   if ! defined(Class['rabbitmq']) { class { 'rabbitmq': } }
   if ! defined(Class['redis']) { class { 'redis': } }
@@ -28,22 +28,22 @@ class config::roles::data {
   }
   # setup unisubs project
   if 'local' in $config::envs {
-    project_unisubs_data { 'local': revision => 'staging', }
+    project_unisubs_data { 'local': revision => $revisions['local'], }
   }
   if 'dev' in $config::envs {
-    project_unisubs_data { 'dev': }
+    project_unisubs_data { 'dev': revision => $revisions['dev'], }
   }
   if 'staging' in $config::envs {
-    project_unisubs_data { 'staging': }
+    project_unisubs_data { 'staging': revision => $revisions['staging'], }
   }
   if 'nf' in $config::envs {
-    project_unisubs_data { 'nf': revision => 'x-nf', }
+    project_unisubs_data { 'nf': revision => $revisions['nf'], }
   }
   if 'production' in $config::envs {
-    project_unisubs_data { 'production': }
+    project_unisubs_data { 'production': revision => $revisions['production'], }
   }
   # this is for the development environment
   if 'vagrant' in $config::envs {
-    project_unisubs_data { 'vagrant': revision => 'dev', }
+    project_unisubs_data { 'vagrant': revision => $revisions['vagrant'], }
   }
 }

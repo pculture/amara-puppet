@@ -33,12 +33,30 @@ class config ($graphite_host=$config::params::graphite_host) inherits config::pa
     undef => [],
     default => $::system_roles,
   }
+  # hash for controlling revisions for the app and data roles
+  $revisions = {
+    'vagrant'     => 'dev',
+    'local'       => 'x-new-puppet-setup',
+    'dev'         => 'dev',
+    'staging'     => 'staging',
+    'nf'          => 'x-nf',
+    'production'  => 'production',
+  }
   # conditional to check for roles
   if 'app' in $roles {
-    if ! defined(Class['config::roles::app']) { class { 'config::roles::app': graphite_host => $graphite_host, } }
+    if ! defined(Class['config::roles::app']) {
+      class { 'config::roles::app':
+        graphite_host => $graphite_host,
+        revisions     => $revisions,
+      }
+    }
   }
   if 'data' in $roles {
-    if ! defined(Class['config::roles::data']) { class { 'config::roles::data': } }
+    if ! defined(Class['config::roles::data']) {
+      class { 'config::roles::data':
+        revisions => $revisions,
+      }
+    }
   }
   if 'util' in $roles {
     if ! defined(Class['config::roles::util']) { class { 'config::roles::util': } }
