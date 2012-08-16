@@ -9,6 +9,16 @@ class base::config inherits base::params {
       ensure  => present,
     }
   }
+  # timezone
+  file { '/etc/timezone':
+    ensure  => present,
+    content => 'Etc/UTC',
+    notify  => Exec['base::config::update_tzdata'],
+  }
+  exec { 'base::config::update_tzdata':
+    command     => 'dpkg-reconfigure -f noninteractive tzdata',
+    refreshonly => true,
+  }
   # hack: local /etc/hosts for vagrant
   if ($::is_vagrant == 'true') {
     if ! defined(User['vagrant']) {

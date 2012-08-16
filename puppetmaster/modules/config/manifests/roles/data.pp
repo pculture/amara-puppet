@@ -8,7 +8,7 @@ class config::roles::data {
   if ! defined(Package['libmysqlclient-dev']) { package { 'libmysqlclient-dev': ensure => installed, } }
 
   # if running in the local test vagrant multi-vm, include mysql for local testing
-  if ($::is_vagrant) {
+  if ($::is_vagrant == 'true') {
     if ! defined(Class['mysql']) { class { 'mysql': } }
   }
 

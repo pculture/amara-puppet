@@ -244,7 +244,7 @@ define config::projects::unisubs (
     }
   }
   # vagrant setup
-  if ($::is_vagrant) and ($env == 'vagrant') {
+  if ($::is_vagrant == 'true') and ($env == 'vagrant') {
     # vagrant vagrant setup
     #user { 'vagrant':
     #  ensure  => present,
