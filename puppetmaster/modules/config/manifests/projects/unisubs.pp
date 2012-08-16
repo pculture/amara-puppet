@@ -38,7 +38,6 @@ define config::projects::unisubs (
     default => $::system_roles,
   }
   $settings_module = $env ? {
-    'dev'     => 'dev_settings',
     'vagrant' => 'dev_settings',
     default   => 'unisubs_settings',
   }
@@ -176,7 +175,8 @@ define config::projects::unisubs (
     ensure  => directory,
     path    => "/tmp/unisubs-messages_$env",
     owner   => "$app_user",
-    mode    => 0750,
+    group   => "$app_group",
+    mode    => 0770,
   }
   # celery config
   file { "config::projects::unisubs::upstart_celeryd_conf_$env":
