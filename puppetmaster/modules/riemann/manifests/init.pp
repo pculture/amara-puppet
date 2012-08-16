@@ -20,7 +20,10 @@
 #
 # Copyright 2012 PCF, unless otherwise noted.
 #
-class riemann ($graphite_host=$riemann::params::graphite_host) inherits riemann::params {
+class riemann (
+  $graphite_host=$riemann::params::graphite_host,
+  $enable_dashboard=true,
+  ) inherits riemann::params {
   class { 'riemann::package': }
   class { 'riemann::config':
     require => Class['riemann::package'],

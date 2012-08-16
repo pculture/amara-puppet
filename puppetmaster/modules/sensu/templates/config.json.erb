@@ -1,0 +1,29 @@
+{
+  "rabbitmq": {
+    "host": "<%= @sensu_rabbitmq_host %>",
+    "port": <%= @sensu_rabbitmq_port %>,
+    "user": "<%= @sensu_rabbitmq_user %>",
+    "password": "<%= @sensu_rabbitmq_pass %>",
+    "vhost": "<%= @sensu_rabbitmq_vhost %>"
+  },
+  "redis": {
+    "host": "<%= @sensu_redis_host %>",
+    "port": <%= @sensu_redis_port %>
+  },
+  "api": {
+    "host": "<%= @sensu_api_host %>",
+    "port": <%= @sensu_api_port %>
+  },
+  "dashboard": {
+    "host": "<%= @sensu_dashboard_host %>",
+    "port": <%= @sensu_dashboard_port %>,
+    "user": "<%= @sensu_dashboard_user %>",
+    "password": "<%= @sensu_dashboard_pass %>"
+  },
+  "handlers": {
+    "default": {
+      "type": "pipe",
+      "command": "/etc/sensu/handlers/default"
+    }
+  }
+}

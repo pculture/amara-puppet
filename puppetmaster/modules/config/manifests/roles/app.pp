@@ -1,4 +1,4 @@
-class config::roles::app ($graphite_host=undef) {
+class config::roles::app ($graphite_host=undef, $revisions={}) {
   # base modules to include
   if ! defined(Class['nginx']) { class { 'nginx': } }
   if ! defined(Class['appserver']) {
@@ -35,22 +35,22 @@ class config::roles::app ($graphite_host=undef) {
   }
   # setup unisubs project
   if 'local' in $envs {
-    project_unisubs { 'local': revision => 'staging', }
+    project_unisubs { 'local': revision => $revisions['local'], }
   }
   if 'dev' in $envs {
-    project_unisubs { 'dev': }
+    project_unisubs { 'dev': revision => $revision['dev'], }
   }
   if 'staging' in $envs {
-    project_unisubs { 'staging': }
+    project_unisubs { 'staging': revision => $revision['staging'], }
   }
   if 'nf' in $envs {
-    project_unisubs { 'nf': revision => 'x-nf', }
+    project_unisubs { 'nf': revision => $revisions['nf'], }
   }
   if 'production' in $envs {
-    project_unisubs { 'production': }
+    project_unisubs { 'production': revision => $revision['production'], }
   }
   # this is for the development environment
   if 'vagrant' in $envs {
-    project_unisubs { 'vagrant': revision => 'dev', }
+    project_unisubs { 'vagrant': revision => $revisions['vagrant'], }
   }
 }

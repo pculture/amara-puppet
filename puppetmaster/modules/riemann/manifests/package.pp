@@ -16,5 +16,6 @@ class riemann::package inherits riemann::params {
   package { 'riemann-dash':
     ensure    => present,
     provider  => 'gem',
+    require   => [ Package['g++'], Package['make'], Package['autoconf'] ],
   }
 }

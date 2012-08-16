@@ -155,7 +155,7 @@ define config::projects::unisubs (
       ensure  => link,
       path    => "$project_dir/media/js/closure-library",
       target  => "${closure::closure_local_dir}",
-      require => Class['closure'],
+      require => [ Exec["config::projects::unisubs::clone_repo_$env"], Class['closure'] ],
     }
     # create virtualenv
     exec { "config::projects::unisubs::virtualenv_$env":
@@ -244,7 +244,7 @@ define config::projects::unisubs (
     }
   }
   # vagrant setup
-  if ($::is_vagrant) and ($env == 'vagrant') {
+  if ($::is_vagrant == 'true') and ($env == 'vagrant') {
     # vagrant vagrant setup
     #user { 'vagrant':
     #  ensure  => present,

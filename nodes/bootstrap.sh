@@ -2,9 +2,9 @@
 
 echo "10.10.10.100 puppet puppet.local" >> /etc/hosts
 # create the env file
-echo "environments:\n  - local\n" > /etc/system_environments.yml
+echo "- local\n" > /etc/system_environments.yml
 # create the role file
-echo "roles:\n  - `hostname -s`\n" > /etc/system_roles.yml
+echo "- `hostname -s`\n" > /etc/system_roles.yml
 
 # update apt
 apt-get -y update 2>&1 > /dev/null
@@ -14,5 +14,8 @@ mkdir -p /etc/puppet
 echo "[main]\n  pluginsync = true\n" > /etc/puppet/puppet.conf
 # run the initial sync in the foreground
 puppet agent -t
+
+# start the puppet agent daemon
+puppet agent
 
 exit 0
