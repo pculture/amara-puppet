@@ -38,16 +38,16 @@ class config::roles::app ($graphite_host=undef, $revisions={}) {
     project_unisubs { 'local': revision => $revisions['local'], }
   }
   if 'dev' in $envs {
-    project_unisubs { 'dev': revision => $revision['dev'], }
+    project_unisubs { 'dev': revision => $revisions['dev'], }
   }
   if 'staging' in $envs {
-    project_unisubs { 'staging': revision => $revision['staging'], }
+    project_unisubs { 'staging': revision => $revisions['staging'], }
   }
   if 'nf' in $envs {
     project_unisubs { 'nf': revision => $revisions['nf'], }
   }
   if 'production' in $envs {
-    project_unisubs { 'production': revision => $revision['production'], }
+    project_unisubs { 'production': revision => $revisions['production'], }
   }
   # this is for the development environment
   if 'vagrant' in $envs {
