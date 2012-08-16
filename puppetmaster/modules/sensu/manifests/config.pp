@@ -36,4 +36,9 @@ class sensu::config inherits sensu::params {
     source  => 'puppet:///modules/sensu/plugins/check-procs.rb',
     mode    => 0755,
   }
+  file { '/etc/sensu/plugins/check-http.rb':
+    ensure  => present,
+    source  => 'puppet:///modules/sensu/plugins/check-http.rb',
+    mode    => 0755,
+  }
 }
