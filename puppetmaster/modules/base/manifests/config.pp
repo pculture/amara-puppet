@@ -58,6 +58,6 @@ class base::config inherits base::params {
     command   => 'apt-get update',
     user      => root,
     hour      => '*',
-    minute    => '05',
+    minute    => '01',
   }
 }
