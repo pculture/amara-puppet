@@ -25,7 +25,7 @@ node basenode {
       sensu_api_host        => 'util.amara.org',
       sensu_dashboard_host  => 'util.amara.org',
     }
-    class { 'config': graphite_host => '10.226.105.213:2003', require => Class['base'], }
+    class { 'config': graphite_host => '10.118.146.251:2003', require => Class['base'], }
   }
   class { 'amara': }
 }
