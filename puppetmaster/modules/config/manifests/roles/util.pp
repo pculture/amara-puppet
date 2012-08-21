@@ -5,6 +5,7 @@ class config::roles::util {
       update_local_syslog => false,
     }
   }
+  if ! defined(Class['nginx']) { class { 'nginx': } }
   if ! defined(Class['graphite']) { class { 'graphite': } }
   if ! defined(Class['sensu::server']) { class { 'sensu::server': } }
   if ! defined(Class['riemann']) {
