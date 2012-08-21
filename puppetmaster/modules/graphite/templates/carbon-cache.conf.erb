@@ -2,5 +2,12 @@
 
 description "Carbon Cache"
 
+pre-start script
+    PID=/opt/graphite/storage/carbon-cache-a.pid
+    if [ -e $PID ] ; then
+        rm -rf $PID
+    fi
+end script
+
 exec /opt/graphite/bin/carbon-cache.py --config /opt/graphite/conf/carbon.conf --debug start
 
