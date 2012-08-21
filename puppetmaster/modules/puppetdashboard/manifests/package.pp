@@ -7,6 +7,7 @@ class puppetdashboard::package {
   }
 
   if ! defined(Package["autoconf"]) { package { "autoconf": ensure => installed, } }
+  if ! defined(Package["build-essential"]) { package { "build-essential": ensure => installed, } }
   if ! defined(Package["irb"]) { package { "irb": ensure => installed, } }
   if ! defined(Package["libmysql-ruby"]) { package { "libmysql-ruby": ensure => installed, } }
   if ! defined(Package["libmysqlclient-dev"]) { package { "libmysqlclient-dev": ensure => installed, } }
