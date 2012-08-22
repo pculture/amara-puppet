@@ -12,7 +12,7 @@ class sensu::package {
   file { '/etc/apt/sources.list.d/sensu.list':
     alias   => 'sensu::package::apt_source_list',
     ensure  => present,
-    content => 'deb http://repos.sensuapp.org/apt sensu main',
+    content => "deb http://repos.sensuapp.org/apt sensu main\n",
     owner   => root,
     notify  => Exec['sensu::package::apt_update'],
     require => Exec['sensu::package::apt_key'],
