@@ -24,7 +24,6 @@ node basenode {
       sensu_redis_host      => 'util.amara.org',
       sensu_api_host        => 'util.amara.org',
       sensu_dashboard_host  => 'util.amara.org',
-      sensu_dashboard_password  => 'sensu1029',
     }
     class { 'config': graphite_host => '10.118.146.251:2003', require => Class['base'], }
   }
