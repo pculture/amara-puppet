@@ -14,12 +14,6 @@ class solr::config inherits solr::params {
     owner   => "${solr::config::tomcat_user}",
     require => Package["tomcat6"],
   }
-  file { 'solr::config::tomcat_users_conf':
-    path    => '/etc/tomcat6/tomcat-users.xml',
-    content => template('solr/tomcat-users.xml.erb'),
-    owner   => "${solr::config::tomcat_user}",
-    require => Package["tomcat6"],
-  }
   file { 'solr::config::solr_core_conf':
     ensure  => present,
     content => template('solr/solr.xml.erb'),

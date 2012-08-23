@@ -8,6 +8,14 @@ class graphite::config inherits graphite::params {
     ensure  => present,
     content => template('graphite/vhost-graphite.conf.erb'),
     mode    => 0644,
+    require => Package['apache2'],
+    notify  => Service['apache2'],
+  }
+  file { '/etc/apache2/ports.conf':
+    ensure  => present,
+    content => template('graphite/ports.conf.erb'),
+    mode    => 0644,
+    require => Package['apache2'],
     notify  => Service['apache2'],
   }
   file { '/opt/graphite/conf/graphite.wsgi':
