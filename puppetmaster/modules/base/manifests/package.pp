@@ -17,8 +17,8 @@ class base::package {
   if ! defined(Package['libmysqlclient-dev']) { package { 'libmysqlclient-dev': ensure => installed, } }
   if ! defined(Package['libssl-dev']) { package { 'libssl-dev': ensure => installed, } }
   if ! defined(Package['mailutils']) { package { 'mailutils': ensure => installed, } }
-  if ! defined(Package['mysql']) { package { 'mysql': ensure => installed, provider => 'gem', } }
-  if ! defined(Package['mysql2']) { package { 'mysql2': ensure => installed, provider => 'gem', } }
+  if ! defined(Package['mysql']) { package { 'mysql': ensure => installed, provider => 'gem', require => Package['libmysqlclient-dev'], } }
+  if ! defined(Package['mysql2']) { package { 'mysql2': ensure => installed, provider => 'gem', require => Package['libmysqlclient-dev'], } }
   if ! defined(Package['ntp']) { package { 'ntp': ensure => installed, } }
   if ! defined(Package['python-software-properties']) { package { 'python-software-properties': ensure => installed, } }
   if ! defined(Package['s3cmd']) { package { 's3cmd': ensure => installed, } }
