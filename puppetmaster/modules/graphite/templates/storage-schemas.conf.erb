@@ -5,6 +5,12 @@
 #  pattern = regex
 #  retentions = timePerPoint:timeToStore, timePerPoint:timeToStore, ...
 
+[mysql_production_1min]
+priority = 100
+pattern = ^production\.mysql.
+retentions = 60s:7d, 600s:30d, 3600s:5y
+
 [default]
 pattern = .*
-retentions = 5s:1d, 1m:7d, 10m:5y
+retentions = 5s:1d, 1m:7d, 30m:5y
+
