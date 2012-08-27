@@ -5,9 +5,49 @@
 #  pattern = regex
 #  retentions = timePerPoint:timeToStore, timePerPoint:timeToStore, ...
 
+[system_sensu_1min]
+priority = 100
+pattern = ^system\.sensu.
+retentions = 60s:7d, 600s:30d, 3600s:5y
+
+[mysql_local_1min]
+priority = 100
+pattern = ^local\.mysql.
+retentions = 60s:7d, 600s:30d, 3600s:5y
+
+[solr_local_1min]
+priority = 100
+pattern = ^local\.solr.
+retentions = 60s:7d, 600s:30d, 3600s:5y
+
+[mysql_dev_1min]
+priority = 100
+pattern = ^dev\.mysql.
+retentions = 60s:7d, 600s:30d, 3600s:5y
+
+[solr_dev_1min]
+priority = 100
+pattern = ^dev\.solr.
+retentions = 60s:7d, 600s:30d, 3600s:5y
+
+[mysql_staging_1min]
+priority = 100
+pattern = ^staging\.mysql.
+retentions = 60s:7d, 600s:30d, 3600s:5y
+
+[solr_staging_1min]
+priority = 100
+pattern = ^staging\.solr.
+retentions = 60s:7d, 600s:30d, 3600s:5y
+
 [mysql_production_1min]
 priority = 100
 pattern = ^production\.mysql.
+retentions = 60s:7d, 600s:30d, 3600s:5y
+
+[solr_production_1min]
+priority = 100
+pattern = ^production\.solr.
 retentions = 60s:7d, 600s:30d, 3600s:5y
 
 [default]
