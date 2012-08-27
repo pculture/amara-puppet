@@ -1,4 +1,4 @@
-class base::package {
+class base::package inherits base::params {
   require "base::config"
 
   Exec {
@@ -31,7 +31,7 @@ class base::package {
     if ! defined(Package['ruby1.8-dev']) { package { 'ruby1.8-dev': ensure => installed, } }
   }
 
-  if ('vagrant' in $::system_environments) and ($::is_vagrant) {
+  if ('vagrant' in $base::params::roles) and ($::is_vagrant == 'true') {
     if ! defined(Package['firefox']) { package { 'firefox': ensure => installed, } }
   }
 

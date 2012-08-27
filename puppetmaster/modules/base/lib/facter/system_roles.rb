@@ -12,6 +12,6 @@ Facter.add("system_roles") do
     rescue
       puts 'Unable to read /etc/system_roles.yml'
     end
-    all_roles
+    all_roles.join(',')
   end
 end

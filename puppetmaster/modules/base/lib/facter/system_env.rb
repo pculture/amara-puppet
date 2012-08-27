@@ -12,6 +12,6 @@ Facter.add("system_environments") do
     rescue
       puts 'Unable to read /etc/system_environments.yml'
     end
-    all_envs
+    all_envs.join(',')
   end
 end
