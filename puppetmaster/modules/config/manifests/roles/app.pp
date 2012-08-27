@@ -13,7 +13,7 @@ class config::roles::app ($graphite_host=undef, $revisions={}) {
 
   $envs = $::system_environments ? {
     undef   => ["dev"],
-    default => $::system_environments,
+    default => split($::system_environments, ','),
   }
   define project_unisubs ($revision=undef, $enable_upstart=true, $env=$name) {
     $apps_root  = "${appserver::apps_dir}"
@@ -29,6 +29,7 @@ class config::roles::app ($graphite_host=undef, $revisions={}) {
       require         => $requires,
       revision        => $revision,
       env             => $env,
+      enable_celery   => false,
       enable_upstart  => $enable_upstart,
       graphite_host   => $config::roles::app::graphite_host,
     }

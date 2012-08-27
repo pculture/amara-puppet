@@ -2,7 +2,7 @@ class solr::config inherits solr::params {
   $tomcat_user = 'tomcat6'
   $envs = $::system_environments ? {
     undef   => [],
-    default => $::system_environments,
+    default => split($::system_environments, ','),
   }
   Exec {
     path      => "${::path}",

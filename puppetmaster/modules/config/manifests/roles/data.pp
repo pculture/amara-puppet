@@ -23,6 +23,7 @@ class config::roles::data($revisions={}) {
       revision        => $revision,
       env             => $env,
       enable_upstart  => $enable_upstart,
+      enable_celery   => true,
       require         => Class['virtualenv'],
     }
   }
