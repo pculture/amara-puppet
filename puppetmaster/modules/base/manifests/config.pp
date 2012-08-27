@@ -53,11 +53,4 @@ class base::config inherits base::params {
     content => template("base/rsyslog-50-default.conf.erb"),
     notify  => Service["rsyslog"],
   }
-  # apt update
-  cron { 'base::config::cron_apt_update':
-    command   => 'apt-get update',
-    user      => root,
-    hour      => '*',
-    minute    => '01',
-  }
 }
