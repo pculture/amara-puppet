@@ -29,6 +29,7 @@ class config::roles::app ($graphite_host=undef, $revisions={}) {
       require         => $requires,
       revision        => $revision,
       env             => $env,
+      enable_celery   => false,
       enable_upstart  => $enable_upstart,
       graphite_host   => $config::roles::app::graphite_host,
     }

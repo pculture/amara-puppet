@@ -7,6 +7,7 @@ define config::projects::unisubs (
     $ve_root='/opt/ve',
     $enable_upstart=true,
     $env=undef,
+    $enable_celery=true,
     $celery_user='celery',
     $celery_group='celery',
     $setup_db=false,
@@ -142,6 +143,7 @@ define config::projects::unisubs (
         require => File["config::projects::unisubs::upstart_unisubs_$env"],
       }
       service { "uwsgi.unisubs.$env":
+        enable    => true,
         ensure    => running,
         provider  => 'upstart',
         require   => [ File["config::projects::unisubs::upstart_link_unisubs_$env"], Exec["config::projects::unisubs::bootstrap_ve_$env"] ],
@@ -178,55 +180,68 @@ define config::projects::unisubs (
     group   => "$app_group",
     mode    => 0770,
   }
-  # celery config
-  file { "config::projects::unisubs::upstart_celeryd_conf_$env":
-    ensure  => present,
-    path    => "/etc/init/celeryd.$env.conf",
-    content => template('config/apps/unisubs/upstart.celeryd.conf.erb'),
-    owner   => root,
-    group   => root,
-    mode    => 0644,
-  }
-  # manual symlink to /lib/init/upstart-job for http://projects.puppetlabs.com/issues/14297
-  file { "config::projects::unisubs::upstart_link_celeryd_$env":
-    ensure  => link,
-    path    => "/etc/init.d/celeryd.$env",
-    target  => '/lib/init/upstart-job',
-    require => File["config::projects::unisubs::upstart_celeryd_conf_$env"],
-  }
-  file { "config::projects::unisubs::upstart_celerycam_conf_$env":
-    ensure  => present,
-    path    => "/etc/init/celerycam.$env.conf",
-    content => template('config/apps/unisubs/upstart.celerycam.conf.erb'),
-    owner   => root,
-    group   => root,
-    mode    => 0644,
-  }
-  # manual symlink to /lib/init/upstart-job for http://projects.puppetlabs.com/issues/14297
-  file { "config::projects::unisubs::upstart_link_celerycam_$env":
-    ensure  => link,
-    path    => "/etc/init.d/celerycam.$env",
-    target  => '/lib/init/upstart-job',
-    require => File["config::projects::unisubs::upstart_celerycam_conf_$env"],
-  }
-  # symlinks for celery - needed for celery module (celeryd, celerybeat)
-  # NOTE: on multi-env setups, this will only be created for the first env as subsequent
-  # ones would just overwrite the symlink
-  if ! defined(File['config::projects::unisubs::celeryd_symlink']) {
-    file { "config::projects::unisubs::celeryd_symlink":
-      ensure    => link,
-      path      => '/etc/init/celeryd.conf',
-      target    => "/etc/init/celeryd.$env.conf",
-      require   => File["config::projects::unisubs::upstart_celeryd_conf_$env"],
+  if ($enable_celery) {
+    # celery config
+    file { "config::projects::unisubs::upstart_celeryd_conf_$env":
+      ensure  => present,
+      path    => "/etc/init/celeryd.$env.conf",
+      content => template('config/apps/unisubs/upstart.celeryd.conf.erb'),
+      owner   => root,
+      group   => root,
+      mode    => 0644,
     }
-  }
-  if ! defined(File['config::projects::unisubs::celerycam_symlink']) {
-    file { "config::projects::unisubs::celerycam_symlink":
-      ensure    => link,
-      path      => '/etc/init/celerycam.conf',
-      target    => "/etc/init/celerycam.$env.conf",
-      require   => File["config::projects::unisubs::upstart_celerycam_conf_$env"],
+    # manual symlink to /lib/init/upstart-job for http://projects.puppetlabs.com/issues/14297
+    file { "config::projects::unisubs::upstart_link_celeryd_$env":
+      ensure  => link,
+      path    => "/etc/init.d/celeryd.$env",
+      target  => '/lib/init/upstart-job',
+      require => File["config::projects::unisubs::upstart_celeryd_conf_$env"],
     }
+    service { "celeryd.$env":
+      enable    => true,
+      ensure    => running,
+      require   =>[ Class['celery'], File["config::projects::unisubs::upstart_link_celeryd_$env"] ]
+    }
+    file { "config::projects::unisubs::upstart_celerycam_conf_$env":
+      ensure  => present,
+      path    => "/etc/init/celerycam.$env.conf",
+      content => template('config/apps/unisubs/upstart.celerycam.conf.erb'),
+      owner   => root,
+      group   => root,
+      mode    => 0644,
+    }
+    # manual symlink to /lib/init/upstart-job for http://projects.puppetlabs.com/issues/14297
+    file { "config::projects::unisubs::upstart_link_celerycam_$env":
+      ensure  => link,
+      path    => "/etc/init.d/celerycam.$env",
+      target  => '/lib/init/upstart-job',
+      require => File["config::projects::unisubs::upstart_celerycam_conf_$env"],
+    }
+    service { "celerycam.$env":
+      enable    => true,
+      ensure    => running,
+      require   =>[ Class['celery'], File["config::projects::unisubs::upstart_link_celerycam_$env"] ]
+    }
+    # disabled for now as upstart doesn't like symlinks
+    ## symlinks for celery - needed for celery module (celeryd, celerybeat)
+    ## NOTE: on multi-env setups, this will only be created for the first env as subsequent
+    ## ones would just overwrite the symlink
+    #if ! defined(File['config::projects::unisubs::celeryd_symlink']) {
+    #  file { "config::projects::unisubs::celeryd_symlink":
+    #    ensure    => link,
+    #    path      => '/etc/init/celeryd.conf',
+    #    target    => "/etc/init/celeryd.$env.conf",
+    #    require   => File["config::projects::unisubs::upstart_celeryd_conf_$env"],
+    #  }
+    #}
+    #if ! defined(File['config::projects::unisubs::celerycam_symlink']) {
+    #  file { "config::projects::unisubs::celerycam_symlink":
+    #    ensure    => link,
+    #    path      => '/etc/init/celerycam.conf',
+    #    target    => "/etc/init/celerycam.$env.conf",
+    #    require   => File["config::projects::unisubs::upstart_celerycam_conf_$env"],
+    #  }
+    #}
   }
   # nginx
   if defined(Class['nginx']) {
