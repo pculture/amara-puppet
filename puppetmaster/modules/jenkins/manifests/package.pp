@@ -7,7 +7,7 @@ class jenkins::package {
   exec { 'jenkins::package::apt_key':
     command => 'wget -q http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key -O- | sudo apt-key add -',
     user    => root,
-    unless  => 'apt-key list | grep -i jenkins',
+    unless  => 'apt-key list | grep -i kawaguchi',
   }
   file { '/etc/apt/sources.list.d/jenkins.list':
     alias   => 'jenkins::package::apt_source_list',
@@ -23,11 +23,12 @@ class jenkins::package {
     refreshonly => true,
   }
   define install_plugin ($url=$title) {
-    $filename = split($url, 'latest/')
+    $file_parts = split($url, 'latest/')
+    $filename = $file_parts[1]
     exec { "jenkins::package::install_plugin_$url":
       cwd     => '/var/lib/jenkins/plugins',
       command => "wget -q $url",
-      creates => "/var/lib/jenkins/plugins/$filename[1]",
+      creates => "/var/lib/jenkins/plugins/$filename",
       user    => 'jenkins',
       require => Package['jenkins'],
       notify  => Service['jenkins'],
