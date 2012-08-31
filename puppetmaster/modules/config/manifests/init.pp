@@ -53,6 +53,9 @@ class config ($graphite_host=$config::params::graphite_host) inherits config::pa
   if 'util' in $config::params::roles {
     if ! defined(Class['config::roles::util']) { class { 'config::roles::util': } }
   }
+  if 'jenkins' in $config::params::roles {
+    if ! defined(Class['config::roles::jenkins']) { class { 'config::roles::jenkins': } }
+  }
   # local vagrant dev
   if 'vagrant' in $config::params::roles {
     if ! defined(Class['config::roles::app']) { class { 'config::roles::app': } }

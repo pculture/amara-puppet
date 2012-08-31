@@ -65,6 +65,14 @@ To start a `util` instance:
 
 `vagrant up util`
 
+### Role: jenkins
+
+The `jenkins` role contains the `jenkins` module for continuous integration testing.  Port forwarding is setup for port 8888 to access the Jenkins web interface.  To access it, visit http://localhost:8888/ .
+
+To start a `jenkins` instance:
+
+`vagrant up jenkins`
+
 ## Environments
 
 The node environment(s) (dev, staging, production) are defined in the file `/etc/system_environments.yml`.

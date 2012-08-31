@@ -6,7 +6,6 @@ class config::roles::util {
     }
   }
   if ! defined(Class['nginx']) { class { 'nginx': } }
-  if ! defined(Class['jenkins']) { class { 'jenkins': port => $config::params::jenkins_port, } }
   if ! defined(Class['graphite']) { class { 'graphite': } }
   if ! defined(Class['sensu::server']) { class { 'sensu::server': } }
   if ! defined(Class['riemann']) {

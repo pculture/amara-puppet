@@ -1,11 +1,11 @@
-class jenkins::package {
+class jenkins::package inherits jenkins::params {
   Exec {
     path      => "${::path}",
     logoutput => on_failure,
   }
   # get apt key
   exec { 'jenkins::package::apt_key':
-    command => 'wget -q http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key -O- | sudo apt-key add -',
+    command => 'wget --no-check-certificate -q http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key -O- | sudo apt-key add -',
     user    => root,
     unless  => 'apt-key list | grep -i kawaguchi',
   }
@@ -27,7 +27,7 @@ class jenkins::package {
     $filename = $file_parts[1]
     exec { "jenkins::package::install_plugin_$url":
       cwd     => '/var/lib/jenkins/plugins',
-      command => "wget -q $url",
+      command => "wget --no-check-certificate -q $url",
       creates => "/var/lib/jenkins/plugins/$filename",
       user    => 'jenkins',
       require => Package['jenkins'],

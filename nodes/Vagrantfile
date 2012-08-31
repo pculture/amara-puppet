@@ -30,6 +30,14 @@ Vagrant::Config.run do |config|
     data_config.vm.provision :shell, :path => "bootstrap.sh"
   end
 
+  config.vm.define :jenkins do |jenkins_config|
+    jenkins_config.vm.box = "lucid64"
+    jenkins_config.vm.host_name = "jenkins.local"
+    jenkins_config.vm.network :hostonly, "10.10.10.125"
+    jenkins_config.vm.forward_port 8888, 8888 # jenkins
+    jenkins_config.vm.provision :shell, :path => "bootstrap.sh"
+  end
+
   config.vm.define :app do |app_config|
     app_config.vm.box = "lucid64"
     app_config.vm.host_name = "app.local"

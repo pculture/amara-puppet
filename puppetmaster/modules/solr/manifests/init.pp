@@ -4,6 +4,9 @@
 #
 # === Parameters
 #
+# configure
+#   This will configure Solr users and cores
+#
 # === Variables
 #
 # === Examples
@@ -20,7 +23,7 @@
 #
 # Copyright 2012 PCF, unless otherwise noted.
 #
-class solr (
+class solr ($configure=true,
   ) inherits solr::params {
 
   class { 'solr::package': }

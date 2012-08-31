@@ -10,6 +10,7 @@ node basenode {
   }
   # modules
   class { 'postfix': }
+
   if ($::is_vagrant == 'true') {
     class { 'sensu':
       sensu_rabbitmq_host   => 'util.local',
@@ -27,7 +28,7 @@ node basenode {
     }
     class { 'config': graphite_host => '10.118.146.251:2003', require => Class['base'], }
   }
-  class { 'amara': }
+  class { 'amara': require => [ Class['base'], Class['config'] ], }
 }
 node default inherits basenode {} # default for all non-defined nodes
 
