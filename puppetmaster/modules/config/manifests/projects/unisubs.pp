@@ -43,184 +43,184 @@ define config::projects::unisubs (
     default   => 'unisubs_settings',
   }
   $rev = $revision ? {
-    undef   => "$env",
+    undef   => "${env}",
     default => $revision,
   }
-  $server_name = "$env" ? {
+  $server_name = "${env}" ? {
     'vagrant'    => 'unisubs.example.com',
     'local'       => 'unisubs.local amara.local', # this is for the multi-vm environment for infrastructure testing
     'production'  => 'www.universalsubtitles.org universalsubtitles.org www.amara.org amara.org',
-    default       => "$env.universalsubtitles.org $env.amara.org",
+    default       => "${env}.universalsubtitles.org ${env}.amara.org",
   }
-  $project_root = "$apps_root/$env"
-  $project_dir = "$project_root/unisubs"
-  $ve_dir = "$ve_root/$env/unisubs"
+  $project_root = "${apps_root}/${env}"
+  $project_dir = "${project_root}/unisubs"
+  $ve_dir = "${ve_root}/${env}/unisubs"
 
   # app root
-  if ! defined(File["$apps_root"]) { file { "$apps_root": ensure => directory, path => "$apps_root", } }
+  if ! defined(File["${apps_root}"]) { file { "${apps_root}": ensure => directory, path => "${apps_root}", } }
 
   # don't setup project dir for vagrant ; it's symlinked via vagrant
   if ($env != 'vagrant') {
-    file { "config::projects::unisubs::project_root_$env":
+    file { "config::projects::unisubs::project_root_${env}":
       ensure  => directory,
       path    => "$project_root",
       owner   => "$app_user",
       group   => "$app_group",
       mode    => 2775,
     }
-    cron { "config::project::unisubs::cron_app_dir_permissions_$env":
-      command   => "chown -R $app_user:$app_group $project_dir ; chmod -R g+rw $project_dir",
+    cron { "config::project::unisubs::cron_app_dir_permissions_${env}":
+      command   => "chown -R ${app_user}:${app_group} ${project_dir} ; chmod -R g+rw ${project_dir}",
       user      => root,
       hour      => '*',
       minute    => '05',
     }
     # unisubs repo
-    exec { "config::projects::unisubs::clone_repo_$env":
-      command => "git clone $repo $project_dir",
-      user    => "$app_user",
-      creates => "$project_dir",
+    exec { "config::projects::unisubs::clone_repo_${env}":
+      command => "git clone ${repo} ${project_dir}",
+      user    => "${app_user}",
+      creates => "${project_dir}",
       timeout => 900,
-      notify  => Exec["config::projects::unisubs::checkout_rev_$env"],
-      require => [ Package['git-core'], File["config::projects::unisubs::project_root_$env"] ],
+      notify  => Exec["config::projects::unisubs::checkout_rev_${env}"],
+      require => [ Package['git-core'], File["config::projects::unisubs::project_root_${env}"] ],
     }
-    exec { "config::projects::unisubs::checkout_rev_$env":
-      cwd         => "$project_dir",
-      command     => "git checkout --force $rev",
-      require     => Exec["config::projects::unisubs::clone_repo_$env"],
-      unless      => "test \"`git symbolic-ref HEAD | awk '{split(\$0,s,\"/\"); print s[3]}'`\" = \"$rev\"",
-      notify      => [ Exec["config::projects::unisubs::virtualenv_$env"], Exec["config::projects::unisubs::set_permissions_$env"] ],
+    exec { "config::projects::unisubs::checkout_rev_${env}":
+      cwd         => "${project_dir}",
+      command     => "git checkout --force ${rev}",
+      require     => Exec["config::projects::unisubs::clone_repo_${env}"],
+      unless      => "test \"`git symbolic-ref HEAD | awk '{split(\$0,s,\"/\"); print s[3]}'`\" = \"${rev}\"",
+      notify      => [ Exec["config::projects::unisubs::virtualenv_${env}"], Exec["config::projects::unisubs::set_permissions_${env}"] ],
     }
-    exec { "config::projects::unisubs::set_permissions_$env":
-      command     => "chown -R $app_user:$app_group $project_dir ; chmod -R g+rw $project_dir",
-      require     => Exec["config::projects::unisubs::clone_repo_$env"],
+    exec { "config::projects::unisubs::set_permissions_${env}":
+      command     => "chown -R ${app_user}:${app_group} ${project_dir} ; chmod -R g+rw ${project_dir}",
+      require     => Exec["config::projects::unisubs::clone_repo_${env}"],
       refreshonly => true,
     }
     # unisubs closure library link
-    file { "config::projects::unisubs::unisubs_closure_library_link_$env":
+    file { "config::projects::unisubs::unisubs_closure_library_link_${env}":
       ensure  => link,
-      path    => "$project_dir/media/js/closure-library",
+      path    => "${project_dir}/media/js/closure-library",
       target  => "${closure::closure_local_dir}",
-      require => [Exec["config::projects::unisubs::clone_repo_$env"], Class['closure'] ],
+      require => [Exec["config::projects::unisubs::clone_repo_${env}"], Class['closure'] ],
     }
     # create virtualenv
-    exec { "config::projects::unisubs::virtualenv_$env":
-      command     => "virtualenv --no-site-packages $ve_dir",
-      creates     => "$ve_dir",
+    exec { "config::projects::unisubs::virtualenv_${env}":
+      command     => "virtualenv --no-site-packages ${ve_dir}",
+      creates     => "${ve_dir}",
       require     => Class['virtualenv'],
-      notify      => Exec["config::projects::unisubs::bootstrap_ve_$env"],
+      notify      => Exec["config::projects::unisubs::bootstrap_ve_${env}"],
       refreshonly => true,
     }
-    exec { "config::projects::unisubs::bootstrap_ve_$env":
-      command     => "$ve_dir/bin/pip install -r requirements.txt",
-      cwd         => "$project_dir/deploy",
-      require     => Exec["config::projects::unisubs::checkout_rev_$env"],
+    exec { "config::projects::unisubs::bootstrap_ve_${env}":
+      command     => "${ve_dir}/bin/pip install -r requirements.txt",
+      cwd         => "${project_dir}/deploy",
+      require     => Exec["config::projects::unisubs::checkout_rev_${env}"],
       timeout     => 1200,
       refreshonly => true,
-      notify      => Exec["config::projects::unisubs::ve_permissions_$env"],
+      notify      => Exec["config::projects::unisubs::ve_permissions_${env}"],
     }
     # upstart
     if $enable_upstart {
-      file { "config::projects::unisubs::uwsgi_unisubs_conf_$env":
+      file { "config::projects::unisubs::uwsgi_unisubs_conf_${env}":
         ensure  => present,
-        path    => "/etc/uwsgi.unisubs.$env.ini",
+        path    => "/etc/uwsgi.unisubs.${env}.ini",
         content => template('config/apps/unisubs/uwsgi.unisubs.ini.erb'),
         mode    => 0644,
         owner   => root,
-        notify  => Service["uwsgi.unisubs.$env"],
+        notify  => Service["uwsgi.unisubs.${env}"],
       }
-      file { "config::projects::unisubs::upstart_unisubs_$env":
+      file { "config::projects::unisubs::upstart_unisubs_${env}":
         ensure  => present,
-        path    => "/etc/init/uwsgi.unisubs.$env.conf",
+        path    => "/etc/init/uwsgi.unisubs.${env}.conf",
         content => template('config/apps/unisubs/upstart.unisubs.uwsgi.conf.erb'),
         mode    => 0644,
         owner   => root,
       }
       # manual symlink to /lib/init/upstart-job for http://projects.puppetlabs.com/issues/14297
-      file { "config::projects::unisubs::upstart_link_unisubs_$env":
+      file { "config::projects::unisubs::upstart_link_unisubs_${env}":
         ensure  => link,
-        path    => "/etc/init.d/uwsgi.unisubs.$env",
+        path    => "/etc/init.d/uwsgi.unisubs.${env}",
         target  => '/lib/init/upstart-job',
-        require => File["config::projects::unisubs::upstart_unisubs_$env"],
+        require => File["config::projects::unisubs::upstart_unisubs_${env}"],
       }
-      service { "uwsgi.unisubs.$env":
+      service { "uwsgi.unisubs.${env}":
         enable    => true,
         ensure    => running,
         provider  => 'upstart',
-        require   => [ File["config::projects::unisubs::upstart_link_unisubs_$env"], Exec["config::projects::unisubs::bootstrap_ve_$env"] ],
+        require   => [ File["config::projects::unisubs::upstart_link_unisubs_${env}"], Exec["config::projects::unisubs::bootstrap_ve_${env}"] ],
       }
     }
   } else {
     # these are duplicated from above to change requires so the local
     # dev environment that is symlinked from vagrant doesn't get touched
     # unisubs closure library link
-    file { "config::projects::unisubs::unisubs_closure_library_link_$env":
+    file { "config::projects::unisubs::unisubs_closure_library_link_${env}":
       ensure  => link,
-      path    => "$project_dir/media/js/closure-library",
+      path    => "${project_dir}/media/js/closure-library",
       target  => "${closure::closure_local_dir}",
-      require => [ Exec["config::projects::unisubs::clone_repo_$env"], Class['closure'] ],
+      require => [ Exec["config::projects::unisubs::clone_repo_${env}"], Class['closure'] ],
     }
     # create virtualenv
-    exec { "config::projects::unisubs::virtualenv_$env":
-      command   => "virtualenv --no-site-packages $ve_dir ; chown -R $app_user $ve_dir",
+    exec { "config::projects::unisubs::virtualenv_${env}":
+      command   => "virtualenv --no-site-packages ${ve_dir} ; chown -R ${app_user} ${ve_dir}",
       user      => root,
-      creates   => "$ve_dir",
+      creates   => "${ve_dir}",
       require   => Class['virtualenv'],
-      notify    => Exec["config::projects::unisubs::ve_permissions_$env"],
+      notify    => Exec["config::projects::unisubs::ve_permissions_${env}"],
     }
   }
-  exec { "config::projects::unisubs::ve_permissions_$env":
-    command     => "chgrp -R $app_group $ve_dir ; chmod -R g+rw $ve_dir",
+  exec { "config::projects::unisubs::ve_permissions_${env}":
+    command     => "chgrp -R ${app_group} ${ve_dir} ; chmod -R g+rw ${ve_dir}",
     refreshonly => true,
   }
   # local email dir
-  file { "config::projects::unisubs::email_messages_dir_$env":
+  file { "config::projects::unisubs::email_messages_dir_${env}":
     ensure  => directory,
-    path    => "/tmp/unisubs-messages_$env",
-    owner   => "$app_user",
-    group   => "$app_group",
+    path    => "/tmp/unisubs-messages_${env}",
+    owner   => "${app_user}",
+    group   => "${app_group}",
     mode    => 0770,
   }
   if ($enable_celery) {
     # celery config
-    file { "config::projects::unisubs::upstart_celeryd_conf_$env":
+    file { "config::projects::unisubs::upstart_celeryd_conf_${env}":
       ensure  => present,
-      path    => "/etc/init/celeryd.$env.conf",
+      path    => "/etc/init/celeryd.${env}.conf",
       content => template('config/apps/unisubs/upstart.celeryd.conf.erb'),
       owner   => root,
       group   => root,
       mode    => 0644,
     }
     # manual symlink to /lib/init/upstart-job for http://projects.puppetlabs.com/issues/14297
-    file { "config::projects::unisubs::upstart_link_celeryd_$env":
+    file { "config::projects::unisubs::upstart_link_celeryd_${env}":
       ensure  => link,
-      path    => "/etc/init.d/celeryd.$env",
+      path    => "/etc/init.d/celeryd.${env}",
       target  => '/lib/init/upstart-job',
-      require => File["config::projects::unisubs::upstart_celeryd_conf_$env"],
+      require => File["config::projects::unisubs::upstart_celeryd_conf_${env}"],
     }
-    service { "celeryd.$env":
+    service { "celeryd.${env}":
       enable    => true,
       ensure    => running,
-      require   =>[ Class['celery'], File["config::projects::unisubs::upstart_link_celeryd_$env"] ]
+      require   =>[ Class['celery'], File["config::projects::unisubs::upstart_link_celeryd_${env}"] ]
     }
-    file { "config::projects::unisubs::upstart_celerycam_conf_$env":
+    file { "config::projects::unisubs::upstart_celerycam_conf_${env}":
       ensure  => present,
-      path    => "/etc/init/celerycam.$env.conf",
+      path    => "/etc/init/celerycam.${env}.conf",
       content => template('config/apps/unisubs/upstart.celerycam.conf.erb'),
       owner   => root,
       group   => root,
       mode    => 0644,
     }
     # manual symlink to /lib/init/upstart-job for http://projects.puppetlabs.com/issues/14297
-    file { "config::projects::unisubs::upstart_link_celerycam_$env":
+    file { "config::projects::unisubs::upstart_link_celerycam_${env}":
       ensure  => link,
-      path    => "/etc/init.d/celerycam.$env",
+      path    => "/etc/init.d/celerycam.${env}",
       target  => '/lib/init/upstart-job',
-      require => File["config::projects::unisubs::upstart_celerycam_conf_$env"],
+      require => File["config::projects::unisubs::upstart_celerycam_conf_${env}"],
     }
-    service { "celerycam.$env":
+    service { "celerycam.${env}":
       enable    => true,
       ensure    => running,
-      require   =>[ Class['celery'], File["config::projects::unisubs::upstart_link_celerycam_$env"] ]
+      require   =>[ Class['celery'], File["config::projects::unisubs::upstart_link_celerycam_${env}"] ]
     }
     # disabled for now as upstart doesn't like symlinks
     ## symlinks for celery - needed for celery module (celeryd, celerybeat)
@@ -245,8 +245,8 @@ define config::projects::unisubs (
   }
   # nginx
   if defined(Class['nginx']) {
-    file { "config::projects::unisubs::vhost_unisubs_$env":
-      path    => "/etc/nginx/conf.d/amara_$env.conf",
+    file { "config::projects::unisubs::vhost_unisubs_${env}":
+      path    => "/etc/nginx/conf.d/amara_${env}.conf",
       content => template('config/apps/unisubs/vhost_unisubs.conf.erb'),
       #owner   => "${nginx::config::www_user}",
       mode    => 0644,
