@@ -18,6 +18,7 @@ class base::package inherits base::params {
   if ! defined(Package['libmysqlclient-dev']) { package { 'libmysqlclient-dev': ensure => installed, } }
   if ! defined(Package['libssl-dev']) { package { 'libssl-dev': ensure => installed, } }
   if ! defined(Package['mailutils']) { package { 'mailutils': ensure => installed, } }
+  if ! defined(Package['mysql-client']) { package { 'mysql-client': ensure => installed, } }
   if ! defined(Package['mysql']) { package { 'mysql': ensure => installed, provider => 'gem', require => Package['libmysqlclient-dev'], } }
   if ! defined(Package['mysql2']) { package { 'mysql2': ensure => installed, provider => 'gem', require => Package['libmysqlclient-dev'], } }
   if ! defined(Package['ntp']) { package { 'ntp': ensure => installed, } }

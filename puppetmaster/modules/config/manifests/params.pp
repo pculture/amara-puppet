@@ -4,6 +4,7 @@ class config::params {
     default => split($::system_environments, ','),
   }
   $graphite_host = undef
+  $jenkins_port = 8888
   $roles = $::system_roles ? {
     undef => [],
     default => split($::system_roles, ','),
