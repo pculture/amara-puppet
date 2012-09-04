@@ -157,7 +157,7 @@ define config::projects::unisubs (
       ensure  => link,
       path    => "${project_dir}/media/js/closure-library",
       target  => "${closure::closure_local_dir}",
-      require => [ Exec["config::projects::unisubs::clone_repo_${env}"], Class['closure'] ],
+      require => Class['closure'],
     }
     # create virtualenv
     exec { "config::projects::unisubs::virtualenv_${env}":

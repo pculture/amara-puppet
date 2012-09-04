@@ -43,8 +43,4 @@ class config::roles::data($revisions={}) {
   if 'production' in $config::envs {
     project_unisubs_data { 'production': revision => $revisions['production'], }
   }
-  # this is for the development environment
-  if 'vagrant' in $config::envs {
-    project_unisubs_data { 'vagrant': revision => $revisions['vagrant'], }
-  }
 }
