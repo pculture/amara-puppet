@@ -34,6 +34,14 @@ node default inherits basenode {} # default for all non-defined nodes
 
 node puppet inherits basenode {
   class { 'puppetdashboard': }
+  # prune cron job for puppet master
+  cron { 'nodes::prune_cron':
+    ensure  => present,
+    command => "cd /usr/share/puppet-dashboard ; rake RAILS_ENV=production reports:prune upto=7 unit=day 2>&1 > /dev/null",
+    user    => root,
+    hour    => 22,
+    minute  => 30,
+  }
   # custom subscribe to restart apache (passenger) on puppet.conf changes
   service { "apache2":
     ensure    => running,
