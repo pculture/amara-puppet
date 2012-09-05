@@ -2,12 +2,7 @@ class config::roles::data($revisions={}) {
   # base modules to include
   if ! defined(Class['rabbitmq']) { class { 'rabbitmq': } }
   if ! defined(Class['redis']) { class { 'redis': } }
-  if ('vagrant' in $::system_environments) {
-    $configure_solr = false
-  } else {
-    $configure_solr = true
-  }
-  if ! defined(Class['solr']) { class { 'solr': configure => $configure_solr, } }
+  if ! defined(Class['solr']) { class { 'solr': } }
   if ! defined(Class['virtualenv']) { class { 'virtualenv': } }
   # extra role packages
   if ! defined(Package['libmysqlclient-dev']) { package { 'libmysqlclient-dev': ensure => installed, } }
