@@ -23,7 +23,7 @@ class solr::config inherits solr::params {
       command   => "cp -rf admin-extra.html elevate.xml mapping-ISOLatin1Accent.txt protwords.txt schema.xml scripts.conf solrconfig.xml spellings.txt stopwords.txt synonyms.txt xslt /etc/solr/conf/${env}/conf/",
       unless    => "test -e /etc/solr/conf/${env}/conf/schema.xml",
       require   => [ Class['solr'], File["solr::config::solr_conf_dir_${env}"] ],
-      notify    => [ Exec["solr::config::solr_conf_dir_permissions_${env}"], Service['tomcat6'] ],
+      notify    => Service['tomcat6'],
     }
   }
   if ($solr::configure) {
