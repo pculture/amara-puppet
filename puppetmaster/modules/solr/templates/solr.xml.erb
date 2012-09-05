@@ -4,8 +4,7 @@
     <% @envs.each do |val| -%>
     <core name="<%= val %>" instanceDir="/etc/solr/conf/<%= val %>" />
     <% end -%>
-    <% else %>
-    <core name="core0" instanceDir="." />
     <% end %>
+    <core name="main" instanceDir="." />
   </cores>
 </solr>
