@@ -8,6 +8,24 @@ class solr::config inherits solr::params {
     path      => "${::path}",
     logoutput => on_failure,
   }
+  define solr_config($env=$name) {
+    file { "solr::config::solr_conf_dir_${env}_root":
+      ensure  => directory,
+      path    => "/etc/solr/conf/${env}",
+    }
+    file { "solr::config::solr_conf_dir_${env}":
+      ensure  => directory,
+      path    => "/etc/solr/conf/${env}/conf",
+    }
+    exec { "solr::config::init_solr_conf_dir_${env}":
+      cwd       => '/etc/solr/conf',
+      # TODO: mutli-line string ; can't get to work with examples
+      command   => "cp -rf admin-extra.html elevate.xml mapping-ISOLatin1Accent.txt protwords.txt schema.xml scripts.conf solrconfig.xml spellings.txt stopwords.txt synonyms.txt xslt /etc/solr/conf/${env}/conf/",
+      unless    => "test -e /etc/solr/conf/${env}/conf/schema.xml",
+      require   => [ Class['solr'], File["solr::config::solr_conf_dir_${env}"] ],
+      notify    => [ Exec["solr::config::solr_conf_dir_permissions_${env}"], Service['tomcat6'] ],
+    }
+  }
   if ($solr::configure) {
     file { 'solr::config::tomcat_server_conf':
       path    => '/etc/tomcat6/server.xml',
@@ -23,29 +41,6 @@ class solr::config inherits solr::params {
       mode    => 0644,
       require => Package['solr-tomcat'],
       notify  => Service['tomcat6'],
-    }
-    define solr_config($env=$name) {
-      file { "amara::config::data::solr_conf_dir_${env}_root":
-        ensure  => directory,
-        path    => "/etc/solr/conf/${env}",
-      }
-      file { "amara::config::data::solr_conf_dir_${env}":
-        ensure  => directory,
-        path    => "/etc/solr/conf/${env}/conf",
-      }
-      exec { "amara::config::data::init_solr_conf_dir_${env}":
-        cwd       => '/etc/solr/conf',
-        # TODO: mutli-line string ; can't get to work with examples
-        command   => "cp -rf admin-extra.html elevate.xml mapping-ISOLatin1Accent.txt protwords.txt schema.xml scripts.conf solrconfig.xml spellings.txt stopwords.txt synonyms.txt xslt /etc/solr/conf/${env}/conf/",
-        unless    => "test -e /etc/solr/conf/${env}/conf/schema.xml",
-        require   => [ Class['solr'], File["amara::config::data::solr_conf_dir_${env}"] ],
-        notify    => [ Exec["amara::config::data::solr_conf_dir_permissions_${env}"], Service['tomcat6'] ],
-      }
-      exec { "amara::config::data::solr_conf_dir_permissions_${env}":
-        command     => "chgrp -R ${amara::app_group} /etc/solr/conf/${env} ; chmod -R g+rw /etc/solr/conf/${env}/",
-        require     => Exec["amara::config::data::init_solr_conf_dir_${env}"],
-        refreshonly => true,
-      }
     }
     # array syntax isn't working (solr_config { $envs: }) ; i'm probably just an idiot
     solr_config { $envs: }
