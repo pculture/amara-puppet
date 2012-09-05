@@ -43,7 +43,7 @@ class solr::config inherits solr::params {
       notify  => Service['tomcat6'],
     }
     # array syntax isn't working (solr_config { $envs: }) ; i'm probably just an idiot
-    solr_config { $envs: }
+    solr_config { [$envs]: }
     #if 'local' in $amara::params::envs {
     #  solr_config { 'local': }
     #}
