@@ -40,7 +40,7 @@ node puppet inherits basenode {
     command => "cd /usr/share/puppet-dashboard ; rake RAILS_ENV=production reports:prune upto=7 unit=day 2>&1 > /dev/null",
     user    => root,
     hour    => 22,
-    minute  => 30,
+    minute  => 01,
   }
   # custom subscribe to restart apache (passenger) on puppet.conf changes
   service { "apache2":
