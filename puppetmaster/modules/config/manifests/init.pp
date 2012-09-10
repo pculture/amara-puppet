@@ -28,8 +28,8 @@ class config ($graphite_host=$config::params::graphite_host) inherits config::pa
   # hash for controlling revisions for the app and data roles
   $revisions = {
     'vagrant'     => 'dev',
-    'local'       => 'x-new-puppet-setup',
-    'dev'         => 'x-new-puppet-setup', # temporary
+    'local'       => 'staging',
+    'dev'         => 'dev', # temporary
     'staging'     => 'staging',
     'nf'          => 'x-nf',
     'production'  => 'production',
@@ -55,6 +55,9 @@ class config ($graphite_host=$config::params::graphite_host) inherits config::pa
   }
   if 'jenkins' in $config::params::roles {
     if ! defined(Class['config::roles::jenkins']) { class { 'config::roles::jenkins': } }
+  }
+  if 'lb' in $config::params::roles {
+    if ! defined(Class['config::roles::lb']) { class { 'config::roles::lb': } }
   }
   # local vagrant dev
   if 'vagrant' in $config::params::roles {
