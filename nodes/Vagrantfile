@@ -6,6 +6,14 @@ Vagrant::Config.run do |config|
   config.vm.box = "precise64"
   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
 
+  config.vm.define :lb do |lb_config|
+    lb_config.vm.host_name = "lb.local"
+    lb_config.vm.network :hostonly, "10.10.10.105"
+    lb_config.vm.forward_port 80, 8180 # http
+    lb_config.vm.forward_port 443, 8143 # https
+    lb_config.vm.provision :shell, :path => "bootstrap.sh"
+  end
+
   config.vm.define :util do |util_config|
     util_config.vm.host_name = "util.local"
     util_config.vm.network :hostonly, "10.10.10.110"

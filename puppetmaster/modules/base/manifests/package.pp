@@ -23,15 +23,13 @@ class base::package inherits base::params {
   if ! defined(Package['mysql2']) { package { 'mysql2': ensure => installed, provider => 'gem', require => Package['libmysqlclient-dev'], } }
   if ! defined(Package['ntp']) { package { 'ntp': ensure => installed, } }
   if ! defined(Package['python-software-properties']) { package { 'python-software-properties': ensure => installed, } }
+  if ! defined(Package['ruby']) { package { 'ruby': ensure => installed, } }
+  if ! defined(Package['ruby-dev']) { package { 'ruby-dev': ensure => installed, } }
+  if ! defined(Package['rubygems']) { package { 'rubygems': ensure => installed, } }
   if ! defined(Package['s3cmd']) { package { 's3cmd': ensure => installed, } }
   if ! defined(Package['screen']) { package { 'screen': ensure => installed, } }
   if ! defined(Package['supervisor']) { package { 'supervisor': ensure => installed, } }
   if ! defined(Package['vim']) { package { 'vim': ensure => installed, } }
-  if ($::operatingsystem == 'Ubuntu') and ($::operatingsystemrelease == '10.04') {
-    if ! defined(Package['ruby']) { package { 'ruby': ensure => installed, } }
-    if ! defined(Package['rubygems']) { package { 'rubygems': ensure => installed, } }
-    if ! defined(Package['ruby1.8-dev']) { package { 'ruby1.8-dev': ensure => installed, } }
-  }
 
   if ('vagrant' in $base::params::roles) and ($::is_vagrant == 'true') {
     if ! defined(Package['firefox']) { package { 'firefox': ensure => installed, } }
