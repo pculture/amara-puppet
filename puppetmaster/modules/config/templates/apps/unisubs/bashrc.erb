@@ -103,6 +103,7 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
 export PATH=~/bin:$PATH
+export DISPLAY=:99
 
 function pm {
     python manage.py $* --settings=dev_settings
@@ -112,6 +113,9 @@ function pmt {
 }
 function pmtd {
     python manage.py test $* --settings=dev_settings_test 2>&1 | discoball -o '.+Error:.*' '.+Exception: .+' 'line \d+'
+}
+function pms {
+    python manage.py test $* --settings=dev_settings_selenium
 }
 
 # on login, drop us on the working directory with the venv activated

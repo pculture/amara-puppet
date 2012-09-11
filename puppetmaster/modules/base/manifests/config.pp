@@ -9,6 +9,7 @@ class base::config inherits base::params {
       ensure  => present,
     }
   }
+  $is_vagrant = $::is_vagrant
   # timezone
   file { '/etc/timezone':
     ensure  => present,
