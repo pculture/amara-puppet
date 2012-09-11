@@ -113,6 +113,9 @@ function pmt {
 function pmtd {
     python manage.py test $* --settings=dev_settings_test 2>&1 | discoball -o '.+Error:.*' '.+Exception: .+' 'line \d+'
 }
+function pms {
+    python manage.py test $* --settings=dev_settings_selenium
+}
 
 # on login, drop us on the working directory with the venv activated
 cd <%= @project_dir %>/
@@ -122,3 +125,4 @@ if [ -e "<%= @ve_dir %>" ]; then source <%= @ve_dir %>/bin/activate; fi
 function psg {
     ps auxww | grep --color=always $* | grep -v grep | sed -e 's/  */ /g' | cut -d' ' -f 2,11-
 }
+
