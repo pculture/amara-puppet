@@ -33,6 +33,7 @@ class base::package inherits base::params {
 
   if ('vagrant' in $base::params::roles) and ($::is_vagrant == 'true') {
     if ! defined(Package['firefox']) { package { 'firefox': ensure => installed, } }
+    if ! defined(Package['flashplugin-installer']) { package { 'flashplugin-installer': ensure => installed, } }
     if ! defined(Package['xvfb']) { package { 'xvfb': ensure => installed, } }
   }
 
