@@ -279,14 +279,15 @@ define config::projects::unisubs (
       source  => 'puppet:///modules/config/xvfb.conf',
     }
     # manual symlink to /lib/init/upstart-job for http://projects.puppetlabs.com/issues/14297
-    file { "config::projects::unisubs::upstart_link_xvfb":
+    file { 'config::projects::unisubs::upstart_link_xvfb':
       ensure  => link,
-      path    => "/etc/init.d/xvfb",
+      path    => '/etc/init.d/xvfb',
       target  => '/lib/init/upstart-job',
-      require => File["config::projects::unisubs::vagrant_xvfb_upstart"],
+      require => File['config::projects::unisubs::vagrant_xvfb_upstart'],
     }
     service { 'xvfb':
       ensure  => running,
+      require => File['config::projects::unisubs::vagrant_xvfb_upstart'],
     }
     # # nginx
     #     file { 'config::projects::unisubs::vhost_unisubs_vagrant':
