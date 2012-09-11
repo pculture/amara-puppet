@@ -103,6 +103,7 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
 export PATH=~/bin:$PATH
+export DISPLAY=:99
 
 function pm {
     python manage.py $* --settings=dev_settings
@@ -125,4 +126,3 @@ if [ -e "<%= @ve_dir %>" ]; then source <%= @ve_dir %>/bin/activate; fi
 function psg {
     ps auxww | grep --color=always $* | grep -v grep | sed -e 's/  */ /g' | cut -d' ' -f 2,11-
 }
-
