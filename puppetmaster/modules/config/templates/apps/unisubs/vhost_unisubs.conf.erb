@@ -37,9 +37,12 @@ server {
         root <%= @project_dir %>/media/static-cache;
         try_files /$1 @unisubs;
     }
-
     location ~* /en/user-data/(.*) {
         root <%= @project_dir %>/user-data;
+        try_files /$1 @unisubs;
+    }
+    location ~* /en/site_media/admin/(.*) {
+        root <%= @ve_dir %>/lib/python2.6/site-packages/django/contrib/admin/static/admin/;
         try_files /$1 @unisubs;
     }
     location ~* /en/site_media/(.*) {
