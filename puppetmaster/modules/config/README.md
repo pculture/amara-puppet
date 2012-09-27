@@ -1,9 +1,9 @@
-# Puppet Module :: nginx
+# Puppet Module :: config
 
-This installs and configures nginx.
+Performs configuration for environment.
 
 ## Usage
 
 Basic
 
-`include nginx`
+`include config`
