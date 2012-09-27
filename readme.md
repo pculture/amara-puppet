@@ -33,8 +33,7 @@ Node (server or VM) functionality is divided into "roles" such as `app`, `data`,
 For example:
 
 ```yaml
-roles:
-  - app
+- app
 ```
 
 Each role defines multiple Puppet modules that get applied to the instance.
@@ -87,8 +86,7 @@ The node environment(s) (dev, staging, production) are defined in the file `/etc
 
 For example:
 ```yaml
-environments:
-  - dev
+- dev
 ```
 
 # Appendix
