@@ -1,5 +1,7 @@
 shopt -s expand_aliases
 
+[ -z "$PS1" ] && NOINTERACTIVE=1
+
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -90,6 +92,7 @@ export PYTHONDONTWRITEBYTECODE=1
 alias cu='cd <%= @project_dir %>'
 alias cv='cd <%= @project_dir %>'
 alias so='source ./venv/bin/activate'
+alias s='cu && so'
 alias go='cu && so && ./dev-runserver.sh plus'
 alias d='./dev-runserver.sh plus'
 alias us='sudo deploy/update_solr_schema_vagrant.sh'
@@ -117,11 +120,15 @@ function pms {
     python manage.py test $* --settings=dev_settings_selenium
 }
 
-# on login, drop us on the working directory with the venv activated
-cd <%= @project_dir %>/
-if [ -e "<%= @ve_dir %>" ]; then source <%= @ve_dir %>/bin/activate; fi
-
 # ps-grep
 function psg {
     ps auxww | grep --color=always $* | grep -v grep | sed -e 's/  */ /g' | cut -d' ' -f 2,11-
 }
+
+# If not running interactively, we're done.
+[ -n "$NOINTERACTIVE" ] && return
+
+# Otherwise on login, drop us on the working directory with the venv activated
+cd <%= @project_dir %>/
+if [ -e "<%= @ve_dir %>" ]; then source <%= @ve_dir %>/bin/activate; fi
+
