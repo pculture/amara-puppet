@@ -58,7 +58,7 @@ To start a `data` instance:
 
 ### Role: util
 
-The `util` role contains the `graylog2` module for centralized syslogging.  Every node is also configured to forward logs to this instance.  Port forwarding is setup for port 3001 to access the Graylog2 web interface.  To access it, visit http://localhost:3001/ .
+The `util` role contains the `graylog2` module for centralized syslogging `graphite` for graphing, `riemann` for application stats, and `sensu::server` for Sensu (monitoring).  Every node is also configured to forward logs to this instance.  Port forwarding is setup for port 3001 to access the Graylog2 web interface, ports 2003, 2004, and 7002 for Graphite, 8081 for the Graphite web app, 8082 for the Sensu admin, and 5555 for Riemann.
 
 To start a `util` instance:
 
