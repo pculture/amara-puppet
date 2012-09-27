@@ -73,6 +73,14 @@ To start a `jenkins` instance:
 
 `vagrant up jenkins`
 
+### Role: lb
+
+The `lb` role contains the configuration for the Nginx-based load balancer.  Port forwarding is setup for port 8180 and 8143 to access ports 80 and 443 on the VM.  These ports are used to not conflict with the forwarding on the app server.  You will also need to add an entry in your local `/etc/hosts` file to access the name-based virtual host for the Amara app.  Add `amara.local` to `/etc/hosts` (or whichever is for your host OS) with the IP of `10.10.10.105` and then access http://amara.local:8180/ .
+
+To start a `lb` instance:
+
+`vagrant up lb`
+
 ## Environments
 
 The node environment(s) (dev, staging, production) are defined in the file `/etc/system_environments.yml`.
