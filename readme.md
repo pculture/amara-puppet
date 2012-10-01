@@ -33,8 +33,7 @@ Node (server or VM) functionality is divided into "roles" such as `app`, `data`,
 For example:
 
 ```yaml
-roles:
-  - app
+- app
 ```
 
 Each role defines multiple Puppet modules that get applied to the instance.
@@ -59,7 +58,7 @@ To start a `data` instance:
 
 ### Role: util
 
-The `util` role contains the `graylog2` module for centralized syslogging.  Every node is also configured to forward logs to this instance.  Port forwarding is setup for port 3001 to access the Graylog2 web interface.  To access it, visit http://localhost:3001/ .
+The `util` role contains the `graylog2` module for centralized syslogging `graphite` for graphing, `riemann` for application stats, and `sensu::server` for Sensu (monitoring).  Every node is also configured to forward logs to this instance.  Port forwarding is setup for port 3001 to access the Graylog2 web interface, ports 2003, 2004, and 7002 for Graphite, 8081 for the Graphite web app, 8082 for the Sensu admin, and 5555 for Riemann.
 
 To start a `util` instance:
 
@@ -73,14 +72,21 @@ To start a `jenkins` instance:
 
 `vagrant up jenkins`
 
+### Role: lb
+
+The `lb` role contains the configuration for the Nginx-based load balancer.  Port forwarding is setup for port 8180 and 8143 to access ports 80 and 443 on the VM.  These ports are used to not conflict with the forwarding on the app server.  You will also need to add an entry in your local `/etc/hosts` file to access the name-based virtual host for the Amara app.  Add `amara.local` to `/etc/hosts` (or whichever is for your host OS) with the IP of `10.10.10.105` and then access http://amara.local:8180/ .
+
+To start a `lb` instance:
+
+`vagrant up lb`
+
 ## Environments
 
 The node environment(s) (dev, staging, production) are defined in the file `/etc/system_environments.yml`.
 
 For example:
 ```yaml
-environments:
-  - dev
+- dev
 ```
 
 # Appendix
