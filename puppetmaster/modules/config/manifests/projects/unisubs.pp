@@ -243,7 +243,7 @@ define config::projects::unisubs (
     #  }
     #}
   }
-  # nginx
+  # nginx ; only create virtual host if class is defined
   if defined(Class['nginx']) {
     file { "config::projects::unisubs::vhost_unisubs_${env}":
       path    => "/etc/nginx/conf.d/amara_${env}.conf",
@@ -252,10 +252,6 @@ define config::projects::unisubs (
       mode    => 0644,
       require => Package['nginx'],
       notify  => Service['nginx'],
-    }
-  } else {
-    notify { 'config::projects::unisubs::no_nginx':
-      name  => 'Nginx class not defined ; skipping virtual host config',
     }
   }
   # vagrant setup
