@@ -119,6 +119,14 @@ function pmtd {
 function pms {
     python manage.py test $* --settings=dev_settings_selenium
 }
+function dbdump {
+    if [ "$1" = "" ]; then echo "You must specify a filename"; return; fi
+    cu ; mysqldump -uroot -proot unisubs > $1
+}
+function dbrestore {
+    if [ ! -e "$1" ]; then echo "You must specify a restore file"; return; fi
+    mysql -uroot -proot unisubs < $1
+}
 
 # ps-grep
 function psg {
