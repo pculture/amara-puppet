@@ -127,6 +127,15 @@ function dbrestore {
     if [ ! -e "$1" ]; then echo "You must specify a restore file"; return; fi
     mysql -uroot -proot unisubs < $1
 }
+function dbreset {
+    echo "drop database unisubs ; create database unisubs;" | mysql -uroot -proot unisubs
+    python manage.py syncdb --all --settings=dev_settings --noinput
+    python manage.py migrate --fake --settings=dev_settings
+}
+function vereset {
+    rm -rf <%= @ve_dir %>/*
+    virtualenv --no-site-packages --distribute <%= @ve_dir %>
+}
 
 # ps-grep
 function psg {
