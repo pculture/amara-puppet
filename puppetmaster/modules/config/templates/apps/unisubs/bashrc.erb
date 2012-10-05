@@ -91,7 +91,7 @@ export PYTHONDONTWRITEBYTECODE=1
 
 alias cu='cd <%= @project_dir %>'
 alias cv='cd <%= @project_dir %>'
-alias so='source ./venv/bin/activate'
+alias so='source <%= @ve_dir %>/bin/activate'
 alias s='cu && so'
 alias go='cu && so && ./bin/dev-runserver.sh plus'
 alias d='./bin/dev-runserver.sh plus'
