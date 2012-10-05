@@ -138,6 +138,8 @@ function vereset {
     rm -rf <%= @ve_dir %>/*
     virtualenv --no-site-packages --distribute <%= @ve_dir %>
     s ; cd deploy ; pip install -M -r requirements.txt ; pip install -M -r requirements-test.txt
+    sudo service celeryd.vagrant start
+    sudo service celerycam.vagrant start
 }
 
 # ps-grep
