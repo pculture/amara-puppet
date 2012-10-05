@@ -128,6 +128,7 @@ function dbrestore {
     mysql -uroot -proot unisubs < $1
 }
 function dbreset {
+    cu
     echo "drop database unisubs ; create database unisubs;" | mysql -uroot -proot unisubs
     python manage.py syncdb --all --settings=dev_settings --noinput
     python manage.py migrate --fake --settings=dev_settings
@@ -140,6 +141,7 @@ function vereset {
     s ; cd deploy ; pip install -M -r requirements.txt ; pip install -M -r requirements-test.txt
     sudo service celeryd.vagrant start
     sudo service celerycam.vagrant start
+    cu
 }
 
 # ps-grep
