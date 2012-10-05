@@ -133,8 +133,11 @@ function dbreset {
     python manage.py migrate --fake --settings=dev_settings
 }
 function vereset {
+    sudo service celeryd.vagrant status | grep stopped || sudo service celeryd.vagrant stop
+    sudo service celerycam.vagrant status | grep stopped || sudo service celerycam.vagrant stop
     rm -rf <%= @ve_dir %>/*
     virtualenv --no-site-packages --distribute <%= @ve_dir %>
+    s ; cd deploy ; pip install -M -r requirements.txt ; pip install -M -r requirements-test.txt
 }
 
 # ps-grep
