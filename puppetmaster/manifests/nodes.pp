@@ -43,7 +43,7 @@ node puppet inherits basenode {
     minute  => 01,
   }
   # clean cron job for puppet master
-  cron { 'nodes::prune_cron':
+  cron { 'nodes::clean_cron':
     ensure  => present,
     command => "cd /var/lib/puppet ; find reports/ -mtime +7 -delete",
     user    => root,
