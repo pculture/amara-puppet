@@ -42,6 +42,14 @@ node puppet inherits basenode {
     hour    => 22,
     minute  => 01,
   }
+  # clean cron job for puppet master
+  cron { 'nodes::prune_cron':
+    ensure  => present,
+    command => "cd /var/lib/puppet ; find reports/ -mtime +7 -delete",
+    user    => root,
+    hour    => 23,
+    minute  => 01,
+  }
   # custom subscribe to restart apache (passenger) on puppet.conf changes
   service { "apache2":
     ensure    => running,
