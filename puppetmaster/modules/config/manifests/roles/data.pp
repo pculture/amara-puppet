@@ -5,6 +5,7 @@ class config::roles::data($revisions={}) {
   if ! defined(Class['solr']) { class { 'solr': } }
   if ! defined(Class['virtualenv']) { class { 'virtualenv': } }
   # extra role packages
+  if ! defined(Package['carrot-top']) { package { 'carrot-top': ensure => installed, provider => 'gem', require => Package['rubygems'], } }
   if ! defined(Package['libmysqlclient-dev']) { package { 'libmysqlclient-dev': ensure => installed, } }
 
   # if running in the local test vagrant multi-vm, include mysql for local testing
