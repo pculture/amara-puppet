@@ -42,7 +42,6 @@ class solr::config inherits solr::params {
       require => Package['solr-tomcat'],
       notify  => Service['tomcat6'],
     }
-    # array syntax isn't working (solr_config { $envs: }) ; i'm probably just an idiot
     solr_config { $envs: }
     #if 'local' in $envs {
     #  solr_config { 'local': }
