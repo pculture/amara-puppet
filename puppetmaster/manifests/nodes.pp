@@ -10,6 +10,7 @@ node basenode {
   }
   # modules
   class { 'postfix': }
+  class { 'virtualenv': }
 
   if ($::is_vagrant == 'true') {
     class { 'sensu':
@@ -28,7 +29,7 @@ node basenode {
     }
     class { 'config': graphite_host => '10.118.146.251:2003', require => Class['base'], }
   }
-  class { 'amara': require => [ Class['base'], Class['config'] ], }
+  class { 'amara': require => [ Class['base'], Class['config'] , Class['virtualenv'] ], }
 }
 node default inherits basenode {} # default for all non-defined nodes
 
