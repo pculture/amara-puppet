@@ -1,5 +1,6 @@
 class solr::config inherits solr::params {
-  $tomcat_user = 'tomcat6'
+  $tomcat_user = $solr::params::tomcat_user
+  $jvm_mem = $solr::params::jvm_mem
   $envs = $::system_environments ? {
     undef     => [],
     default   => split($::system_environments, ','),
@@ -27,11 +28,18 @@ class solr::config inherits solr::params {
     }
   }
   if ($solr::configure) {
+    file { '/etc/default/tomcat6':
+      alias   => 'solr::config::tomcat_conf',
+      content => template('solr/tomcat6.erb'),
+      owner   => 'root',
+      require => Package['tomcat6'],
+      notify  => Service['tomcat6'],
+    }
     file { 'solr::config::tomcat_server_conf':
       path    => '/etc/tomcat6/server.xml',
       content => template('solr/server.xml.erb'),
       owner   => "${solr::config::tomcat_user}",
-      require => Package["tomcat6"],
+      require => Package['tomcat6'],
     }
     file { 'solr::config::solr_core_conf':
       ensure  => present,
@@ -42,24 +50,7 @@ class solr::config inherits solr::params {
       require => Package['solr-tomcat'],
       notify  => Service['tomcat6'],
     }
+    # configure cores
     solr_config { $envs: }
-    #if 'local' in $envs {
-    #  solr_config { 'local': }
-    #}
-    #if 'vagrant' in $envs {
-    #  solr_config { 'vagrant': }
-    #}
-    #if 'dev' in $envs {
-    #  solr_config { 'dev': }
-    #}
-    #if 'staging' in $envs {
-    #  solr_config { 'staging': }
-    #}
-    #if 'nf' in $envs {
-    #  solr_config { 'nf': }
-    #}
-    #if 'production' in $envs {
-    #  solr_config { 'production': }
-    #}
   }
 }
