@@ -41,6 +41,8 @@ class solr::config inherits solr::params {
       owner   => "${solr::config::tomcat_user}",
       require => Package['tomcat6'],
     }
+  }
+  if ($solr::manage_cores) {
     file { 'solr::config::solr_core_conf':
       ensure  => present,
       content => template('solr/solr.xml.erb'),
@@ -50,8 +52,6 @@ class solr::config inherits solr::params {
       require => Package['solr-tomcat'],
       notify  => Service['tomcat6'],
     }
-  }
-  if ($solr::manage_cores) {
     # configure cores
     solr_config { $envs: }
   }
