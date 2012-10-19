@@ -50,7 +50,10 @@ class solr::config inherits solr::params {
       require => Package['solr-tomcat'],
       notify  => Service['tomcat6'],
     }
-    # configure cores
-    solr_config { $envs: }
+  }
+  if ($solr::manage_cores) {
+      # configure cores
+      solr_config { $envs: }
+    }
   }
 }

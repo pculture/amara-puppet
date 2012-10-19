@@ -23,7 +23,7 @@
 #
 # Copyright 2012 PCF, unless otherwise noted.
 #
-class solr ($configure=true,
+class solr ($configure=true, $manage_cores=true,
   ) inherits solr::params {
 
   class { 'solr::package': }
