@@ -52,8 +52,7 @@ class solr::config inherits solr::params {
     }
   }
   if ($solr::manage_cores) {
-      # configure cores
-      solr_config { $envs: }
-    }
+    # configure cores
+    solr_config { $envs: }
   }
 }
