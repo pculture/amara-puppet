@@ -108,7 +108,6 @@ define config::projects::unisubs (
       creates     => "${ve_dir}",
       require     => Class['virtualenv'],
       notify      => Exec["config::projects::unisubs::bootstrap_ve_${env}"],
-      refreshonly => true,
     }
     exec { "config::projects::unisubs::bootstrap_ve_${env}":
       command     => "${ve_dir}/bin/pip install -r requirements.txt",

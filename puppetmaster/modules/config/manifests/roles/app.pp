@@ -15,11 +15,9 @@ class config::roles::app ($graphite_host=undef, $revisions={}) {
     undef   => ["dev"],
     default => split($::system_environments, ','),
   }
-  define project_unisubs ($revision=undef, $enable_upstart=true, $enable_celery=false, $env=$name) {
-    $apps_root  = "${appserver::apps_dir}"
-    $app_user      = "${appserver::app_user}"
-    $app_group     = "${appserver::app_group}"
-    $ve_root       = "${appserver::python_ve_dir}"
+  define project_unisubs ($revision=undef, $enable_upstart=true, $enable_celery=false, $env=$name, $apps_root="${appserver::apps_dir}", $ve_root="${appserver::python_ve_dir}") {
+    $app_user       = "${appserver::app_user}"
+    $app_group      = "${appserver::app_group}"
     $requires       = [ Class['appserver::config'], Class['celery'] ]
     config::projects::unisubs { "$name":
       apps_root       => $apps_root,

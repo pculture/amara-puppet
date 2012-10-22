@@ -95,6 +95,27 @@ For example:
 
 In order to do full multi-VM replicated environment testing, you will need the `amara-puppet-private` module.  See below for details.  However, you can still build an entire environment (everything but serving the app on http://unisubs.local) without the `amara-puppet-private` module.
 
+## Adding a new role
+
+To add a new role, create a file names <rolename>.pp in the `config/manifests/roles/` directory with the following:
+
+```puppet
+class config::roles::<rolename> {
+  # puppet code goes here
+}
+
+```
+
+Then add a role check in `config/manifests/init.pp`:
+
+```puppet
+if '<rolename>' in $config::params::roles {
+  if ! defined(Class['config::roles::<rolename>']) { class { 'config::roles::<rolename>': } }
+}
+```
+
+If you need private configuration, then do the same steps above in the amara-puppet-private repo as well: role goes in `amara/manifests/config/<rolename>.pp` and check goes in `amara/manifests/config/init.pp`)
+
 ## Adding a new environment (for the `app` role)
 
 To add a new environment for the `app` role:
