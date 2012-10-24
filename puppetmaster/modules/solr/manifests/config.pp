@@ -5,6 +5,7 @@ class solr::config inherits solr::params {
     undef     => [],
     default   => split($::system_environments, ','),
   }
+  $extra_cores = $::solr_extra_cores
   Exec {
     path      => "${::path}",
     logoutput => on_failure,
@@ -54,5 +55,6 @@ class solr::config inherits solr::params {
     }
     # configure cores
     solr_config { $envs: }
+    solr_config { $extra_cores: }
   }
 }
