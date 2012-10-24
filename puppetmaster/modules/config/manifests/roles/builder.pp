@@ -38,6 +38,14 @@ class config::roles::builder {
       timeout => 900,
       require => [ Package['git-core'], File["${project_root}"] ],
     }
+    # integration
+    exec { "config::roles::builder::clone_integration_repo_${env}":
+      command => "git clone git@github.com:pculture/unisubs-integration.git ${project_dir}/unisubs-integration",
+      creates => "${project_dir}/unisubs-integration",
+      user    => "root",
+      timeout => 900,
+      require => [ Package['git-core'], Exec["config::roles::builder::clone_repo_${env}"] ],
+    }
     # unisubs closure library link
     file { "config::roles::builder::unisubs_closure_library_link_build_${env}":
       ensure  => link,
