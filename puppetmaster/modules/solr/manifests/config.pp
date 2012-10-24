@@ -5,7 +5,10 @@ class solr::config inherits solr::params {
     undef     => [],
     default   => split($::system_environments, ','),
   }
-  $extra_cores = $::solr_extra_cores
+  $extra_cores = $::solr_extra_cores ? {
+    undef     => [],
+    default   => split($::solr_extra_cores, ','),
+  }
   Exec {
     path      => "${::path}",
     logoutput => on_failure,
