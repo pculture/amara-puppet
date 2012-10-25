@@ -11,7 +11,7 @@ class base::service {
   }
   if ! defined(Service['collectd']) {
     service { 'collectd':
-      ensure  => stopped,
+      ensure  => running,
     }
   }
 }

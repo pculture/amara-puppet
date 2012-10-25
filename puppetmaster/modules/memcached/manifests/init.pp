@@ -25,4 +25,7 @@ class memcached {
   class { 'memcached::config':
     require => Class['memcached::package'],
   }
+  class { 'memcached::service':
+    require => [ Class['memcached::config'], Class['memcached::package'] ],
+  }
 }
