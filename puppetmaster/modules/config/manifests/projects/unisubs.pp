@@ -14,6 +14,8 @@ define config::projects::unisubs (
     $graphite_host=undef,
   ) {
 
+  $hostname = $::hostname
+
   # modules
   if ! defined(Class['celery']) { class { 'celery': } }
   if ! defined(Class['closure']) { class { 'closure': } }
