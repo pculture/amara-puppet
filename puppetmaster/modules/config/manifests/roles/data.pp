@@ -12,6 +12,11 @@ class config::roles::data($revisions={}) {
   if ($::is_vagrant == 'true') {
     if ! defined(Class['mysql']) { class { 'mysql': } }
   }
+  if 'worker-only' in $config::params::roles {
+    $enable_celery = false
+  } else {
+    $enable_celery = true
+  }
 
   define project_unisubs_data ($revision=undef, $enable_upstart=false, $env=$name) {
     #$apps_root  = "$config::apps_dir"
@@ -24,7 +29,7 @@ class config::roles::data($revisions={}) {
       revision        => $revision,
       env             => $env,
       enable_upstart  => $enable_upstart,
-      enable_celery   => true,
+      enable_celery   => $enable_celery,
       require         => Class['virtualenv'],
     }
   }
