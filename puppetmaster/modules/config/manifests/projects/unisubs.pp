@@ -267,7 +267,7 @@ define config::projects::unisubs (
     }
     file { 'config::projects::unisubs::vagrant_bashrc':
       ensure  => present,
-      path    => "${vagrant_dir}/.bashrc",
+      path    => "${vagrant_home}/.bashrc",
       content => template('config/apps/unisubs/bashrc.erb'),
       owner   => 'vagrant',
       group   => 'vagrant',
