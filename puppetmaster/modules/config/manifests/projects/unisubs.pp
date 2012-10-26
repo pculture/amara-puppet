@@ -261,9 +261,13 @@ define config::projects::unisubs (
     #user { 'vagrant':
     #  ensure  => present,
     #}
+    $vagrant_home = $::virtual ? {
+      'vmware'  => '/home/sandbox',
+      default   => '/home/vagrant',
+    }
     file { 'config::projects::unisubs::vagrant_bashrc':
       ensure  => present,
-      path    => '/home/vagrant/.bashrc',
+      path    => "${vagrant_dir}/.bashrc",
       content => template('config/apps/unisubs/bashrc.erb'),
       owner   => 'vagrant',
       group   => 'vagrant',
