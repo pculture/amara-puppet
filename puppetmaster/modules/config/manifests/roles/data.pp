@@ -1,5 +1,6 @@
 class config::roles::data($revisions={}) {
   # base modules to include
+  if ! defined(Class['memcached']) { class { 'memcached': } }
   if ! defined(Class['rabbitmq']) { class { 'rabbitmq': } }
   if ! defined(Class['redis']) { class { 'redis': } }
   if ! defined(Class['solr']) { class { 'solr': } }
