@@ -1,8 +1,8 @@
 [uwsgi]
 master = true
-processes = 30
-cheaper = 10
+workers = 4
 socket = /tmp/uwsgi_unisubs.sock
+stats = /tmp/uwsgi_unisubs_stats.sock
 add-header = Node: <%= @hostname %>
 die-on-term = true
 # currently with nginx + uwsgi this must run under www-data/www-data
@@ -15,12 +15,11 @@ no-orphans = true
 vacuum = true
 pythonpath = <%= @project_root %>
 wsgi-file = <%= @project_dir %>/deploy/unisubs.wsgi
-max-requests = 15000
+env = DJANGO_SETTINGS_MODULE=unisubs_settings
+touch-reload = <%= @project_dir %>/deploy/unisubs.wsgi
 #log-syslog = uwsgi.unisubs.<%= @env %>
 #<% if @graphite_host != 'undef' %>
 #carbon = <%= @graphite_host %>
-#carbon-freq = 10
+#carbon-freq = 60
 #carbon-no-workers = true
 #<% end %>
-env = DJANGO_SETTINGS_MODULE=unisubs_settings
-touch-reload = <%= @project_dir %>/deploy/unisubs.wsgi
