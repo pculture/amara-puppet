@@ -113,8 +113,8 @@ function pm {
 function pmt {
     python manage.py test $* --settings=dev_settings_test
 }
-function pmtd {
-    python manage.py test $* --settings=dev_settings_test 2>&1 | discoball -o '.+Error:.*' '.+Exception: .+' 'line \d+'
+function pmtc {
+    python manage.py test $* --settings=dev_settings_test 2>&1 | grcat conf.pmt
 }
 function pms {
     python manage.py test $* --settings=dev_settings_selenium

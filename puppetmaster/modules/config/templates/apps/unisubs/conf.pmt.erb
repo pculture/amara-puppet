@@ -1,0 +1,89 @@
+regexp=^(FAIL|ERROR): .+$
+colours=bold red
+count=more
+=========
+regexp=^---+ >> begin captured logging << ---+$
+colours="\033[38;5;240m"
+count=block
+=========
+regexp=^---+ >> end captured logging << ---+$
+colours="\033[38;5;240m"
+count=unblock
+=========
+regexp=^---+ >> begin captured stdout << ---+$
+colours="\033[38;5;229m"
+count=block
+=========
+regexp=^---+ >> end captured stdout << ---+$
+count=unblock
+colours="\033[38;5;229m"
+=========
+regexp=^  File ".+", line \d+, in .+$
+colours="\033[38;5;240m"
+count=more
+=========
+regexp=^    .+$
+count=more
+colours="\033[38;5;240m"
+=========
+regexp=^Traceback \(most recent call last\):$
+colours=magenta
+count=more
+=========
+regexp="[-/\w.]+.py"
+count=more
+colours=yellow
+=========
+regexp=line \d+
+count=more
+colours=cyan
+=========
+regexp=^Ran \d+ tests? in .+$
+count=more
+colours=bold white
+=========
+regexp=^FAILED \(.+\)$
+count=more
+colours=bold magenta
+=========
+regexp=^OK$
+count=more
+colours=bold green
+=========
+regexp=(?<=\d, in )\w+$
+count=more
+colours=green
+=========
+regexp=^.*(Error|Exception|DoesNotExist):.*$
+count=more
+colours=magenta
+=========
+# Useless Crap Output
+regexp=^.*Creating test database.*$
+count=more
+colours="\033[38;5;240m"
+=========
+regexp=^.*Destroying test database.*$
+count=more
+colours="\033[38;5;240m"
+=========
+regexp=^.*Destroying test database.*$
+count=more
+colours="\033[38;5;240m"
+=========
+regexp=^.*nosexcover.*$
+count=block
+colours="\033[38;5;237m"
+=========
+regexp=^=======+$
+colours="\033[38;5;237m"
+count=unblock
+=========
+regexp=^----------------------------------------------------------------------$
+colours="\033[38;5;237m"
+count=unblock
+=========
+regexp=^nosetests --verbosity .+$
+colours=black
+count=more
+
