@@ -11,6 +11,7 @@ gid = www-data
 enable-threads = true
 virtualenv = <%= @ve_dir %>
 buffer-size = 32768
+max-requests = 15000
 no-orphans = true
 vacuum = true
 pythonpath = <%= @project_root %>
