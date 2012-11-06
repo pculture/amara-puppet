@@ -291,6 +291,15 @@ define config::projects::unisubs (
       mode    => 0644,
       require => File['config::projects::unisubs::vagrant_grcat'],
     }
+    file { 'config::projects::unisubs::vagrant_grcat_pmm_config':
+      ensure  => present,
+      path    => "${vagrant_home}/.grc/conf.pmm",
+      content => template('config/apps/unisubs/conf.pmm.erb'),
+      owner   => 'vagrant',
+      group   => 'vagrant',
+      mode    => 0644,
+      require => File['config::projects::unisubs::vagrant_grcat'],
+    }
     file { 'config::projects::unisubs::vagrant_xvfb_upstart':
       ensure  => present,
       path    => '/etc/init/xvfb.conf',
