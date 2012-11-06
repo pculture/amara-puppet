@@ -5,6 +5,11 @@
     <core name="<%= val %>" instanceDir="/etc/solr/conf/<%= val %>" />
     <% end -%>
     <% end %>
+    <% if @extra_cores != nil %>
+    <% @extra_cores.each do |val| -%>
+    <core name="<%= val %>" instanceDir="/etc/solr/conf/<%= val %>" />
+    <% end -%>
+    <% end %>
     <core name="main" instanceDir="." />
   </cores>
 </solr>
