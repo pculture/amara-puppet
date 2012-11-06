@@ -1,0 +1,39 @@
+regexp=^DEBUG .+$
+colours=bold black
+count=more
+=========
+regexp=^ [<>] \w+:\d+\w+$
+colours=bold green
+count=more
+=========
+regexp=^Running migrations for \w+:$
+colours=bold white
+count=more
+=========
+regexp=^ - Migrating (forwards|backwards) to .+$
+colours=bold white
+count=more
+=========
+regexp=^- Nothing to migrate.$
+colours=bold black
+count=more
+=========
+regexp=^Traceback \(most recent call last\):$
+colours=bold magenta
+count=more
+=========
+regexp="[-/\w.]+.py"
+count=more
+colours=yellow
+=========
+regexp=line \d+
+count=more
+colours=cyan
+=========
+regexp=^.*(Error|Exception|DoesNotExist):.*$
+count=more
+colours=bold magenta
+=========
+regexp=^   \(faked\)$
+count=more
+colours=yellow

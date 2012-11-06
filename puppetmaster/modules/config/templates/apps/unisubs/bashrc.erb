@@ -107,18 +107,29 @@ alias .....='cd ../../../..'
 export PATH=<%= @project_dir %>/bin:~/bin:$PATH
 export DISPLAY=:99
 
+# Aliases for normal manage.py *.
 function pm {
     python manage.py $* --settings=dev_settings
 }
+function pmm {
+    python manage.py migrate $* --settings=dev_settings 2>&1 | grcat conf.pmm
+}
+
+# Aliases for manage.py * on the test DB.
 function pmt {
     python manage.py test $* --settings=dev_settings_test
 }
 function pmtc {
     python manage.py test $* --settings=dev_settings_test 2>&1 | grcat conf.pmt
 }
+function pmtm {
+    python manage.py migrate $* --settings=dev_settings_test | grcat conf.pmm
+}
 function pms {
     python manage.py test $* --settings=dev_settings_selenium
 }
+
+# Database dump/load function.s
 function dbdump {
     if [ "$1" = "" ]; then echo "You must specify a filename"; return; fi
     cu ; mysqldump -uroot -proot unisubs > $1
@@ -133,6 +144,8 @@ function dbreset {
     python manage.py syncdb --all --settings=dev_settings --noinput
     python manage.py migrate --fake --settings=dev_settings
 }
+
+# Reset the virtualenv.
 function vereset {
     sudo service celeryd.vagrant status | grep stopped || sudo service celeryd.vagrant stop
     sudo service celerycam.vagrant status | grep stopped || sudo service celerycam.vagrant stop
