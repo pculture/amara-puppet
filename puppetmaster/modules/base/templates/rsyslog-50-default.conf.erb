@@ -1,6 +1,9 @@
 #  Default rules for rsyslog.
 #
 #			For more information see rsyslog.conf(5) and /etc/rsyslog.conf
+#
+:msg,contains,"passwd"  /dev/null
+& ~
 
 *.*             @<%= scope.lookupvar('base::syslog_server') %>
 
