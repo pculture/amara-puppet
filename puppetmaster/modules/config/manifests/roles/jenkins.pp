@@ -4,6 +4,7 @@ class config::roles::jenkins inherits config::params {
       port => $config::params::jenkins_port,
     }
   }
+  if ! defined(Class['closure']) { class { 'closure': } }
   if ! defined(Class['rabbitmq']) { class { 'rabbitmq': } }
   if ! defined(Class['redis']) { class { 'redis': } }
   if ! defined(Class['solr']) { class { 'solr': configure => true, manage_cores => false } }
