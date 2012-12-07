@@ -300,22 +300,6 @@ define config::projects::unisubs (
       mode    => 0644,
       require => File['config::projects::unisubs::vagrant_grcat'],
     }
-    file { 'config::projects::unisubs::vagrant_xvfb_upstart':
-      ensure  => present,
-      path    => '/etc/init/xvfb.conf',
-      source  => 'puppet:///modules/config/xvfb.conf',
-    }
-    # manual symlink to /lib/init/upstart-job for http://projects.puppetlabs.com/issues/14297
-    file { 'config::projects::unisubs::upstart_link_xvfb':
-      ensure  => link,
-      path    => '/etc/init.d/xvfb',
-      target  => '/lib/init/upstart-job',
-      require => File['config::projects::unisubs::vagrant_xvfb_upstart'],
-    }
-    service { 'xvfb':
-      ensure  => running,
-      require => [ File['config::projects::unisubs::vagrant_xvfb_upstart'], File['config::projects::unisubs::upstart_link_xvfb'] ],
-    }
     # # nginx
     #     file { 'config::projects::unisubs::vhost_unisubs_vagrant':
     #       path    => '/etc/nginx/conf.d/unisubs.example.com.conf',
