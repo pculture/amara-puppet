@@ -314,7 +314,7 @@ define config::projects::unisubs (
     }
     service { 'xvfb':
       ensure  => running,
-      require => File['config::projects::unisubs::vagrant_xvfb_upstart'],
+      require => [ File['config::projects::unisubs::vagrant_xvfb_upstart'], File['config::projects::unisubs::upstart_link_xvfb'] ],
     }
     # # nginx
     #     file { 'config::projects::unisubs::vhost_unisubs_vagrant':
