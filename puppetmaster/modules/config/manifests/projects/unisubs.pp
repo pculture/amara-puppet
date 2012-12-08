@@ -312,10 +312,6 @@ define config::projects::unisubs (
       target  => '/lib/init/upstart-job',
       require => File['config::projects::unisubs::vagrant_xvfb_upstart'],
     }
-    service { 'xvfb':
-      ensure  => running,
-      require => File['config::projects::unisubs::vagrant_xvfb_upstart'],
-    }
     # # nginx
     #     file { 'config::projects::unisubs::vhost_unisubs_vagrant':
     #       path    => '/etc/nginx/conf.d/unisubs.example.com.conf',
