@@ -22,7 +22,7 @@ class base::config inherits base::params {
   }
   # enable multiverse for ubuntu
   exec { 'base::config::enable_apt_multiverse':
-    command     => "sudo add-apt-repository 'deb http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ ${::lsbdistcodename} main multiverse'",
+    command     => "add-apt-repository 'deb http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ ${::lsbdistcodename} main multiverse' ; apt-get update",
     user        => root,
     unless      => 'cat /etc/apt/sources.list | grep multiverse',
   }
