@@ -33,6 +33,32 @@ class base::package inherits base::params {
   if ! defined(Package['mysql2']) { package { 'mysql2': ensure => installed, provider => 'gem', require => [ Package['rubygems'], Package['libmysqlclient-dev'] ], } }
 
   if ('vagrant' in $base::params::roles) and ($::is_vagrant == 'true') {
+    # Google Chrome for selenium
+    # get apt key
+    exec { 'base::package::google_apt_key':
+      command => 'wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -',
+      user    => root,
+      unless  => 'apt-key list | grep -i google',
+    }
+    file { '/etc/apt/sources.list.d/google-chrome.list':
+      alias   => 'base::package::google_chrome_apt_source_list',
+      ensure  => present,
+      content => "deb http://dl.google.com/linux/deb/ stable main\n",
+      owner   => root,
+      notify  => Exec['base::package::apt_update'],
+      require => Exec['base::package::google_apt_key'],
+    }
+    exec { 'base::package::apt_update':
+      command     => 'apt-get update',
+      user        => root,
+      refreshonly => true,
+    }
+    if ! defined(Package["google-chrome"]) {
+      package { "google-chrome":
+        ensure  => installed,
+        require => [ File['base::package::google_chrome_apt_source_list'], Exec['base::package::apt_update'] ],
+      }
+    }
     if ! defined(Package['grc']) { package { 'grc': ensure => installed, } }
     if ! defined(Package['firefox']) { package { 'firefox': ensure => installed, } }
     if ! defined(Package['flashplugin-installer']) { package { 'flashplugin-installer': ensure => installed, } }
