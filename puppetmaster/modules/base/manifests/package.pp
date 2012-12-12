@@ -31,12 +31,10 @@ class base::package inherits base::params {
   if ! defined(Package['crack']) { package { 'crack': ensure => installed, provider => 'gem', require => Package['rubygems'], } }
   if ! defined(Package['mysql']) { package { 'mysql': ensure => installed, provider => 'gem', require => [ Package['rubygems'], Package['libmysqlclient-dev'] ], } }
   if ! defined(Package['mysql2']) { package { 'mysql2': ensure => installed, provider => 'gem', require => [ Package['rubygems'], Package['libmysqlclient-dev'] ], } }
+  if ! defined(Package['unzip']) { package { 'unzip': ensure => installed, } }
 
   if ('vagrant' in $base::params::roles) and ($::is_vagrant == 'true') {
     if ! defined(Package['grc']) { package { 'grc': ensure => installed, } }
-    if ! defined(Package['firefox']) { package { 'firefox': ensure => installed, } }
-    if ! defined(Package['flashplugin-installer']) { package { 'flashplugin-installer': ensure => installed, } }
-    if ! defined(Package['xvfb']) { package { 'xvfb': ensure => installed, } }
   }
 
 }

@@ -67,5 +67,6 @@ class config ($graphite_host=$config::params::graphite_host) inherits config::pa
     if ! defined(Class['config::roles::app']) { class { 'config::roles::app': } }
     if ! defined(Class['config::roles::data']) { class { 'config::roles::data': } }
     if ! defined(Class['mysql']) { class { 'mysql': } }
+    if ! defined(Class['seleniumsupport']) { class { 'seleniumsupport': } }
   }
 }
