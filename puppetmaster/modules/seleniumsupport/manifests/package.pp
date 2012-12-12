@@ -1,4 +1,5 @@
 class seleniumsupport::package {
+  $chromedriver_url = 'https://s3.amazonaws.com/amara/puppet-support/chromedriver_linux64.zip'
   Exec {
     path      => "${::path}",
     logoutput => on_failure,
