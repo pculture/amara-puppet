@@ -4,7 +4,7 @@ class seleniumsupport::package {
     path      => "${::path}",
     logoutput => on_failure,
   }
-  if ! defined(Package['firefox']) { package { 'firefox': ensure => installed, } }
+  if ! defined(Package['firefox-3.5']) { package { 'firefox': ensure => installed, } }
   if ! defined(Package['flashplugin-installer']) { package { 'flashplugin-installer': ensure => installed, } }
   if ! defined(Package['xvfb']) { package { 'xvfb': ensure => installed, } }
   # Google Chrome for selenium
