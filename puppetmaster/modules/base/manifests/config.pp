@@ -20,6 +20,12 @@ class base::config inherits base::params {
     command     => 'dpkg-reconfigure -f noninteractive tzdata',
     refreshonly => true,
   }
+  # enable multiverse for ubuntu
+  exec { 'base::config::enable_apt_multiverse':
+    command     => "sudo add-apt-repository 'deb http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ ${::lsbdistcodename} main multiverse'",
+    user        => root,
+    unless      => 'cat /etc/apt/sources.list | grep multiverse',
+  }
   # hack: local /etc/hosts for vagrant
   if ($::is_vagrant == 'true') {
     if ! defined(User['vagrant']) {
