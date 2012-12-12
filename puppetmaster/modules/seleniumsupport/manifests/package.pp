@@ -17,7 +17,7 @@ class seleniumsupport::package {
   file { '/etc/apt/sources.list.d/google-chrome.list':
     alias   => 'seleniumsupport::package::google_chrome_apt_source_list',
     ensure  => present,
-    content => "deb http://dl.google.com/linux/deb/ stable main\n",
+    content => "deb http://dl.google.com/linux/chrome/deb/ stable main\n",
     owner   => root,
     notify  => Exec['seleniumsupport::package::apt_update'],
     require => Exec['seleniumsupport::package::google_apt_key'],
