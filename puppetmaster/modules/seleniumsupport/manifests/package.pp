@@ -1,6 +1,4 @@
 class seleniumsupport::package {
-  $chromedriver_url = $seleniumsupport::params::chromedriver_url
-
   Exec {
     path      => "${::path}",
     logoutput => on_failure,
@@ -36,7 +34,7 @@ class seleniumsupport::package {
   }
   # chrome driver
   exec { 'seleniumsupport::package::install_chromedriver':
-    command   => "wget $chromedriver_url -O /tmp/chromedriver.zip ; unzip -d /usr/local/bin/ /tmp/chromedriver.zip ; rm /tmp/chromedriver.zip",
+    command   => "wget $seleniumsupport::package::chromedriver_url -O /tmp/chromedriver.zip ; unzip -d /usr/local/bin/ /tmp/chromedriver.zip ; rm /tmp/chromedriver.zip",
     user      => root,
     unless    => 'test -e /usr/local/bin/chromedriver',
   }
