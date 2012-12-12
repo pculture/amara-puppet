@@ -53,8 +53,8 @@ class base::package inherits base::params {
       user        => root,
       refreshonly => true,
     }
-    if ! defined(Package["google-chrome"]) {
-      package { "google-chrome":
+    if ! defined(Package["google-chrome-stable"]) {
+      package { "google-chrome-stable":
         ensure  => installed,
         require => [ File['base::package::google_chrome_apt_source_list'], Exec['base::package::apt_update'] ],
       }
