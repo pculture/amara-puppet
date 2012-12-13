@@ -4,5 +4,6 @@ class jenkins::params {
   $greenballs_plugin_url = 'http://updates.jenkins-ci.org/latest/greenballs.hpi'
   $instantmessaging_plugin_url = 'http://updates.jenkins-ci.org/latest/instant-messaging.hpi'
   $ircbot_plugin_url = 'http://updates.jenkins-ci.org/latest/ircbot.hpi'
+  $postbuildtask_plugin_url = 'http://updates.jenkins-ci.org/latest/postbuild-task.hpi'
   $port = 8080
 }
