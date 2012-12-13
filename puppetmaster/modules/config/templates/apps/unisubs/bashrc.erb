@@ -162,6 +162,9 @@ function psg {
     ps auxww | grep --color=always $* | grep -v grep | sed -e 's/  */ /g' | cut -d' ' -f 2,11-
 }
 
+# restart Xvfb per sifter #1729
+sudo /etc/init.d/xvfb restart > /dev/null 2>&1
+
 # If not running interactively, we're done.
 [ -n "$NOINTERACTIVE" ] && return
 
