@@ -251,7 +251,7 @@ define config::projects::unisubs (
       content => template('config/apps/unisubs/vhost_unisubs.conf.erb'),
       #owner   => "${nginx::config::www_user}",
       mode    => 0644,
-      require => Package['nginx'],
+      require => Package['nginx-extras'],
       notify  => Service['nginx'],
     }
   }
@@ -318,7 +318,7 @@ define config::projects::unisubs (
     #       content => template('config/apps/unisubs/vhost_unisubs.conf.erb'),
     #       #owner   => "${nginx::config::www_user}",
     #       mode    => 0644,
-    #       require => Package['nginx'],
+    #       require => Package['nginx-extras'],
     #       notify  => Service['nginx'],
     #     }
   }
