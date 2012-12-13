@@ -19,4 +19,10 @@ class nginx::package {
       require => [ Exec['nginx::package::nginx_ppa'], Exec['nginx::package::update_apt'] ],
     }
   }
+  if ! defined(Package['nginx-extras']) {
+    package { 'nginx-extras':
+      ensure  => installed,
+      require => [ Exec['nginx::package::nginx_ppa'], Exec['nginx::package::update_apt'] ],
+    }
+  }
 }
