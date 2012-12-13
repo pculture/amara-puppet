@@ -45,6 +45,7 @@ class jenkins::package inherits jenkins::params {
       $jenkins::params::greenballs_plugin_url,
       $jenkins::params::instantmessaging_plugin_url,
       $jenkins::params::ircbot_plugin_url,
+      $jenkins::params::postbuildtask_plugin_url,
     ]
     install_plugin { $plugins: }
   }
