@@ -9,7 +9,7 @@ class nginx::config inherits nginx::params {
     content => template('nginx/nginx.conf.erb'),
     owner   => root,
     mode    => 0644,
-    require => Package['nginx'],
+    require => Package['nginx-extras'],
     notify  => Service['nginx'],
   }
   file { '/etc/nginx/sites-available/default':
@@ -17,7 +17,7 @@ class nginx::config inherits nginx::params {
     content => template('nginx/default.conf.erb'),
     owner   => root,
     mode    => 0644,
-    require => Package['nginx'],
+    require => Package['nginx-extras'],
     notify  => Service['nginx'],
   }
 }
