@@ -10,5 +10,5 @@ class graylog2::params {
   $mongodb_dir = "/opt/mongodb"
   $mongodb_data_dir = "/opt/mongodb_data"
   $elasticsearch_dir = "/opt/elasticsearch"
-  $elasticsearch_url = "https://github.com/downloads/elasticsearch/elasticsearch/elasticsearch-0.18.6.tar.gz"
+  $elasticsearch_url = "https://s3.amazonaws.com/amara/puppet-support/elasticsearch-0.18.6.tar.gz"
 }

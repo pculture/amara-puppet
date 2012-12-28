@@ -22,7 +22,7 @@ wget --quiet "${PUPPETLABS_DEB_URL}" -O puppetlabs.deb
 dpkg -i puppetlabs.deb
 
 apt-get -y update
-DEBCONF=noninteractive apt-get -y install puppetmaster-passenger git-core
+DEBCONF=noninteractive apt-get -y install puppetmaster-passenger git-core python-software-properties
 
 gem install --no-ri --no-rdoc hiera hiera-puppet
 
