@@ -12,7 +12,7 @@ Vagrant::Config.run do |config|
   config.vm.share_folder "puppet_hiera", "/etc/puppet/hieradata", "hieradata"
   # mount amara private config
   if File.exists?('amara-puppet-private')
-    config.vm.share_folder "amara_private", "/opt/amara-puppet-private", "amara-puppet-private"
+    config.vm.share_folder "amara_private", "/opt/amara-puppet-private", "amara-puppet-private", :owner => "puppet"
   end
   config.vm.forward_port 3000, 3000 # puppet (puppet-dashboard standalone)
   config.vm.forward_port 8140, 8140 # puppet
