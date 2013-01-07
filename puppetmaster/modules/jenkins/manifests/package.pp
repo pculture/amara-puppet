@@ -46,6 +46,7 @@ class jenkins::package inherits jenkins::params {
       $jenkins::params::instantmessaging_plugin_url,
       $jenkins::params::ircbot_plugin_url,
       $jenkins::params::postbuildtask_plugin_url,
+      $jenkins::params::sauce_ondemand_plugin_url,
     ]
     install_plugin { $plugins: }
   }
