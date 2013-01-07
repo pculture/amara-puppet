@@ -5,5 +5,6 @@ class jenkins::params {
   $instantmessaging_plugin_url = 'http://updates.jenkins-ci.org/latest/instant-messaging.hpi'
   $ircbot_plugin_url = 'http://updates.jenkins-ci.org/latest/ircbot.hpi'
   $postbuildtask_plugin_url = 'http://updates.jenkins-ci.org/latest/postbuild-task.hpi'
+  $sauce_ondemand_plugin_url = 'http://updates.jenkins-ci.org/latest/sauce-ondemand.hpi'
   $port = 8080
 }
