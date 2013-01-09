@@ -140,7 +140,7 @@ function dbrestore {
 }
 function dbreset {
     cu
-    echo "drop database unisubs ; create database unisubs;" | mysql -uroot -proot unisubs
+    echo "drop database unisubs ; create database unisubs CHARACTER SET utf8 COLLATE utf8_unicode_ci;" | mysql -uroot -proot unisubs
     python manage.py syncdb --all --settings=dev_settings --noinput
     python manage.py migrate --fake --settings=dev_settings
 }
