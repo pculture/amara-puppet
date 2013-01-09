@@ -11,7 +11,7 @@ class mysql::config inherits mysql::params {
     refreshonly => true,
   }
   exec { 'mysql::config::create_unisubs_db':
-    command   => "echo \"create database unisubs character set utf8;\" | ${mysql::config::mysql_cmd}",
+    command   => "echo \"create database unisubs character set utf8 collate utf8_unicode_ci;\" | ${mysql::config::mysql_cmd}",
     unless    => "echo \"show databases;\" | ${mysql::config::mysql_cmd} | grep unisubs",
     require   => [ Package['mysql-server'], Exec['mysql::config::set_root_password'] ],
   }
