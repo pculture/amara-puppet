@@ -10,6 +10,11 @@ priority = 100
 pattern = ^system\.sensu.
 retentions = 60s:7d, 600s:30d, 3600s:5y
 
+[deploy_1min]
+priority = 100
+pattern = .*\.deploy\.*
+retentions = 60s:7d, 600s:30d, 3600s:5y
+
 [mysql_local_1min]
 priority = 100
 pattern = ^local\.mysql.
