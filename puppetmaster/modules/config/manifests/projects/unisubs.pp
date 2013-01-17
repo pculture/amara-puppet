@@ -225,7 +225,7 @@ define config::projects::unisubs (
     }
     # logrotate for celery
     file { '/etc/logrotate.d/celery':
-      ensure    => present
+      ensure    => present,
       content   => template('config/apps/unisubs/celery.logrotate.erb'),
       owner     => root,
       group     => root,
