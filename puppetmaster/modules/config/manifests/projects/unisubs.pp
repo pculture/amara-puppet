@@ -223,6 +223,14 @@ define config::projects::unisubs (
       ensure    => running,
       require   =>[ Class['celery'], File["config::projects::unisubs::upstart_link_celerycam_${env}"] ]
     }
+    # logrotate for celery
+    file { '/etc/logrotate.d/celery':
+      ensure    => present
+      content   => template('config/apps/unisubs/celery.logrotate.erb'),
+      owner     => root,
+      group     => root,
+      mode      => 0644,
+    }
     # disabled for now as upstart doesn't like symlinks
     ## symlinks for celery - needed for celery module (celeryd, celerybeat)
     ## NOTE: on multi-env setups, this will only be created for the first env as subsequent
