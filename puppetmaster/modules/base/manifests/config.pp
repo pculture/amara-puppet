@@ -3,13 +3,34 @@ class base::config inherits base::params {
     path      => "${::path}",
     logoutput => on_failure,
   }
+  $distro_name = $::lsbdistcodename
+  $is_vagrant = $::is_vagrant
+  $is_ec2 = $::ec2_ami_id ? {
+    ""     => false,
+    default => true,
+  }
   $dev_group = 'deploy'
   if ! defined(Group["$dev_group"]) {
     group { "$dev_group":
       ensure  => present,
     }
   }
-  $is_vagrant = $::is_vagrant
+  if $::lsbdistid == 'Ubuntu' {
+    file { '/etc/apt/sources.list':
+      alias   => 'base::config::apt_sources_list',
+      ensure  => present,
+      content => template('base/sources.list.erb'),
+      owner   => root,
+      mode    => 0644,
+      notify  => Exec['base::config::apt_update'],
+    }
+  }
+  exec { 'base::config::apt_update':
+    command     => 'apt-get update',
+    user        => root,
+    refreshonly => true,
+  }
+
   # timezone
   file { '/etc/timezone':
     ensure  => present,

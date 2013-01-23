@@ -1,0 +1,17 @@
+<% if @is_ec2 %>
+deb http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ <%= @distro_name %> main universe
+deb-src http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ <%= @distro_name %> main universe
+deb http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ <%= @distro_name %>-updates main universe
+deb-src http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ <%= @distro_name %>-updates main universe
+deb http://security.ubuntu.com/ubuntu <%= @distro_name %>-security main universe
+deb http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ <%= @distro_name %> multiverse
+deb-src http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ <%= @distro_name %> multiverse
+<% else %>
+deb http://us.archive.ubuntu.com/ubuntu/ <%= @distro_name %> main universe
+deb-src http://us.archive.ubuntu.com/ubuntu/ <%= @distro_name %> main universe
+deb http://us.archive.ubuntu.com/ubuntu/ <%= @distro_name %>-updates main universe
+deb-src http://us.archive.ubuntu.com/ubuntu/ <%= @distro_name %>-updates main universe
+deb http://security.ubuntu.com/ubuntu <%= @distro_name %>-security main universe
+deb http://us.archive.ubuntu.com/ubuntu/ <%= @distro_name %> multiverse
+deb-src http://us.archive.ubuntu.com/ubuntu/ <%= @distro_name %> multiverse
+<% end %>

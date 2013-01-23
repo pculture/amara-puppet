@@ -5,19 +5,6 @@ class base::package inherits base::params {
     path      => "${::path}",
     logoutput => on_failure,
   }
-  # enable multiverse for ubuntu
-  exec { 'base::package::enable_apt_multiverse':
-    command     => "add-apt-repository 'deb http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ ${::lsbdistcodename} multiverse' ; apt-get update",
-    user        => root,
-    unless      => 'cat /etc/apt/sources.list | grep "${::lsbdistcodename} multiverse"',
-    require     => Package['python-software-properties'],
-  }
-  exec { 'base::package::enable_apt_multiverse_updates':
-    command     => "add-apt-repository 'deb http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ ${::lsbdistcodename}-updates multiverse' ; apt-get update",
-    user        => root,
-    unless      => 'cat /etc/apt/sources.list | grep "${::lsbdistcodename}-updates multiverse"',
-    require     => Package['python-software-properties'],
-  }
   if ! defined(Package['build-essential']) { package { 'build-essential': ensure => installed, } }
   if ! defined(Package['collectd']) { package { 'collectd': ensure => installed, } }
   if ! defined(Package['curl']) { package { 'curl': ensure => installed, } }
