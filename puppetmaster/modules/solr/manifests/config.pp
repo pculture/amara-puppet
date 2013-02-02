@@ -47,14 +47,15 @@ class solr::config inherits solr::params {
     }
   }
   if ($solr::manage_cores) {
-    file { 'solr::config::solr_core_conf':
-      ensure  => present,
-      content => template('solr/solr.xml.erb'),
-      path    => '/usr/share/solr/solr.xml',
-      owner   => "${solr::config::tomcat_user}",
-      mode    => 0644,
-      require => Package['solr-tomcat'],
-      notify  => Service['tomcat6'],
+    if ! defined(File['/usr/share/solr/solr.xml']) {
+      file { '/usr/share/solr/solr.xml':
+        ensure  => present,
+        content => template('solr/solr.xml.erb'),
+        owner   => "${solr::config::tomcat_user}",
+        mode    => 0644,
+        require => Package['solr-tomcat'],
+        notify  => Service['tomcat6'],
+      }
     }
     # configure cores
     solr_config { $envs: }

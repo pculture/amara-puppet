@@ -1,8 +1,8 @@
-class config::roles::builder {
+class config::roles::builder inherits config::params {
   require closure
-  $build_root = '/opt/media_compile'
-  $build_apps_root = "$build_root/apps"
-  $build_ve_root = "$build_root/ve"
+  $build_root = $config::params::build_root
+  $build_apps_root = $config::params::build_apps_root
+  $build_ve_root = $config::params::build_ve_root
   $build_envs = ['local', 'dev', 'staging', 'production']
   Exec {
     path      => "${::path}",

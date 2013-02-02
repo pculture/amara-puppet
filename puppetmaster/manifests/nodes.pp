@@ -1,4 +1,8 @@
 node basenode {
+  $apps_dir = '/opt/apps'
+  $ve_root = '/opt/ve'
+  $app_group = 'deploy'
+  $build_root = '/opt/media_compile'
   # config for vagrant
   if ($::is_vagrant == 'true') {
     include base
@@ -19,7 +23,14 @@ node basenode {
       sensu_api_host        => 'util.local',
       sensu_dashboard_host  => 'util.local',
     }
-    class { 'config': graphite_host => '10.10.10.110:2003', require => Class['base'], }
+    class { 'config':
+      apps_dir      => $apps_dir,
+      ve_root       => $ve_root,
+      app_group     => $app_group,
+      build_root    => $build_root,
+      graphite_host => '10.10.10.110:2003',
+      require       => Class['base'],
+    }
   } else {
     class { 'sensu':
       sensu_rabbitmq_host   => 'util.amara.org',
@@ -27,9 +38,20 @@ node basenode {
       sensu_api_host        => 'util.amara.org',
       sensu_dashboard_host  => 'util.amara.org',
     }
-    class { 'config': graphite_host => '10.118.146.251:2003', require => Class['base'], }
+    class { 'config':
+      apps_dir      => $apps_dir,
+      ve_root       => $ve_root,
+      app_group     => $app_group,
+      build_root    => $build_root,
+      graphite_host => '10.118.146.251:2003',
+      require       => Class['base'],
+    }
   }
-  class { 'amara': require => [ Class['base'], Class['config'] , Class['virtualenv'] ], }
+  class { 'amara':
+    apps_dir    => $apps_dir,
+    build_root  => $build_root,
+    require     => [ Class['base'], Class['config'] , Class['virtualenv'] ],
+  }
 }
 node default inherits basenode {} # default for all non-defined nodes
 

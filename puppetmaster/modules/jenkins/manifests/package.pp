@@ -22,6 +22,12 @@ class jenkins::package inherits jenkins::params {
     user        => root,
     refreshonly => true,
   }
+  file { '/var/lib/jenkins/plugins':
+    alias   => 'jenkins::package::plugin_dir',
+    ensure  => directory,
+    owner   => 'jenkins',
+    require => Package['jenkins']
+  }
   define install_plugin ($url=$title) {
     $file_parts = split($url, 'latest/')
     $filename = $file_parts[1]
@@ -30,7 +36,7 @@ class jenkins::package inherits jenkins::params {
       command => "wget --no-check-certificate -q $url",
       creates => "/var/lib/jenkins/plugins/$filename",
       user    => 'jenkins',
-      require => Package['jenkins'],
+      require => [ Package['jenkins'], File['jenkins::package::plugin_dir'] ],
       notify  => Service['jenkins'],
     }
   }

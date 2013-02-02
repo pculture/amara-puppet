@@ -62,18 +62,16 @@ Vagrant::Config.run do |config|
     sb_config.vm.host_name = "sandbox.local"
     sb_config.vm.customize ["modifyvm", :id, "--memory", 1024]
     sb_config.vm.network :hostonly, "10.10.10.120"
-    sb_config.vm.forward_port 80, 8081 # graphite-web
+    sb_config.vm.forward_port 8000, 8081 # graphite-web
     sb_config.vm.forward_port 2003, 2003 # graphite
     sb_config.vm.forward_port 2004, 2004 # graphite
     sb_config.vm.forward_port 3000, 3001 # graylog2
     sb_config.vm.forward_port 4567, 4567 # riemann-dash
     sb_config.vm.forward_port 5555, 5555 # riemann
-    sb_config.vm.forward_port 5672, 5672 # rabbitmq
-    sb_config.vm.forward_port 6379, 6379 # redis
-    sb_config.vm.forward_port 7002, 7002 # graphite
-    sb_config.vm.forward_port 8000, 8000
-    sb_config.vm.forward_port 8080, 8082 # sensu-dashboard
-    sb_config.vm.forward_port 8888, 8888 # jenkins
-    sb_config.vm.forward_port 8983, 8983 # solr
+    #sb_config.vm.forward_port 5672, 5672 # rabbitmq
+    #sb_config.vm.forward_port 6379, 6379 # redis
+    sb_config.vm.forward_port 8080, 8080 # jenkins (default)
+    sb_config.vm.forward_port 8888, 8888 # jenkins (amara)
+    sb_config.vm.share_folder "puppet_amara", "/mnt/puppet-modules/amara", "../puppetmaster/amara-puppet-private/amara"
   end
 end

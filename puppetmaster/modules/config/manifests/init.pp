@@ -20,11 +20,14 @@
 #
 # Copyright 2012 PCF, unless otherwise noted.
 #
-class config ($graphite_host=$config::params::graphite_host) inherits config::params {
+class config (
+    $apps_dir=$config::params::apps_dir,
+    $ve_root=$config::params::ve_dir,
+    $app_group=$config::params::app_group,
+    $build_root=$config::params::build_root,
+    $graphite_host=$config::params::graphite_host,
+  ) inherits config::params {
   # this needs to match the appserver::apps_dir variable for the fabric tasks
-  $apps_dir = '/opt/apps'
-  $ve_root = '/opt/ve'
-  $app_group = 'deploy'
   # hash for controlling revisions for the app and data roles
   $revisions = {
     'vagrant'     => 'dev',
