@@ -70,7 +70,8 @@ Vagrant::Config.run do |config|
     sb_config.vm.forward_port 5555, 5555 # riemann
     #sb_config.vm.forward_port 5672, 5672 # rabbitmq
     #sb_config.vm.forward_port 6379, 6379 # redis
-    sb_config.vm.forward_port 8888, 8888 # jenkins
+    sb_config.vm.forward_port 8080, 8080 # jenkins (default)
+    sb_config.vm.forward_port 8888, 8888 # jenkins (amara)
     sb_config.vm.share_folder "puppet_amara", "/mnt/puppet-modules/amara", "../puppetmaster/amara-puppet-private/amara"
   end
 end

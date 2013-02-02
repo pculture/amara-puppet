@@ -3,6 +3,7 @@ class nginx::package {
     path      => "${::path}",
     logoutput => on_failure,
   }
+  if ! defined(Package[python-software-properties]) { package { 'python-software-properties': ensure => present } }
   exec { 'nginx::package::nginx_ppa':
     command => 'add-apt-repository ppa:nginx/stable',
     creates => "/etc/apt/sources.list.d/nginx-stable-${::lsbdistcodename}.list",
