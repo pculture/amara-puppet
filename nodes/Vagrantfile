@@ -61,7 +61,7 @@ Vagrant::Config.run do |config|
   config.vm.define :sandbox do |sb_config|
     sb_config.vm.host_name = "sandbox.local"
     sb_config.vm.customize ["modifyvm", :id, "--memory", 1024]
-    sb_config.vm.network :hostonly, "10.10.10.120"
+    sb_config.vm.network :hostonly, "10.10.10.130"
     sb_config.vm.forward_port 8000, 8081 # graphite-web
     sb_config.vm.forward_port 2003, 2003 # graphite
     sb_config.vm.forward_port 2004, 2004 # graphite
