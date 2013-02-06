@@ -27,6 +27,7 @@ class base::package inherits base::params {
   if ! defined(Package['screen']) { package { 'screen': ensure => installed, } }
   if ! defined(Package['supervisor']) { package { 'supervisor': ensure => installed, } }
   if ! defined(Package['vim']) { package { 'vim': ensure => installed, } }
+  if ! defined(Package['xfsprogs']) { package { 'xfsprogs': ensure => installed, } }
 
   if ! defined(Package['crack']) { package { 'crack': ensure => installed, provider => 'gem', require => Package['rubygems'], } }
   if ! defined(Package['mysql']) { package { 'mysql': ensure => installed, provider => 'gem', require => [ Package['rubygems'], Package['libmysqlclient-dev'] ], } }
