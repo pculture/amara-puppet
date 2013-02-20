@@ -14,6 +14,7 @@ node basenode {
   }
   # modules
   class { 'postfix': }
+  class { 'mosh': }
   class { 'virtualenv': }
 
   if ($::is_vagrant == 'true') {
