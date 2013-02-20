@@ -1,0 +1,2 @@
+class mosh::service {
+}
