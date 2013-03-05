@@ -5,8 +5,21 @@ class seleniumsupport::package {
     logoutput => on_failure,
   }
   if ! defined(Package['firefox']) { package { 'firefox': ensure => installed, } }
-  if ! defined(Package['flashplugin-installer']) { package { 'flashplugin-installer': ensure => installed, } }
+  if ! defined(Package['adobe-flashplugin']) {
+    package { 'adobe-flashplugin':
+      ensure  => installed,
+      require => File['seleniumsupport::package::canonical_partner_apt_source_list'],
+    }
+  }
   if ! defined(Package['xvfb']) { package { 'xvfb': ensure => installed, } }
+  # canonical apt partner repo
+  file { '/etc/apt/sources.list.d/canonical-partner.list':
+    alias   => 'seleniumsupport::package::canonical_partner_apt_source_list',
+    ensure  => present,
+    content => "deb http://archive.canonical.com/ubuntu/ ${::lsbdistcodename} partner\n",
+    owner   => root,
+    notify  => Exec['seleniumsupport::package::apt_update'],
+  }
   # Google Chrome for selenium
   # get apt key
   exec { 'seleniumsupport::package::google_apt_key':
