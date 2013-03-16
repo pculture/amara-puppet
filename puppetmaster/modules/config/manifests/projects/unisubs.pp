@@ -270,7 +270,6 @@ define config::projects::unisubs (
     #  ensure  => present,
     #}
     $vagrant_home = $::virtual ? {
-      'vmware'  => '/home/sandbox',
       default   => '/home/vagrant',
     }
     file { 'config::projects::unisubs::vagrant_bashrc':
