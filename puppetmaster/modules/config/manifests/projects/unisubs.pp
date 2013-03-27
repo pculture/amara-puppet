@@ -82,15 +82,7 @@ define config::projects::unisubs (
       user    => "${app_user}",
       creates => "${project_dir}",
       timeout => 900,
-      notify  => Exec["config::projects::unisubs::checkout_rev_${env}"],
       require => [ Package['git-core'], File["config::projects::unisubs::project_root_${env}"] ],
-    }
-    exec { "config::projects::unisubs::checkout_rev_${env}":
-      cwd         => "${project_dir}",
-      command     => "git checkout --force ${rev}",
-      require     => Exec["config::projects::unisubs::clone_repo_${env}"],
-      unless      => "test \"`git symbolic-ref HEAD | awk '{split(\$0,s,\"/\"); print s[3]}'`\" = \"${rev}\"",
-      notify      => [ Exec["config::projects::unisubs::virtualenv_${env}"], Exec["config::projects::unisubs::set_permissions_${env}"] ],
     }
     exec { "config::projects::unisubs::set_permissions_${env}":
       command     => "chown -R ${app_user}:${app_group} ${project_dir} ; chmod -R g+rw ${project_dir}",
@@ -114,7 +106,7 @@ define config::projects::unisubs (
     exec { "config::projects::unisubs::bootstrap_ve_${env}":
       command     => "${ve_dir}/bin/pip install -r requirements.txt",
       cwd         => "${project_dir}/deploy",
-      require     => Exec["config::projects::unisubs::checkout_rev_${env}"],
+      require     => Exec["config::projects::unisubs::clone_repo_${env}"],
       timeout     => 1200,
       refreshonly => true,
       notify      => Exec["config::projects::unisubs::ve_permissions_${env}"],
