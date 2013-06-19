@@ -10,6 +10,7 @@ server {
     client_max_body_size 4G;
     open_file_cache off;
     sendfile off;
+    proxy_read_timeout 300s;
 
     keepalive_timeout 5;
 
